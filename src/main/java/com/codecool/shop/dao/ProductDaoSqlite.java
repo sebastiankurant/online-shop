@@ -4,12 +4,10 @@ import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by diana on 02.05.17.
- */
 public class ProductDaoSqlite implements ProductDao {
     @Override
     public void add(Product product) {
@@ -32,15 +30,26 @@ public class ProductDaoSqlite implements ProductDao {
         ProductCategory category = new ProductCategory("other",
                 "other", "description");
         Supplier supplier = new Supplier("dupa", "description");
-        Product product1 = new Product("product 1", 12.1f, "PLN",
-                "product", category, supplier);
-        Product product2 = new Product("product 2", 12.1f, "PLN",
-                "product", category, supplier);
-        Product product3 = new Product("product 3", 12.1f, "PLN",
-                "product", category, supplier);
-        products.add(product1);
-        products.add(product2);
-        products.add(product3);
+
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:sqlite:src/main/resources/database.db");
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * from products");
+            while(rs.next()){
+                Product product = new Product(
+                        rs.getString("name"),
+                        rs.getFloat("price"),
+                        "PLN",
+                        rs.getString("description"),
+                        category,
+                        supplier);
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("Connection failed");
+            e.printStackTrace();
+        }
         return  products;
     }
 
