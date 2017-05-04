@@ -18,4 +18,5 @@ public class ProductView {
             System.out.println(c);
         }
     }
+
 }

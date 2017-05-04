@@ -1,5 +1,7 @@
 package com.codecool.shop.controller;
 
+import com.codecool.shop.view.UserInput;
+
 import java.util.Scanner;
 
 /**
@@ -9,16 +11,10 @@ public class MainMenuController {
     public void mainMenuAction() {
         ProductController controller = new ProductController();
 
-        Scanner s = new Scanner(System.in);
         System.out.println("select options");
         System.out.println("1. List all products.");
         System.out.println("2. List products by category");
-        System.out.println("Select option:");
-        while(!s.hasNextInt()){
-            System.out.println("Invalid input");
-            s.next();
-        }
-        Integer input = s.nextInt();
+        Integer input = UserInput.getUserInput("Select option:");
         switch (input){
             case 1:
                 controller.listProducts();

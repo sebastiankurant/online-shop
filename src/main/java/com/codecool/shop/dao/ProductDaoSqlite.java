@@ -29,8 +29,6 @@ public class ProductDaoSqlite implements ProductDao {
     @Override
     public List<Product> getAll() {
         List<Product> products = new ArrayList<>();
-        ProductCategory category = new ProductCategory("other",
-                "other", "description");
         Supplier supplier = new Supplier("dupa", "description");
 
         try {
@@ -42,7 +40,7 @@ public class ProductDaoSqlite implements ProductDao {
                         rs.getFloat("price"),
                         "PLN",
                         rs.getString("description"),
-                        category,
+                        new ProductCategoryDaoSqlite().find(rs.getInt("category_id")),
                         supplier);
                 products.add(product);
             }
@@ -60,6 +58,27 @@ public class ProductDaoSqlite implements ProductDao {
 
     @Override
     public List<Product> getBy(ProductCategory productCategory) {
-        return null;
+        List<Product> products = new ArrayList<>();
+        Supplier supplier = new Supplier("dupa", "description");
+
+        try {
+            Statement statement = SgliteJDSCConnector.makeConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * from products where category_id = "+
+                    productCategory.getId());
+            while(rs.next()){
+                Product product = new Product(
+                        rs.getString("name"),
+                        rs.getFloat("price"),
+                        "PLN",
+                        rs.getString("description"),
+                        productCategory,
+                        supplier);
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("Connection failed");
+            e.printStackTrace();
+        }
+        return  products;
     }
 }

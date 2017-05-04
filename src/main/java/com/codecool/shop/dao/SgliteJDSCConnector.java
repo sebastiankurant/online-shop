@@ -29,7 +29,15 @@ public class SgliteJDSCConnector {
                     "    name VARCHAR(255) NOT NULL,\n" +
                     "    description TEXT,\n" +
                     "    price DOUBLE DEFAULT 0\n" +
+                    "   category_id INTEGER "+
                     ")");
+        statement.execute("CREATE TABLE IF NOT EXISTS categories\n" +
+                "(\n" +
+                "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    name VARCHAR(255) NOT NULL,\n" +
+                "    description TEXT NOT NULL,\n" +
+                "    department VARCHAR(255) NOT NULL\n" +
+                ")");
     }
 
 
@@ -44,6 +52,11 @@ public class SgliteJDSCConnector {
                     "price) VALUES (\" dupa1\", \"gbvgh\", 3434)");
             statement.execute("INSERT Into products (name, description, " +
                     "price) VALUES (\" dupa2\", \"gbvgh\", 3434)");
+
+            statement.execute("INSERT Into categories (name, description, " +
+                    "department) VALUES (\" alcohols\", \"gbvgh\", \"kjkj\")");
+            statement.execute("INSERT Into categories (name, description, " +
+                    "department) VALUES (\" bread\", \"gbvgh\", \"kjkj\")");
         } catch (SQLException e) {
             e.printStackTrace();
         }
