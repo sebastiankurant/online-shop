@@ -4,7 +4,9 @@ import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +34,7 @@ public class ProductDaoSqlite implements ProductDao {
         Supplier supplier = new Supplier("dupa", "description");
 
         try {
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:sqlite:src/main/resources/database.db");
-            Statement statement = connection.createStatement();
+            Statement statement = SgliteJDSCConnector.makeConnection().createStatement();
             ResultSet rs = statement.executeQuery("SELECT * from products");
             while(rs.next()){
                 Product product = new Product(
