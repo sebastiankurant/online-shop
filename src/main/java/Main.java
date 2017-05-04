@@ -1,8 +1,6 @@
-import com.codecool.shop.controller.MainMenuController;
-import com.codecool.shop.controller.ProductController;
-import com.codecool.shop.dao.SgliteJDSCConnector;
 import java.sql.SQLException;
-import java.util.Scanner;
+import com.codecool.shop.controller.MainMenuController;
+import com.codecool.shop.dao.SgliteJDSCConnector;
 
 public class Main {
 
