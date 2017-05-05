@@ -39,26 +39,4 @@ public class SgliteJDSCConnector {
                 "    department VARCHAR(255) NOT NULL\n" +
                 ")");
     }
-
-
-    public static void makeSeeds(){
-        try {
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:sqlite:src/main/resources/database.db");
-            Statement statement = connection.createStatement();
-            statement.execute("INSERT Into products (name, description, " +
-                    "price) VALUES (\" dupa\", \"gbvgh\", 3434)");
-            statement.execute("INSERT Into products (name, description, " +
-                    "price) VALUES (\" dupa1\", \"gbvgh\", 3434)");
-            statement.execute("INSERT Into products (name, description, " +
-                    "price) VALUES (\" dupa2\", \"gbvgh\", 3434)");
-
-            statement.execute("INSERT Into categories (name, description, " +
-                    "department) VALUES (\" alcohols\", \"gbvgh\", \"kjkj\")");
-            statement.execute("INSERT Into categories (name, description, " +
-                    "department) VALUES (\" bread\", \"gbvgh\", \"kjkj\")");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }

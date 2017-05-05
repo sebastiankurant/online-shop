@@ -6,11 +6,13 @@ import com.codecool.shop.model.Supplier;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDaoSqlite implements ProductDao {
+public class ProductDaoSqlite extends Dao implements ProductDao {
+    private ProductCategoryDao categoryDao = new ProductCategoryDaoSqlite();
+    private SupplierDao supplierDao = new SupplierDaoSqlite();
+
     @Override
     public void add(Product product) {
 
@@ -23,62 +25,45 @@ public class ProductDaoSqlite implements ProductDao {
 
     @Override
     public void remove(int id) {
-
     }
 
     @Override
-    public List<Product> getAll() {
-        List<Product> products = new ArrayList<>();
-        Supplier supplier = new Supplier("dupa", "description");
-
-        try {
-            Statement statement = SgliteJDSCConnector.makeConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * from products");
-            while(rs.next()){
-                Product product = new Product(
-                        rs.getString("name"),
-                        rs.getFloat("price"),
-                        "PLN",
-                        rs.getString("description"),
-                        new ProductCategoryDaoSqlite().find(rs.getInt("category_id")),
-                        supplier);
-                products.add(product);
-            }
-        } catch (SQLException e) {
-            System.out.println("Connection failed");
-            e.printStackTrace();
-        }
+    public List<Product> getAll() throws SQLException {
+            ResultSet rs = getResultSet("SELECT * from products");
+            List<Product> products = createProductList(rs);
         return  products;
     }
 
     @Override
-    public List<Product> getBy(Supplier supplier) {
-        return null;
+    public List<Product> getBy(Supplier supplier) throws SQLException {
+        ResultSet rs = getResultSet("SELECT * from products where supplier_id =?",
+                    supplier.getId());
+        List<Product> products = createProductList(rs);
+        return  products;
+
     }
 
     @Override
-    public List<Product> getBy(ProductCategory productCategory) {
-        List<Product> products = new ArrayList<>();
-        Supplier supplier = new Supplier("dupa", "description");
-
-        try {
-            Statement statement = SgliteJDSCConnector.makeConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * from products where category_id = "+
-                    productCategory.getId());
-            while(rs.next()){
-                Product product = new Product(
-                        rs.getString("name"),
-                        rs.getFloat("price"),
-                        "PLN",
-                        rs.getString("description"),
-                        productCategory,
-                        supplier);
-                products.add(product);
-            }
-        } catch (SQLException e) {
-            System.out.println("Connection failed");
-            e.printStackTrace();
-        }
+    public List<Product> getBy(ProductCategory productCategory) throws SQLException {
+        ResultSet rs = getResultSet("SELECT * from products where category_id = ?",
+                productCategory.getId());
+        List<Product> products = createProductList(rs);
         return  products;
+    }
+
+    private List<Product> createProductList(ResultSet rs) throws SQLException {
+        List<Product> products = new ArrayList<>();
+        while(rs.next()){
+            Product product = new Product(
+                    rs.getString("name"),
+                    rs.getFloat("price"),
+                    "PLN",
+                    rs.getString("description"),
+                    categoryDao.find(rs.getInt("category_id")),
+                    supplierDao.find(rs.getInt("supplier_id")));
+            product.setId(rs.getInt("id"));
+            products.add(product);
+        }
+        return products;
     }
 }
