@@ -3,10 +3,10 @@ package codecool_shop.controller;
 import codecool_shop.dao.*;
 import codecool_shop.model.Product;
 import codecool_shop.model.ProductCategory;
+import codecool_shop.utilities.UtilityClass;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
-import codecool_shop.utilities.UtilityClass;
 
 import java.sql.SQLException;
 import java.text.DateFormat;

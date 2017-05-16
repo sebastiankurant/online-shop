@@ -1,7 +1,5 @@
 package codecool_shop.dao;
 
-import org.sqlite.SQLiteConnection;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
