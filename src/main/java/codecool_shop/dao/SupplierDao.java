@@ -2,8 +2,11 @@ package codecool_shop.dao;
 
 import codecool_shop.model.ProductSupplier;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,6 +31,29 @@ public class SupplierDao extends Dao implements SupplierInterface {
         parameters.put(1, productSupplier.getName());
         parameters.put(2, productSupplier.getAddress());
         this.executeStatementUpdate(ADD, parameters);
+    }
+
+    @Override
+    public List<ProductSupplier> getAll() throws SQLException {
+        ResultSet rs = this.executeStatement(GET_ALL);
+        List<ProductSupplier> productSupplierList = createSupplierList(rs);
+        rs.close();
+        return productSupplierList;
+    }
+
+
+    private List<ProductSupplier> createSupplierList(ResultSet rs) throws SQLException {
+        List<ProductSupplier> productCategories = new ArrayList<>();
+
+        while (rs.next()) {
+            ProductSupplier productCategory = new ProductSupplier(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("address")
+            );
+            productCategories.add(productCategory);
+        }
+        return productCategories;
     }
 
 }
