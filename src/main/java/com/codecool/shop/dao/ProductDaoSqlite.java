@@ -23,7 +23,10 @@ public class ProductDaoSqlite implements ProductDao {
 
     @Override
     public Product find(int id) {
-        return null;
+        ProductCategory category = new ProductCategory("Category", "Department", "Description");
+        Supplier supplier = new Supplier("Supplier", "Description");
+        Product product = new Product("nazwa", 2.50f, "PLN", "kruf", category, supplier);
+        return product;
     }
 
     @Override
@@ -50,6 +53,7 @@ public class ProductDaoSqlite implements ProductDao {
                         category,
                         supplier
                 );
+                product.setId(rs.getInt("id"));
                 products.add(product);
             }
         } catch(SQLException e) {

@@ -16,7 +16,7 @@ public class ProductController {
     private SupplierDao supplierDao = new SupplierDaoSqlite();
     private ProductView view = new ProductView();
 
-    public void listProducts() {
+    void listProducts() {
         List<Product> products = productDao.getAll();
         view.displayProductsList(products);
     }
