@@ -64,4 +64,28 @@ public class SupplierDao extends Dao implements SupplierInterface {
         parameters.put(3, String.valueOf(productSupplier.getId()));
         this.executeStatementUpdate(UPDATE, parameters);
     }
+
+    @Override
+    public void remove(Integer id) throws SQLException {
+        Map<Integer, String> parameters = new HashMap<>();
+        parameters.put(1, String.valueOf(id));
+        this.executeStatementUpdate(DELETE, parameters);
+    }
+
+    @Override
+    public ProductSupplier getById(Integer id) throws SQLException {
+        Map<Integer, String> parameters = new HashMap<>();
+        parameters.put(1, String.valueOf(id));
+
+        ResultSet rs = this.executeStatement(GET_BY_ID, parameters);
+
+        if (!(rs == null) && rs.isBeforeFirst()) {
+            String name = rs.getString("name");
+            String address = rs.getString("address");
+            rs.close();
+            return new ProductSupplier(id, name, address);
+        }
+        rs.close();
+        return null;
+    }
 }
