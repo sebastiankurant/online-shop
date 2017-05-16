@@ -43,17 +43,25 @@ public class SupplierDao extends Dao implements SupplierInterface {
 
 
     private List<ProductSupplier> createSupplierList(ResultSet rs) throws SQLException {
-        List<ProductSupplier> productCategories = new ArrayList<>();
+        List<ProductSupplier> productSuppliers = new ArrayList<>();
 
         while (rs.next()) {
-            ProductSupplier productCategory = new ProductSupplier(
+            ProductSupplier productSupplier = new ProductSupplier(
                     rs.getInt("id"),
                     rs.getString("name"),
                     rs.getString("address")
             );
-            productCategories.add(productCategory);
+            productSuppliers.add(productSupplier);
         }
-        return productCategories;
+        return productSuppliers;
     }
 
+    @Override
+    public void update(ProductSupplier productSupplier) throws SQLException {
+        Map<Integer, String> parameters = new HashMap<>();
+        parameters.put(1, productSupplier.getName());
+        parameters.put(2, productSupplier.getAddress());
+        parameters.put(3, String.valueOf(productSupplier.getId()));
+        this.executeStatementUpdate(UPDATE, parameters);
+    }
 }
