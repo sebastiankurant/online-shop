@@ -1,15 +1,15 @@
-package controller;
+package codecool_shop.controller;
 
-import dao.CategoryDao;
-import dao.CategoryInterface;
-import dao.ProductDao;
-import dao.ProductInterface;
-import model.Product;
-import model.ProductCategory;
+import codecool_shop.dao.CategoryDao;
+import codecool_shop.dao.CategoryInterface;
+import codecool_shop.dao.ProductDao;
+import codecool_shop.dao.ProductInterface;
+import codecool_shop.model.Product;
+import codecool_shop.model.ProductCategory;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
-import utilities.UtilityClass;
+import codecool_shop.utilities.UtilityClass;
 
 import java.sql.SQLException;
 import java.util.Date;

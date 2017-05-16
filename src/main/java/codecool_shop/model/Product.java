@@ -1,4 +1,4 @@
-package model;
+package codecool_shop.model;
 
 import java.util.Date;
 import java.util.List;

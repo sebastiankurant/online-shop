@@ -1,4 +1,6 @@
-package dao;
+package codecool_shop.dao;
+
+import codecool_shop.Application;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +10,8 @@ import java.util.Map;
 
 
 public class Dao {
-    Connection connection = new SgliteJDSCConnector().connection();
+
+    Connection connection = Application.getConnection();
 
     ResultSet executeStatement(String query, Map<Integer, String> parameters) throws SQLException {
         ResultSet resultSet;

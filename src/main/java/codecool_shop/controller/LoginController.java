@@ -1,12 +1,12 @@
-package controller;
+package codecool_shop.controller;
 
 import spark.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static utilities.RequestUtil.getQueryPassword;
-import static utilities.RequestUtil.getQueryUsername;
+import static codecool_shop.utilities.RequestUtil.getQueryPassword;
+import static codecool_shop.utilities.RequestUtil.getQueryUsername;
 
 
 /**

@@ -1,10 +1,9 @@
-package dao;
+package codecool_shop.dao;
 
-import model.Product;
-import model.ProductCategory;
+import codecool_shop.model.Product;
+import codecool_shop.model.ProductCategory;
 import org.sqlite.date.DateFormatUtils;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;

@@ -1,9 +1,9 @@
-package controller;
+package codecool_shop.controller;
 
-import dao.CategoryDao;
-import dao.CategoryInterface;
-import dao.ProductDao;
-import dao.ProductInterface;
+import codecool_shop.dao.CategoryDao;
+import codecool_shop.dao.CategoryInterface;
+import codecool_shop.dao.ProductDao;
+import codecool_shop.dao.ProductInterface;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;

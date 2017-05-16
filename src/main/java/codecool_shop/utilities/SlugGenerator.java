@@ -1,4 +1,4 @@
-package utilities;
+package codecool_shop.utilities;
 
 import java.text.Normalizer;
 import java.util.Locale;

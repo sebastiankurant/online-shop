@@ -1,6 +1,6 @@
-package model;
+package codecool_shop.model;
 
-import utilities.SlugGenerator;
+import codecool_shop.utilities.SlugGenerator;
 
 /**
  * Created by pgurdek on 10.05.17.

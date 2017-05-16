@@ -1,7 +1,7 @@
-package dao;
+package codecool_shop.dao;
 
-import model.Product;
-import model.ProductCategory;
+import codecool_shop.model.Product;
+import codecool_shop.model.ProductCategory;
 
 import java.sql.SQLException;
 import java.util.List;

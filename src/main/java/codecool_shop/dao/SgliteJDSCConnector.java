@@ -1,4 +1,6 @@
-package dao;
+package codecool_shop.dao;
+
+import org.sqlite.SQLiteConnection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +14,7 @@ import java.util.Properties;
 public class SgliteJDSCConnector {
 
     public void createTables() throws SQLException {
+
         Connection connection = connection();
         Statement statement = connection.createStatement();
 
@@ -54,6 +57,7 @@ public class SgliteJDSCConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println(connection + "asdsad");
         return connection;
     }
 

@@ -1,4 +1,4 @@
-package model;
+package codecool_shop.model;
 
 /**
  * Created by pgurdek on 13.05.17.

@@ -1,6 +1,6 @@
-package controller;
+package codecool_shop.controller;
 
-import model.User;
+import codecool_shop.model.User;
 
 /**
  * Created by pgurdek on 13.05.17.

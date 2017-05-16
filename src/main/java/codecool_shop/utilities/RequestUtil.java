@@ -1,4 +1,4 @@
-package utilities;
+package codecool_shop.utilities;
 
 import spark.Request;
 
