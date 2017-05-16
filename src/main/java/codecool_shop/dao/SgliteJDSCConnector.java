@@ -55,7 +55,6 @@ public class SgliteJDSCConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(connection + "asdsad");
         return connection;
     }
 
