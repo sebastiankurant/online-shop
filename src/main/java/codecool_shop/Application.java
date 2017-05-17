@@ -2,6 +2,8 @@ package codecool_shop;
 
 import codecool_shop.controller.*;
 import codecool_shop.dao.SgliteJDSCConnector;
+import spark.Request;
+import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 import java.sql.Connection;
@@ -29,6 +31,7 @@ public class Application {
     }
 
     public void start() {
+
         try {
             SgliteJDSCConnector temp = new SgliteJDSCConnector();
             temp.createTables();
@@ -53,6 +56,7 @@ public class Application {
         ProductControllerAdmin productControllerAdmin = new ProductControllerAdmin();
         CategoryControllerAdmin catController = new CategoryControllerAdmin();
         LoginController loginController = new LoginController();
+        SessionController sessionController = new SessionController();
         AdminController adminController = new AdminController();
         BasketController basketController = new BasketController();
 
@@ -62,6 +66,8 @@ public class Application {
                 if (!path.endsWith("/")) {
                     res.redirect(path + "/");
                 }
+                System.out.println("zzz");
+                sessionController.manageBasketSession(req, res);
             });
             get("/", productController::displayProducts, new ThymeleafTemplateEngine());
 
@@ -80,6 +86,7 @@ public class Application {
                 get("/", basketController::getBasket, new ThymeleafTemplateEngine());
                 get("/add/", basketController::addToBasket);
                 post("/add/", basketController::addToBasket);
+                post("/remove/product/", basketController::removeProduct);
             });
             path("/admin/", () -> {
                 before("/*", (req, res) -> {
