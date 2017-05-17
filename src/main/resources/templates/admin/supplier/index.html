@@ -1,0 +1,53 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: header">
+</head>
+
+<body>
+<div class="container-fluid">
+
+    <div class="row">
+        <nav th:replace="admin/admin-panel :: admin-panel">
+        </nav>
+
+        <div id="admin-panel-content" class="admin-content col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
+            <h1>Supplier</h1>
+            <a class="btn btn-outline-primary" th:text="'Add Supplier'" th:href="@{~/admin/supplier/add/}"></a>
+            <div id="supplier" class="">
+                <table class="table">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="supplier,iterCount : ${supplierContainer}">
+                        <td th:text="${iterCount.count}"></td>
+                        <td th:text="${supplier.getName()}"></td>
+                        <td th:text="${supplier.getAddress()}"></td>
+                        <td>
+                            <a th:href="@{~/admin/supplier/edit/}+${supplier.getId()}">
+                                <button type="button" class="btn btn-secondary" th:text="Edit"></button>
+                            </a>
+                            <form th:method="POST" th:action="@{~/admin/supplier/remove/}+${supplier.getId()}+'/'">
+                                <button class="btn btn-secondary" th:type="submit" th:value="Delete"
+                                        th:text="Delete"></button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div th:replace="footer :: copy"></div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
