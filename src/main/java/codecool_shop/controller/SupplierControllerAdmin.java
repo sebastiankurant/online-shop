@@ -77,7 +77,7 @@ public class SupplierControllerAdmin {
             response.redirect("/admin/supplier");
         } else {
             params.put("supplierContainer", editSupplier);
-            params.put("errorContainer", "Category name cannot be empty");
+            params.put("errorContainer", "Supplier name cannot be empty");
             return new ModelAndView(params, "admin/supplier/edit");
         }
         return new ModelAndView(params, "admin/supplier/edit");
@@ -89,10 +89,10 @@ public class SupplierControllerAdmin {
         ProductSupplier supplierToRemove = supplierDao.getById(id);
         if (null != supplierToRemove) {
             supplierDao.remove(id);
-            response.redirect("admin/supplier/");
+            response.redirect("/admin/supplier/");
             return "Success";
         } else {
-            response.redirect("admin/supplier");
+            response.redirect("/admin/supplier/");
             return "Mission Failed";
         }
     }
