@@ -81,14 +81,14 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, id.toString());
         ResultSet rs = this.executeStatement(GET_BY_ID, parameters);
-        return createEvent(rs);
+        return createProduct(rs);
     }
 
     public Product getByIdFuture(Integer id) throws SQLException {
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, id.toString());
         ResultSet rs = this.executeStatement(GET_BY_ID_FUTURE, parameters);
-        return createEvent(rs);
+        return createProduct(rs);
     }
 
     @Override
@@ -97,9 +97,9 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
         parameters.put(1,name);
         ResultSet rs = executeStatement(GET_BY_NAME,parameters);
         if (!(rs == null)) {
-            Integer eventId = rs.getInt("id");
+            Integer productId = rs.getInt("id");
             rs.close();
-            return eventId;
+            return productId;
         }
         rs.close();
         return null;
@@ -108,7 +108,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
     @Override
     public List<Product> getAll() throws SQLException {
         ResultSet rs = this.executeStatement(GET_ALL);
-        List<Product> products = createEventList(rs);
+        List<Product> products = createProductList(rs);
         rs.close();
         return products;
     }
@@ -116,7 +116,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
     @Override
     public List<Product> getAllPast() throws SQLException {
         ResultSet rs = this.executeStatement(GET_ALL_PAST);
-        List<Product> products = createEventList(rs);
+        List<Product> products = createProductList(rs);
         rs.close();
         return products;
     }
@@ -128,25 +128,25 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
         parameters.put(1, String.valueOf(category.getId()));
         ResultSet rs = this.executeStatement(GET_BY_ALL_CATEGORY,parameters);
         while (rs.next()) {
-            Integer eventId = rs.getInt("post_id");
-            Product product = getByIdFuture(eventId);
+            Integer productId = rs.getInt("post_id");
+            Product product = getByIdFuture(productId);
             if (product != null) {
-                productByCategory.add(getByIdFuture(eventId));
+                productByCategory.add(getByIdFuture(productId));
             }
         }
         return productByCategory == null ? null : productByCategory;
 
     }
 
-    private List<Product> createEventList(ResultSet rs) throws SQLException {
+    private List<Product> createProductList(ResultSet rs) throws SQLException {
         List<Product> products = new ArrayList<>();
         while (rs.next()) {
             DateFormat formatNew = new SimpleDateFormat("yyyy-MM-dd");
             String stringDate = rs.getString("product_date");
-            Date event_date = null;
-            List<ProductCategory> eventCatList = getCategoriesFromMeta(rs);
+            Date product_date = null;
+            List<ProductCategory> productCatList = getCategoriesFromMeta(rs);
             try {
-                event_date = formatNew.parse(stringDate);
+                product_date = formatNew.parse(stringDate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -154,8 +154,8 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
                     rs.getInt("id"),
                     rs.getString("name"),
                     rs.getString("description"),
-                    event_date,
-                    eventCatList
+                    product_date,
+                    productCatList
             );
             products.add(product);
         }
@@ -164,37 +164,37 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
 
     private List<ProductCategory> getCategoriesFromMeta(ResultSet rs) throws SQLException {
         CategoryDao categoryDao = new CategoryDao();
-        List<ProductCategory> eventCatList = new ArrayList<>();
+        List<ProductCategory> productCatList = new ArrayList<>();
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, String.valueOf(rs.getInt("id")));
         ResultSet rs_cat = executeStatement(GET_CATEGORIES_META,parameters);
         while (rs_cat.next()) {
-            eventCatList.add(categoryDao.getById(rs_cat.getInt("category_id")));
+            productCatList.add(categoryDao.getById(rs_cat.getInt("category_id")));
         }
         rs_cat.close();
-        return eventCatList;
+        return productCatList;
     }
 
 
-    private Product createEvent(ResultSet resultSet) throws SQLException {
+    private Product createProduct(ResultSet resultSet) throws SQLException {
 
-        Date event_date = null;
-        DateFormat format = new SimpleDateFormat("yyyy-MM-DD");
+        Date product_date = null;
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         while (resultSet.next()) {
             String stringDate = resultSet.getString("product_date");
             try {
-                event_date = format.parse(stringDate);
+                product_date = format.parse(stringDate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            List<ProductCategory> eventCatList = getCategoriesFromMeta(resultSet);
+            List<ProductCategory> productCatList = getCategoriesFromMeta(resultSet);
 
             Product product = new Product(
                     resultSet.getInt("id"),
                     resultSet.getString("name"),
                     resultSet.getString("description"),
-                    event_date,
-                    eventCatList
+                    product_date,
+                    productCatList
             );
             resultSet.close();
             return product;
