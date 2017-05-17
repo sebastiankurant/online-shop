@@ -22,7 +22,7 @@
                     <div class="form-group row">
                         <label class="col-2 col-form-label">Description:</label>
 
-                        <textarea class="form-control col-8" th:value="${category.getDescription()}" id="description" type="text" th:name="description">
+                        <textarea class="form-control col-8" th:text="${category.getDescription()}" id="description" type="text" th:name="description">
                     </textarea>
                     </div>
 
