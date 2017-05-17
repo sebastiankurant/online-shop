@@ -3,10 +3,10 @@ package codecool_shop.controller;
 import codecool_shop.dao.*;
 import codecool_shop.model.Product;
 import codecool_shop.model.ProductCategory;
+import codecool_shop.utilities.UtilityClass;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
-import codecool_shop.utilities.UtilityClass;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -15,16 +15,16 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ProductControllerAdmin {
-    private ProductInterface eventDao = new ProductDao();
+    private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();
     private MetaInterface eventMeta = new ProductDao();
     private UtilityClass calculateClass = new UtilityClass();
 
-    public ModelAndView renderEvents(Request req, Response res) throws SQLException {
+    public ModelAndView renderProducts(Request req, Response res) throws SQLException {
         //Get products from database by Dao
         Map params = new HashMap<>();
         try {
-            params.put("productContainer", eventDao.getAll());
+            params.put("productContainer", productDao.getAll());
             params.put("categoryAvailable", categoryDao.getAll());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -36,7 +36,7 @@ public class ProductControllerAdmin {
         return new ModelAndView(params, "/admin/products/index");
     }
 
-    public ModelAndView addEvent(Request req, Response res) {
+    public ModelAndView addProduct(Request req, Response res) {
         Map params = new HashMap<>();
         try {
             List<ProductCategory> availableCategory = categoryDao.getAll();
@@ -47,7 +47,7 @@ public class ProductControllerAdmin {
         return new ModelAndView(params, "/admin/products/add");
     }
 
-    public ModelAndView addEventPost(Request req, Response res) throws SQLException {
+    public ModelAndView addProductPost(Request req, Response res) throws SQLException {
         //Get products from database by Dao
         Map params = new HashMap<>();
         try {
@@ -80,8 +80,8 @@ public class ProductControllerAdmin {
             newProduct.setDescription(description);
             newProduct.setDate(date);
             newProduct.setCategories(catList);
-            eventDao.add(newProduct);
-            Integer eventId = eventDao.getByName(newProduct.getName());
+            productDao.add(newProduct);
+            Integer eventId = productDao.getByName(newProduct.getName());
             newProduct.setId(eventId);
             eventMeta.addMeta(newProduct);
             res.redirect("/admin/products/");
@@ -92,9 +92,9 @@ public class ProductControllerAdmin {
         return new ModelAndView(params, "/admin/products/add");
     }
 
-    public ModelAndView editEvent(Request req, Response res) throws SQLException {
+    public ModelAndView editProduct(Request req, Response res) throws SQLException {
         Integer id = Integer.valueOf(req.params("id"));
-        Product productToEdit = eventDao.getById(id);
+        Product productToEdit = productDao.getById(id);
         Map params = new HashMap<>();
         if (!(productToEdit == null)) {
             try { // Set attributes which are already checked
@@ -117,7 +117,7 @@ public class ProductControllerAdmin {
         return new ModelAndView(params, "404");
     }
 
-    public String editEventPost(Request req, Response res) throws SQLException {
+    public String editEventProduct(Request req, Response res) throws SQLException {
         Integer id = Integer.valueOf(req.params("id"));
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String name = req.queryParams("name");
@@ -125,7 +125,7 @@ public class ProductControllerAdmin {
         String postDate = req.queryParams("date");
         String[] categoryList = req.queryParamsValues("category");
         Date date = null;
-        Product editProduct = eventDao.getById(id);
+        Product editProduct = productDao.getById(id);
         try {
             date = format.parse(postDate);
             System.out.println(postDate);
@@ -145,7 +145,7 @@ public class ProductControllerAdmin {
             editProduct.setDescription(description);
             editProduct.setDate(date);
             editProduct.setCategories(catList);
-            eventDao.update(editProduct);
+            productDao.update(editProduct);
             eventMeta.removeMeta(editProduct);
             eventMeta.addMeta(editProduct);
             res.redirect("/admin/products/");
@@ -154,14 +154,14 @@ public class ProductControllerAdmin {
         return "Error";
     }
 
-    public String removeEvent(Request req, Response res) throws SQLException {
+    public String removeProduct(Request req, Response res) throws SQLException {
         System.out.println("Remove Product");
         Integer id = Integer.valueOf(req.params("id"));
         System.out.println(id);
-        Product productToDelete = eventDao.getById(id);
+        Product productToDelete = productDao.getById(id);
 
         if (!(productToDelete == null)) {
-            eventDao.remove(productToDelete.getId());
+            productDao.remove(productToDelete.getId());
             eventMeta.removeMeta(productToDelete);
             res.redirect("/admin/products/");
             return "works";
@@ -170,10 +170,10 @@ public class ProductControllerAdmin {
         return "";
     }
 
-    public ModelAndView pastEvents(Request req, Response res) throws SQLException {
+    public ModelAndView pastProducts(Request req, Response res) throws SQLException {
         Map params = new HashMap<>();
         try {
-            params.put("productContainer", eventDao.getAllPast());
+            params.put("productContainer", productDao.getAllPast());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -181,7 +181,7 @@ public class ProductControllerAdmin {
         UtilityClass calculateClass = new UtilityClass();
         params.put("UtilityClass", calculateClass);
         params.put("currentDate", currentDate);
-        return new ModelAndView(params, "/admin/products/index");
+        return new ModelAndView(params, "/admin/products/pasts");
     }
 
     public ModelAndView filterCategory(Request req, Response res) throws SQLException {
@@ -197,7 +197,7 @@ public class ProductControllerAdmin {
             try {
                 List<ProductCategory> availableCategory = categoryDao.getAll();
                 params.put("categoryAvailable", availableCategory);
-                params.put("productContainer", eventDao.getByAllCategory(catObject));
+                params.put("productContainer", productDao.getByAllCategory(catObject));
             } catch (SQLException e) {
                 e.printStackTrace();
             }

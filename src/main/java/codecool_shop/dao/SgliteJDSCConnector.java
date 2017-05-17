@@ -1,7 +1,5 @@
 package codecool_shop.dao;
 
-import org.sqlite.SQLiteConnection;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -51,6 +49,20 @@ public class SgliteJDSCConnector {
                 "    FOREIGN KEY (category_id) REFERENCES product_category (id) ON DELETE CASCADE ON UPDATE CASCADE\n" +
                 ")");
 
+        statement.execute("CREATE TABLE IF NOT EXISTS users\n" +
+                "(\n" +
+                "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    username TEXT NOT NULL,\n" +
+                "    firstname TEXT ,\n" +
+                "    lastname TEXT,\n" +
+                "    password TEXT NOT NULL,\n" +
+                "    type TEXT NOT NULL,\n" +
+                "    UNIQUE(username)" +
+                ")");
+
+            statement.execute("INSERT OR IGNORE INTO  users (username,firstname,lastname,password,type) VALUES ('admin','admin','gurdek','admin','admin')");
+            statement.execute("INSERT OR IGNORE INTO  users (username,firstname,lastname,password,type) VALUES ('customer','monika','plocica','dupa','customer')");
+
         statement.close();
         connection.close();
     }
@@ -65,7 +77,6 @@ public class SgliteJDSCConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(connection + "asdsad");
         return connection;
     }
 

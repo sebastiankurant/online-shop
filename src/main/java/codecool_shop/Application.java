@@ -2,6 +2,8 @@ package codecool_shop;
 
 import codecool_shop.controller.*;
 import codecool_shop.dao.SgliteJDSCConnector;
+import spark.Request;
+import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 import java.sql.Connection;
@@ -29,6 +31,7 @@ public class Application {
     }
 
     public void start() {
+
         try {
             SgliteJDSCConnector temp = new SgliteJDSCConnector();
             temp.createTables();
@@ -50,19 +53,24 @@ public class Application {
         port(8888);
         enableDebugScreen();
         ProductController productController = new ProductController();
-        ProductControllerAdmin eventControllerAdmin = new ProductControllerAdmin();
+        ProductControllerAdmin productControllerAdmin = new ProductControllerAdmin();
         CategoryControllerAdmin catController = new CategoryControllerAdmin();
         SupplierControllerAdmin supplierController = new SupplierControllerAdmin();
         LoginController loginController = new LoginController();
+        SessionController sessionController = new SessionController();
         AdminController adminController = new AdminController();
+        BasketController basketController = new BasketController();
+
         path("/", () -> {
             before("/*", (req, res) -> { // Ensure that url have "/" on ened
                 String path = req.pathInfo();
                 if (!path.endsWith("/")) {
                     res.redirect(path + "/");
                 }
+                System.out.println("zzz");
+                sessionController.manageBasketSession(req, res);
             });
-            get("/", productController::displayEvents, new ThymeleafTemplateEngine());
+            get("/", productController::displayProducts, new ThymeleafTemplateEngine());
 
 //            Front End routes - Not secured routes
 
@@ -75,6 +83,12 @@ public class Application {
 
 //            Admin routes
 
+            path("/basket/", () -> {
+                get("/", basketController::getBasket, new ThymeleafTemplateEngine());
+                get("/add/", basketController::addToBasket);
+                post("/add/", basketController::addToBasket);
+                post("/remove/product/", basketController::removeProduct);
+            });
             path("/admin/", () -> {
                 before("/*", (req, res) -> {
                     loginController.ensureUserIsLoggedIn(req, res);
@@ -83,14 +97,14 @@ public class Application {
                 get("/", adminController::displayIndex, new ThymeleafTemplateEngine());
                 post("/logout/", loginController::handleLogoutPost);
                 path("/products", () -> {
-                    get("/", eventControllerAdmin::renderEvents, new ThymeleafTemplateEngine());
-                    get("/add/", eventControllerAdmin::addEvent, new ThymeleafTemplateEngine());
-                    get("/edit/:id/", eventControllerAdmin::editEvent, new ThymeleafTemplateEngine());
-                    get("/past/", eventControllerAdmin::pastEvents, new ThymeleafTemplateEngine());
-                    get("/category/", eventControllerAdmin::filterCategory, new ThymeleafTemplateEngine());
-                    post("/add/", eventControllerAdmin::addEventPost, new ThymeleafTemplateEngine());
-                    post("/remove/:id/", eventControllerAdmin::removeEvent);
-                    post("/edit/:id/", eventControllerAdmin::editEventPost);
+                    get("/", productControllerAdmin::renderProducts, new ThymeleafTemplateEngine());
+                    get("/add/", productControllerAdmin::addProduct, new ThymeleafTemplateEngine());
+                    get("/edit/:id/", productControllerAdmin::editProduct, new ThymeleafTemplateEngine());
+                    get("/past/", productControllerAdmin::pastProducts, new ThymeleafTemplateEngine());
+                    get("/category/", productControllerAdmin::filterCategory, new ThymeleafTemplateEngine());
+                    post("/add/", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
+                    post("/remove/:id/", productControllerAdmin::removeProduct);
+                    post("/edit/:id/", productControllerAdmin::editEventProduct);
                 });
 
                 path("/category", () -> {

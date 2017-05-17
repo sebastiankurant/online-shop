@@ -1,6 +1,6 @@
 $(function() {
     console.log( "ready!" );
-   var grid =  $('.events-grid').isotope({
+   var grid =  $('.products-grid').isotope({
         // options
         itemSelector: '.element-item',
         layoutMode: 'fitRows'
