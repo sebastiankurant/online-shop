@@ -7,8 +7,8 @@
 <div class="container">
     <div class="login"><a th:href="@{~/login/}"><i class="fa fa-sign-in" aria-hidden="true"></i>
         Login In </a></div>
-    <h1>Incoming Events</h1>
-    <div class="info" th:text="${Msg}"></div>
+    <h1>Shop</h1>
+    <div class="info" th:if="${Msg}" th:text="'Product ' + ${productName} + 'has beend added to cart'"></div>
     <div class="filter-button-group">
         <button class="filter-button is-checked" data-filter="*">Show all</button>
         <button th:each="category:${allCategoires}" th:class="filter-button" th:data-filter="'.'+${category.getSlug()}"
@@ -16,7 +16,7 @@
     </div>
     <div class="row products-grid">
 
-        <div class="col-4" th:each="product,counter:${eventContaienr}"
+        <div class="col-4" th:each="product,counter:${eventContainer}"
              th:class="'element-item col-4 '+${product.getClassSlug()}">
             <div class="product-wrapper">
                 <h2 th:text="${product.getName()}"></h2>
