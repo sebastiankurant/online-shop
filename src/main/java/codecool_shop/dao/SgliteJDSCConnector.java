@@ -52,8 +52,8 @@ public class SgliteJDSCConnector {
                 "    UNIQUE(username)" +
                 ")");
 
-        statement.execute("INSERT OR IGNORE INTO  users (username,firstname,lastname,password,type) VALUES ('admin','admin','gurdek','admin','admin')");
-        statement.execute("INSERT OR IGNORE INTO  users (username,firstname,lastname,password,type) VALUES ('customer','monika','plocica','dupa','customer')");
+            statement.execute("INSERT OR IGNORE INTO  users (username,firstname,lastname,password,type) VALUES ('admin','admin','gurdek','admin','admin')");
+            statement.execute("INSERT OR IGNORE INTO  users (username,firstname,lastname,password,type) VALUES ('customer','monika','plocica','dupa','customer')");
 
         statement.close();
         connection.close();
