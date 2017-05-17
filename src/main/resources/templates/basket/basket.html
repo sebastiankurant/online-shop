@@ -8,28 +8,20 @@
     <h1>Basket</h1>
 
     <div class="row products-grid">
+        <span th:if="${removeFromBasket}" th:text="'Product Deletd'"></span>
+        <div class="col-12" th:each="product,counter:${basket}"
+             th:class="'col-12 '+${product.getClassSlug()}">
+            <div class="product-wrapper">
+                <h2 th:text="${product.getName()}"></h2>
+             </div>
+            <form th:action="@{~/basket/remove/product/}" method="POST">
+                <input type="hidden" th:id="'product-id' + ${product.getId()}" name="remove_product" th:value="${product.getId()}">
+                <button th:type="submit" class="cat-wrapper">Remove From Basket</button>
+            </form>
+            </div>
 
-        <!--<div class="col-4" th:each="product,counter:${eventContaienr}"-->
-             <!--th:class="'element-item col-4 '+${product.getClassSlug()}">-->
-            <!--<div class="product-wrapper">-->
-                <!--<h2 th:text="${product.getName()}"></h2>-->
-                <!--<div th:class="${UtilityClass.calculateClass(product.getDate(),currentDate)}">-->
-                    <!--<p class="product-date" th:text="${#dates.format(product.getDate(), 'yyyy-MM-dd')}"></p>-->
+        </div>
 
-                    <!--<p class="product-description" th:text="${product.getDescription()}"></p>-->
-                    <!--<div th:class="'cat-wrapper product-category'"-->
-                         <!--th:each="category,catIterCounter :${product.getCategories()}">-->
-                        <!--<span th:class="category-tags">-->
-                            <!--<span th:text="${category.getName()}"> </span>-->
-                        <!--</span>-->
-                    <!--</div>-->
-
-
-                <!--</div>-->
-            <!--</div>-->
-
-        <!--</div>-->
-        asdasdsada
     </div>
 
 
