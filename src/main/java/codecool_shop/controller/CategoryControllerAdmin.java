@@ -91,7 +91,7 @@ public class CategoryControllerAdmin {
             categoryDao.remove(catToDelete.getId());
             categoryDao.removeMeta(catToDelete.getId());
             res.redirect("/admin/category/");
-            return "Sucess";
+            return "Success";
         } else {
             res.redirect("/admin/category/");
             return "Failed";
