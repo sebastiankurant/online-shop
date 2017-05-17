@@ -50,11 +50,11 @@ public class Application {
         port(8888);
         enableDebugScreen();
         ProductController productController = new ProductController();
-        ProductControllerAdmin eventControllerAdmin = new ProductControllerAdmin();
+        ProductControllerAdmin productControllerAdmin = new ProductControllerAdmin();
         CategoryControllerAdmin catController = new CategoryControllerAdmin();
         LoginController loginController = new LoginController();
         AdminController adminController = new AdminController();
-
+        BasketController basketController = new BasketController();
 
         path("/", () -> {
             before("/*", (req, res) -> { // Ensure that url have "/" on ened
@@ -63,7 +63,7 @@ public class Application {
                     res.redirect(path + "/");
                 }
             });
-            get("/", productController::displayEvents, new ThymeleafTemplateEngine());
+            get("/", productController::displayProducts, new ThymeleafTemplateEngine());
 
 //            Front End routes - Not secured routes
 
@@ -76,6 +76,11 @@ public class Application {
 
 //            Admin routes
 
+            path("/basket/", () -> {
+                get("/", basketController::getBasket, new ThymeleafTemplateEngine());
+                get("/add/", basketController::addToBasket);
+                post("/add/", basketController::addToBasket);
+            });
             path("/admin/", () -> {
                 before("/*", (req, res) -> {
                     loginController.ensureUserIsLoggedIn(req, res);
@@ -84,14 +89,14 @@ public class Application {
                 get("/", adminController::displayIndex, new ThymeleafTemplateEngine());
                 post("/logout/", loginController::handleLogoutPost);
                 path("/products", () -> {
-                    get("/", eventControllerAdmin::renderEvents, new ThymeleafTemplateEngine());
-                    get("/add/", eventControllerAdmin::addEvent, new ThymeleafTemplateEngine());
-                    get("/edit/:id/", eventControllerAdmin::editEvent, new ThymeleafTemplateEngine());
-                    get("/past/", eventControllerAdmin::pastEvents, new ThymeleafTemplateEngine());
-                    get("/category/", eventControllerAdmin::filterCategory, new ThymeleafTemplateEngine());
-                    post("/add/", eventControllerAdmin::addEventPost, new ThymeleafTemplateEngine());
-                    post("/remove/:id/", eventControllerAdmin::removeEvent);
-                    post("/edit/:id/", eventControllerAdmin::editEventPost);
+                    get("/", productControllerAdmin::renderProducts, new ThymeleafTemplateEngine());
+                    get("/add/", productControllerAdmin::addProduct, new ThymeleafTemplateEngine());
+                    get("/edit/:id/", productControllerAdmin::editProduct, new ThymeleafTemplateEngine());
+                    get("/past/", productControllerAdmin::pastProducts, new ThymeleafTemplateEngine());
+                    get("/category/", productControllerAdmin::filterCategory, new ThymeleafTemplateEngine());
+                    post("/add/", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
+                    post("/remove/:id/", productControllerAdmin::removeProduct);
+                    post("/edit/:id/", productControllerAdmin::editEventProduct);
                 });
 
                 path("/category", () -> {
