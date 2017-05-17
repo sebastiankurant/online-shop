@@ -181,7 +181,7 @@ public class ProductControllerAdmin {
         UtilityClass calculateClass = new UtilityClass();
         params.put("UtilityClass", calculateClass);
         params.put("currentDate", currentDate);
-        return new ModelAndView(params, "/admin/products/index");
+        return new ModelAndView(params, "/admin/products/pasts");
     }
 
     public ModelAndView filterCategory(Request req, Response res) throws SQLException {
