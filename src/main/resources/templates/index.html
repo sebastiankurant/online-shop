@@ -8,6 +8,7 @@
     <div class="login"><a th:href="@{~/login/}"><i class="fa fa-sign-in" aria-hidden="true"></i>
         Login In </a></div>
     <h1>Incoming Events</h1>
+    <div class="info" th:text="${Msg}"></div>
     <div class="filter-button-group">
         <button class="filter-button is-checked" data-filter="*">Show all</button>
         <button th:each="category:${allCategoires}" th:class="filter-button" th:data-filter="'.'+${category.getSlug()}"
@@ -29,7 +30,10 @@
                             <span th:text="${category.getName()}"> </span>
                         </span>
                     </div>
-
+                    <form th:action="@{~/basket/add/}" method="post">
+                        <input type="hidden" th:id="'product-id' + ${product.getId()}" name="add_product" th:value="${product.getId()}">
+                        <button th:type="submit" class="cat-wrapper">Add To Basket</button>
+                    </form>
 
                 </div>
             </div>
