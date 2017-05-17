@@ -18,7 +18,7 @@ public class SupplierControllerAdmin {
 
     private SupplierInterface supplierDao = new SupplierDao();
 
-    public ModelAndView renderSupplier(Request req, Response res) {
+    public ModelAndView renderSupplier(Request request, Response response) {
         Map<Object, Object> params = new HashMap<>();
         try {
             params.put("supplierContainer", supplierDao.getAll());
@@ -28,13 +28,13 @@ public class SupplierControllerAdmin {
         return new ModelAndView(params, "admin/supplier/index");
     }
 
-    public ModelAndView add(Request req, Response res) {
+    public ModelAndView add(Request request, Response response) {
         Map<Object, Object> params = new HashMap<>();
         return new ModelAndView(params, "admin/supplier/add");
     }
 
-    public ModelAndView editSupplier(Request req, Response res) throws SQLException  {
-        Integer id = Integer.valueOf(req.params("id"));
+    public ModelAndView editSupplier(Request request, Response response) throws SQLException  {
+        Integer id = Integer.valueOf(request.params("id"));
         ProductSupplier productSupplier = supplierDao.getById(id);
         Map params = new HashMap<>();
         if (!(productSupplier == null)) {
@@ -44,4 +44,24 @@ public class SupplierControllerAdmin {
         return new ModelAndView(params, "404");
     }
 
+    public ModelAndView editSupplierPost(Request request, Response response) throws SQLException {
+        String name = request.queryParams("name");
+        String address = request.queryParams("address");
+        Integer id = Integer.valueOf(request.params("id"));
+
+        ProductSupplier editSupplier = supplierDao.getById(id);
+        Map params = new HashMap<>();
+        if (!name.isEmpty() && !(editSupplier == null)) {
+            editSupplier.setName(name);
+            editSupplier.setAddress(address);
+            supplierDao.update(editSupplier);
+            response.redirect("/admin/supplier");
+        } else {
+            params.put("supplierContainer", editSupplier);
+            params.put("errorContainer", "Category name cannot be empty");
+            return new ModelAndView(params, "admin/supplier/edit");
+        }
+        return new ModelAndView(params, "admin/supplier/edit");
+
+    }
 }
