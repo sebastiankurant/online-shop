@@ -83,4 +83,17 @@ public class SupplierControllerAdmin {
         return new ModelAndView(params, "admin/supplier/edit");
 
     }
+
+    public String removeSupplier(Request request, Response response) throws SQLException {
+        Integer id = Integer.valueOf(request.params("id"));
+        ProductSupplier supplierToRemove = supplierDao.getById(id);
+        if (null != supplierToRemove) {
+            supplierDao.remove(id);
+            response.redirect("admin/supplier/");
+            return "Success";
+        } else {
+            response.redirect("admin/supplier");
+            return "Mission Failed";
+        }
+    }
 }
