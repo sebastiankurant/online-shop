@@ -28,14 +28,30 @@ public class Application {
         return app;
     }
 
-    public void start() {
+    public static void restartTables(){
         try {
             SgliteJDSCConnector temp = new SgliteJDSCConnector();
+            temp.dropTables();
             temp.createTables();
         } catch (SQLException e) {
-
             e.printStackTrace();
+            System.out.println("Can't drop and add tables.");
+            System.exit(1);
         }
+    }
+
+    public static void fillIfNotExistTables(){
+        try {
+            SgliteJDSCConnector temp = new SgliteJDSCConnector();
+            temp.createTablesIfNotExist();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Can't fill with not exist tables.");
+            System.exit(1);
+        }
+    }
+
+    public void start() {
 
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
         Boolean localhost = true;  //Prevent public files from caching
