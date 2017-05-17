@@ -55,6 +55,7 @@ public class Application {
         ProductController productController = new ProductController();
         ProductControllerAdmin productControllerAdmin = new ProductControllerAdmin();
         CategoryControllerAdmin catController = new CategoryControllerAdmin();
+        SupplierControllerAdmin supplierController = new SupplierControllerAdmin();
         LoginController loginController = new LoginController();
         SessionController sessionController = new SessionController();
         AdminController adminController = new AdminController();
@@ -114,6 +115,14 @@ public class Application {
                     post("/edit/:id/", catController::editCategoryPost, new ThymeleafTemplateEngine());
                     post("/remove/:id/", catController::removeCategory);
 
+                });
+                path("/supplier", () -> {
+                    get("/", supplierController::renderSupplier, new ThymeleafTemplateEngine());
+                    get("/add/", supplierController::add, new ThymeleafTemplateEngine());
+                    get("/edit/:id/", supplierController::editSupplier, new ThymeleafTemplateEngine());
+                    post("/add/", supplierController::addSupplierPost, new ThymeleafTemplateEngine());
+                    post("/edit/:id/", supplierController::editSupplierPost, new ThymeleafTemplateEngine());
+                    post("/remove/:id/", supplierController::removeSupplier);
                 });
             });
         });

@@ -32,6 +32,14 @@ public class SgliteJDSCConnector {
                 "    slug VARCHAR(2355) NOT NULL" +
                 ")");
 
+
+        statement.execute("CREATE TABLE IF NOT EXISTS product_supplier\n" +
+                "(\n" +
+                "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    name VARCHAR(255) NOT NULL,\n" +
+                "    address TEXT\n"+
+                ")");
+
         statement.execute("CREATE TABLE IF NOT EXISTS product_meta\n" +
                 "(\n" +
                 "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
