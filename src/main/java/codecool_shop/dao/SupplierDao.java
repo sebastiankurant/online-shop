@@ -15,7 +15,7 @@ import java.util.Map;
 public class SupplierDao extends Dao implements SupplierInterface {
     private final String ADD = "INSERT INTO product_supplier (name,address)" +
             " VALUES(?,?)";
-    private final String UPDATE = "DELETE FROM product_supplier" +
+    private final String UPDATE = "UPDATE product_supplier SET name=?, address=?" +
             " WHERE id=? ";
     private final String DELETE = "DELETE FROM product_supplier" +
             " WHERE id=? ";
