@@ -33,6 +33,25 @@ public class SupplierControllerAdmin {
         return new ModelAndView(params, "admin/supplier/add");
     }
 
+    public ModelAndView addSupplierPost(Request request, Response response) throws SQLException {
+        Map params = new HashMap<>();
+        String name = request.queryParams("name");
+        String address = request.queryParams("address");
+
+        if(!name.isEmpty()) {
+            ProductSupplier newSupplier = new ProductSupplier();
+            newSupplier.setId(0);
+            newSupplier.setName(name);
+            newSupplier.setAddress(address);
+            supplierDao.add(newSupplier);
+            response.redirect("/admin/supplier");
+        } else {
+            params.put("errorContainer", "Supplier name cannot be empty");
+            return new ModelAndView(params, "admin/supplier/add");
+        }
+        return new ModelAndView(params, "admin/supplier/add");
+    }
+
     public ModelAndView editSupplier(Request request, Response response) throws SQLException  {
         Integer id = Integer.valueOf(request.params("id"));
         ProductSupplier productSupplier = supplierDao.getById(id);
