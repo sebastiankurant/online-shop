@@ -1,0 +1,40 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: header">
+</head>
+<body>
+<div class="container">
+    <h1>Basket</h1>
+
+    <div class="row products-grid">
+
+        <!--<div class="col-4" th:each="product,counter:${eventContaienr}"-->
+             <!--th:class="'element-item col-4 '+${product.getClassSlug()}">-->
+            <!--<div class="product-wrapper">-->
+                <!--<h2 th:text="${product.getName()}"></h2>-->
+                <!--<div th:class="${UtilityClass.calculateClass(product.getDate(),currentDate)}">-->
+                    <!--<p class="product-date" th:text="${#dates.format(product.getDate(), 'yyyy-MM-dd')}"></p>-->
+
+                    <!--<p class="product-description" th:text="${product.getDescription()}"></p>-->
+                    <!--<div th:class="'cat-wrapper product-category'"-->
+                         <!--th:each="category,catIterCounter :${product.getCategories()}">-->
+                        <!--<span th:class="category-tags">-->
+                            <!--<span th:text="${category.getName()}"> </span>-->
+                        <!--</span>-->
+                    <!--</div>-->
+
+
+                <!--</div>-->
+            <!--</div>-->
+
+        <!--</div>-->
+        asdasdsada
+    </div>
+
+
+</body>
+<script type="text/javascript" th:src="@{~/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{~/js/isotope.pkgd.min.js}"></script>
+<script type="text/javascript" th:src="@{~/js/main.js}"></script>
+</html>
