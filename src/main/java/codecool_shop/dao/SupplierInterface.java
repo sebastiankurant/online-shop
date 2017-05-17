@@ -15,8 +15,6 @@ public interface SupplierInterface {
 
     void update(ProductSupplier productSupplier) throws SQLException;
 
-    void removeMeta(Integer id) throws SQLException;
-
     List<ProductSupplier> getAll() throws SQLException;
 
     ProductSupplier getById(Integer id) throws SQLException;
