@@ -14,4 +14,5 @@ public class Basket {
         this.id = id;
         this.productsInBasket = productsInBasket;
     }
+
 }
