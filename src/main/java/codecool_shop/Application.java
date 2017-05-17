@@ -52,10 +52,9 @@ public class Application {
         ProductController productController = new ProductController();
         ProductControllerAdmin eventControllerAdmin = new ProductControllerAdmin();
         CategoryControllerAdmin catController = new CategoryControllerAdmin();
+        SupplierControllerAdmin supplierController = new SupplierControllerAdmin();
         LoginController loginController = new LoginController();
         AdminController adminController = new AdminController();
-
-
         path("/", () -> {
             before("/*", (req, res) -> { // Ensure that url have "/" on ened
                 String path = req.pathInfo();
@@ -102,6 +101,14 @@ public class Application {
                     post("/edit/:id/", catController::editCategoryPost, new ThymeleafTemplateEngine());
                     post("/remove/:id/", catController::removeCategory);
 
+                });
+                path("/supplier", () -> {
+                    get("/", supplierController::renderSupplier, new ThymeleafTemplateEngine());
+                    get("/add/", supplierController::add, new ThymeleafTemplateEngine());
+                    get("/edit/:id/", supplierController::editSupplier, new ThymeleafTemplateEngine());
+                    post("/add/", supplierController::addSupplierPost, new ThymeleafTemplateEngine());
+                    post("/edit/:id/", supplierController::editSupplierPost, new ThymeleafTemplateEngine());
+                    post("/remove/:id/", supplierController::removeSupplier);
                 });
             });
         });
