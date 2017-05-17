@@ -21,18 +21,19 @@ import java.util.Map;
  * Created by pgurdek on 14.05.17.
  */
 public class ProductController {
-    private ProductInterface eventDao = new ProductDao();
+    private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();
     private UtilityClass calculateClass = new UtilityClass();
 
-    public ModelAndView displayEvents(Request req, Response res) throws SQLException {
+    public ModelAndView displayProducts(Request req, Response res) throws SQLException {
         Map<String, Object> params = new HashMap<>();
-        List<Product> products = eventDao.getAll();
+        List<Product> products = productDao.getAll();
         List<ProductCategory> categoires = categoryDao.getAll();
         params.put("eventContaienr", products);
         params.put("allCategoires", categoires);
         params.put("UtilityClass", calculateClass);
         params.put("currentDate", new Date());
+        params.put("Msg",req.session().attribute("addedToCart"));
         return new ModelAndView(params, "index");
     }
 }
