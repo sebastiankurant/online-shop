@@ -13,22 +13,22 @@ import java.util.*;
 
 public class ProductDao extends Dao implements ProductInterface, MetaInterface {
 
-    private final String ADD = "INSERT INTO product (name,description,product_date)" +
-            " VALUES(?,?,?)";
+    private final String ADD = "INSERT INTO product (name,description,product_date,url)" +
+            " VALUES(?,?,?,?)";
     private final String REMOVE = "DELETE FROM product" +
             " WHERE id=? ";
-    private final String UPDATE = "UPDATE product SET name=?, description=?,product_date=?" +
+    private final String UPDATE = "UPDATE product SET name=?, description=?,product_date=?,url=?" +
             " WHERE id=? ";
     private final String ADD_META = "INSERT INTO product_meta (post_id,category_id)" +
             " VALUES(?,?)";
     private final String REMOVE_META = "DELETE FROM product_meta" +
             " WHERE post_id=? ";
-    private final String GET_BY_ID = "SELECT id,name,description, product_date FROM product WHERE id=?";
-    private final String GET_BY_ID_FUTURE = "SELECT id,name,description, product_date FROM product WHERE id=? AND product_date>=current_date ORDER BY product_date ASC";
+    private final String GET_BY_ID = "SELECT id,name,description, product_date,url FROM product WHERE id=?";
+    private final String GET_BY_ID_FUTURE = "SELECT id,name,description, product_date,url FROM product WHERE id=? AND product_date>=current_date ORDER BY product_date ASC";
     private final String GET_CATEGORIES_META = "SELECT category_id FROM product_meta WHERE post_id=?";
     private final String GET_BY_ALL_CATEGORY  = "SELECT post_id FROM product_meta LEFT JOIN product_category ON product_meta.category_id = product_category.id WHERE category_id = ?";
-    private final String GET_ALL_PAST = "SELECT id,name,description, product_date FROM product WHERE product_date < current_date ORDER BY product_date  DESC ;";
-    private final String GET_ALL = "SELECT id,name,description, product_date FROM product WHERE product_date>=current_date ORDER BY product_date  ASC ;";
+    private final String GET_ALL_PAST = "SELECT id,name,description, product_date, url FROM product WHERE product_date < date(current_date,'-1 day') ORDER BY product_date  DESC ;";
+    private final String GET_ALL = "SELECT id,name,description, product_date,url FROM product WHERE product_date >= date(current_date,'-1 day') ORDER BY product_date  ASC ;";
     private final String GET_BY_NAME = "SELECT id  FROM product WHERE name=?";
 
     @Override
@@ -38,6 +38,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
         parameters.put(1, product.getName());
         parameters.put(2, product.getDescription());
         parameters.put(3, stringDate);
+        parameters.put(4, product.getUrl());
         this.executeStatementUpdate(ADD, parameters);
     }
 
@@ -55,7 +56,8 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
         parameters.put(1, editProduct.getName());
         parameters.put(2, editProduct.getDescription());
         parameters.put(3, stringDate);
-        parameters.put(4, editProduct.getId().toString());
+        parameters.put(4, editProduct.getUrl());
+        parameters.put(5, editProduct.getId().toString());
         this.executeStatementUpdate(UPDATE, parameters);
     }
 
@@ -155,7 +157,8 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
                     rs.getString("name"),
                     rs.getString("description"),
                     product_date,
-                    productCatList
+                    productCatList,
+                    rs.getString("url")
             );
             products.add(product);
         }
@@ -194,7 +197,8 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
                     resultSet.getString("name"),
                     resultSet.getString("description"),
                     product_date,
-                    productCatList
+                    productCatList,
+                    resultSet.getString("url")
             );
             resultSet.close();
             return product;
