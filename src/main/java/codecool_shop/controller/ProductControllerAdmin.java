@@ -28,8 +28,7 @@ public class ProductControllerAdmin {
     private SupplierInterface supplierDao = new SupplierDao();
     private UtilityClass utilityClass = new UtilityClass();
 
-    public ModelAndView renderProducts(Request req, Response res) throws SQLException {
-        //Get products from database by Dao
+    public ModelAndView renderProducts(Request request, Response response) throws SQLException {
         Map params = new HashMap<>();
         try {
             params.put("productContainer", productDao.getAll());
@@ -79,11 +78,11 @@ public class ProductControllerAdmin {
         String filename = formInputs.get("filename");
         String url = utilityClass.getDomainUrl(req) + filename;
         String[] categoryList = req.queryParamsValues("category");
-        try{
+        try {
             price = Integer.valueOf(req.queryParams("price"));
             supplierId = Integer.valueOf(req.queryParams("supplier"));
             supplier = supplierDao.getById(supplierId);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Date date = null;
@@ -141,9 +140,6 @@ public class ProductControllerAdmin {
     public String editProductPost(Request req, Response res) throws SQLException {
         Integer id = Integer.valueOf(req.params("id"));
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//        String name = req.queryParams("name");
-//        String description = req.queryParams("description");
-//        String postDate = req.queryParams("date");
         String[] categoryList = req.queryParamsValues("category");
         Date date = null;
         Product editProduct = productDao.getById(id);

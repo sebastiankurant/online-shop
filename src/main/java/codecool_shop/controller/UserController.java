@@ -17,7 +17,6 @@ public class UserController extends BaseController {
         if (username.isEmpty() || password.isEmpty()) {
             return null;
         }
-
         User user = userDao.getByName(username);
 
         if (user == null) {
