@@ -18,7 +18,7 @@ public class SupplierControllerAdmin extends BaseController{
 
     private SupplierInterface supplierDao = new SupplierDao();
 
-    public ModelAndView renderSupplier() {
+    public ModelAndView renderSupplier(Request request, Response response) {
         Map<String, Object> params = new HashMap<>();
         try {
             params.put("supplierContainer", supplierDao.getAll());
@@ -28,7 +28,7 @@ public class SupplierControllerAdmin extends BaseController{
         return render(params, "admin/supplier/index");
     }
 
-    public ModelAndView add() {
+    public ModelAndView add(Request request, Response response) {
         return render("admin/supplier/add");
     }
 
@@ -51,7 +51,7 @@ public class SupplierControllerAdmin extends BaseController{
         return render(params, "admin/supplier/add");
     }
 
-    public ModelAndView editSupplier(Request request) throws SQLException  {
+    public ModelAndView editSupplier(Request request, Response response) throws SQLException  {
         Integer id = Integer.valueOf(request.params("id"));
         ProductSupplier productSupplier = supplierDao.getById(id);
         Map<String, Object> params = new HashMap<>();

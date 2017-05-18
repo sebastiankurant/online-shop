@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class AdminController extends BaseController{
 
-    public ModelAndView displayIndex() {
+    public ModelAndView displayIndex(Request request, Response response) {
         return render("admin/index");
     }
 }
