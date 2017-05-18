@@ -27,20 +27,19 @@ public class ProductController {
 
     public ModelAndView displayProducts(Request req, Response res) throws SQLException {
         Map<String, Object> params = new HashMap<>();
+        params.put("authenticationSucceeded", req.session().attribute("authenticationSucceeded"));
         List<Product> products = productDao.getAll();
         List<ProductCategory> categoires = categoryDao.getAll();
-        params.put("eventContainer", products);
+        params.put("productContainer", products);
         params.put("allCategoires", categoires);
         params.put("UtilityClass", calculateClass);
         params.put("currentDate", new Date());
-// Test
         Boolean addedToCart = req.session().attribute("addedToCart");
         params.put("Msg", addedToCart);
         String productName = req.session().attribute("productName");
         params.put("productName", productName);
         req.session().attribute("addedToCart", false);
 
-//        End
         return new ModelAndView(params, "index");
     }
 }
