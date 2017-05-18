@@ -34,6 +34,12 @@
                                th:value="${#dates.format(product.getDate(), 'yyyy-MM-dd')}">
                     </div>
                     <div class="form-group row">
+                        <label class="col-2 col-form-label">Supplier:</label>
+                        <select name="supplier">
+                            <option th:each="supplier:${availableSupplier}" th:text="${supplier.getName()}" th:value="${supplier.getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-2 col-form-label">Edit Image:</label>
                         <img th:src="${product.getUrl()}" class="img-fluid edit-image">
                         <input class="form-control col-8" id="file" type="file" th:name="file">
