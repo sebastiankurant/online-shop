@@ -23,6 +23,9 @@ public class Application {
         return app.connection;
     }
 
+    public static void dropConnection() throws SQLException {
+        Application.getConnection().close();
+    }
 
     public static Application runApp() {
         return app;
