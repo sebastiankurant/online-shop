@@ -19,7 +19,6 @@ import java.util.Map;
 public class BasketController extends BaseController{
 
     private ProductInterface produtDao = new ProductDao();
-    private ProductController productController = new ProductController();
 
     public ModelAndView getBasket(Request req, Response res) {
         Map<String, Object> params = new HashMap<>();
