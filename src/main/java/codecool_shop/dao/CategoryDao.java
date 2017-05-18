@@ -16,8 +16,10 @@ public class CategoryDao extends Dao implements CategoryInterface {
 
     private final String ADD = "INSERT INTO product_category (name,description,slug)" +
             " VALUES(?,?,?)";
-    private final String UPDATE = "DELETE FROM product_category" +
+
+    private final String UPDATE = "UPDATE product_category SET name=?, description=? " +
             " WHERE id=? ";
+
     private final String DELETE = "DELETE FROM product_category" +
             " WHERE id=? ";
     private final String DELETE_META = "DELETE FROM product_meta" +

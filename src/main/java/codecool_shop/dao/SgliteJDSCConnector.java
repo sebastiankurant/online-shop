@@ -1,7 +1,5 @@
 package codecool_shop.dao;
 
-import org.sqlite.SQLiteConnection;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -43,6 +41,13 @@ public class SgliteJDSCConnector {
                 "    name VARCHAR(255) NOT NULL,\n" +
                 "    description TEXT,\n" +
                 "    slug VARCHAR(2355) NOT NULL" +
+                ")");
+
+        statement.execute("CREATE TABLE product_supplier\n" +
+                "(\n" +
+                "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    name VARCHAR(255) NOT NULL,\n" +
+                "    address TEXT\n"+
                 ")");
 
         statement.execute("CREATE TABLE product_meta\n" +
@@ -94,6 +99,14 @@ public class SgliteJDSCConnector {
                 "    slug VARCHAR(2355) NOT NULL" +
                 ")");
 
+
+        statement.execute("CREATE TABLE IF NOT EXISTS product_supplier\n" +
+                "(\n" +
+                "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    name VARCHAR(255) NOT NULL,\n" +
+                "    address TEXT\n"+
+                ")");
+
         statement.execute("CREATE TABLE IF NOT EXISTS product_meta\n" +
                 "(\n" +
                 "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
@@ -131,7 +144,6 @@ public class SgliteJDSCConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(connection + "asdsad");
         return connection;
     }
 

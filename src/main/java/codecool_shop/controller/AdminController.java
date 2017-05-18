@@ -1,9 +1,6 @@
 package codecool_shop.controller;
 
-import codecool_shop.dao.CategoryDao;
-import codecool_shop.dao.CategoryInterface;
-import codecool_shop.dao.ProductDao;
-import codecool_shop.dao.ProductInterface;
+import codecool_shop.dao.*;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -17,6 +14,7 @@ import java.util.Map;
 public class AdminController {
     private CategoryInterface categoryDao = new CategoryDao();
     private ProductInterface eventDao = new ProductDao();
+    private SupplierInterface supplierDao = new SupplierDao()
 
 
     public ModelAndView displayIndex(Request req, Response res) {

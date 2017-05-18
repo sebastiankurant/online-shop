@@ -12,17 +12,20 @@
         </nav>
 
         <div id="admin-panel-content" class="admin-content col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
-            <h1>Add Category</h1>
-            <div id="products">
-                <form class="form-default col-6 center" th:method="post" action="">
+            <h1>Edit Supplier</h1>
+            <div id="suppliers">
+                <form th:each="supplier,iterCount : ${supplierContainer}" class="form-default col-6 center"
+                      th:method="post" action="">
                     <div class="form-group row">
                         <label class="col-2 col-form-label">Name:</label>
-                        <input class="form-control col-8" id="name" type="text" th:name="name">
+                        <input class="form-control col-8" th:value="${supplier.getName()}" id="name" type="text"
+                               th:name="name">
                     </div>
                     <div class="form-group row">
-                        <label class="col-2 col-form-label">Description:</label>
+                        <label class="col-2 col-form-label">Address:</label>
 
-                        <textarea class="form-control col-8" id="description" type="text" th:name="description">
+                        <textarea class="form-control col-8" th:text="${supplier.getAddress()}" id="address" type="text"
+                                  th:name="address">
                     </textarea>
                     </div>
 
@@ -34,7 +37,7 @@
                      class="alert alert-danger errors">
                 </div>
                 <div>
-                    <a class="btn btn-outline-primary" th:text="'Back'" th:href="@{~/admin/category/}"></a>
+                    <a class="btn btn-outline-primary" th:text="'Back'" th:href="@{~/admin/products/}"></a>
                 </div>
             </div>
             <div th:replace="footer :: copy"></div>
