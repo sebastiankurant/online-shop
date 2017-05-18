@@ -8,6 +8,12 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.Part;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -18,7 +24,7 @@ public class ProductControllerAdmin {
     private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();
     private MetaInterface eventMeta = new ProductDao();
-    private UtilityClass calculateClass = new UtilityClass();
+    private UtilityClass utilityClass = new UtilityClass();
 
     public ModelAndView renderProducts(Request req, Response res) throws SQLException {
         //Get products from database by Dao
@@ -30,8 +36,8 @@ public class ProductControllerAdmin {
             e.printStackTrace();
         }
         Date currentDate = new Date();
-        UtilityClass calculateClass = new UtilityClass();
-        params.put("UtilityClass", calculateClass);
+        UtilityClass utilityClass = new UtilityClass();
+        params.put("UtilityClass", utilityClass);
         params.put("currentDate", currentDate);
         return new ModelAndView(params, "/admin/products/index");
     }
@@ -48,7 +54,10 @@ public class ProductControllerAdmin {
     }
 
     public ModelAndView addProductPost(Request req, Response res) throws SQLException {
-        //Get products from database by Dao
+        String name;
+        String description = null;
+        String postDate;
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Map params = new HashMap<>();
         try {
             List<ProductCategory> availableCategory = categoryDao.getAll();
@@ -56,10 +65,12 @@ public class ProductControllerAdmin {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String name = req.queryParams("name");
-        String description = req.queryParams("description");
-        String postDate = req.queryParams("date");
+        Map<String, String> formInputs = getParamsFromInputStream(req, res);
+        name = formInputs.get("name");
+        description = formInputs.get("description");
+        postDate = formInputs.get("date");
+        String filename = formInputs.get("filename");
+        String url = utilityClass.getDomainUrl(req)+filename;
         String[] categoryList = req.queryParamsValues("category");
         Date date = null;
         try {
@@ -75,11 +86,7 @@ public class ProductControllerAdmin {
                     catList.add(tempCat);
                 }
             }
-            Product newProduct = new Product();
-            newProduct.setName(name);
-            newProduct.setDescription(description);
-            newProduct.setDate(date);
-            newProduct.setCategories(catList);
+            Product newProduct = new Product(name, description, date, catList,url);
             productDao.add(newProduct);
             Integer eventId = productDao.getByName(newProduct.getName());
             newProduct.setId(eventId);
@@ -117,15 +124,21 @@ public class ProductControllerAdmin {
         return new ModelAndView(params, "404");
     }
 
-    public String editEventProduct(Request req, Response res) throws SQLException {
+    public String editProductPost(Request req, Response res) throws SQLException {
         Integer id = Integer.valueOf(req.params("id"));
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String name = req.queryParams("name");
-        String description = req.queryParams("description");
-        String postDate = req.queryParams("date");
+//        String name = req.queryParams("name");
+//        String description = req.queryParams("description");
+//        String postDate = req.queryParams("date");
         String[] categoryList = req.queryParamsValues("category");
         Date date = null;
         Product editProduct = productDao.getById(id);
+        Map<String, String> formInputs = getParamsFromInputStream(req, res);
+        String name = formInputs.get("name");
+        String description = formInputs.get("description");
+        String postDate = formInputs.get("date");
+        String filename = formInputs.get("filename");
+        String url = utilityClass.getDomainUrl(req)+filename;
         try {
             date = format.parse(postDate);
             System.out.println(postDate);
@@ -145,6 +158,7 @@ public class ProductControllerAdmin {
             editProduct.setDescription(description);
             editProduct.setDate(date);
             editProduct.setCategories(catList);
+            editProduct.setUrl(url);
             productDao.update(editProduct);
             eventMeta.removeMeta(editProduct);
             eventMeta.addMeta(editProduct);
@@ -178,8 +192,8 @@ public class ProductControllerAdmin {
             e.printStackTrace();
         }
         Date currentDate = new Date();
-        UtilityClass calculateClass = new UtilityClass();
-        params.put("UtilityClass", calculateClass);
+        UtilityClass utilityClass = new UtilityClass();
+        params.put("UtilityClass", utilityClass);
         params.put("currentDate", currentDate);
         return new ModelAndView(params, "/admin/products/pasts");
     }
@@ -201,10 +215,49 @@ public class ProductControllerAdmin {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            params.put("UtilityClass", calculateClass);
+            params.put("UtilityClass", utilityClass);
             params.put("currentDate", new Date());
             return new ModelAndView(params, "/admin/products/index");
         }
         return new ModelAndView(params, "/admin/products/index");
     }
+
+
+    public Map<String, String> getParamsFromInputStream(Request req, Response res) {
+        Map<String, String> inputsMap = new HashMap<>();
+        try {
+            File file = new File("src/main/resources");
+            String absolutePath = file.getAbsolutePath();
+            req.raw().setAttribute("org.eclipse.jetty.multipartConfig",
+                    new MultipartConfigElement(absolutePath + "/public/tmp/", 100000000, 100000000, 1024));
+
+            Part partName = req.raw().getPart("name");
+            Part partDescription = req.raw().getPart("description");
+            Part partDate = req.raw().getPart("date");
+            Part uploadedFile = req.raw().getPart("file");
+//            Part partCategory = req.raw().getPart("category");
+            String filename = req.raw().getPart("file").getSubmittedFileName();
+            inputsMap.put("name", utilityClass.getStringFromInputStream(partName));
+            inputsMap.put("description", utilityClass.getStringFromInputStream(partDescription));
+            inputsMap.put("date", utilityClass.getStringFromInputStream(partDate));
+            String fileName = filename;
+            inputsMap.put("filename", fileName);
+            if (!fileName.equals("") && fileName != null) {
+                try (final InputStream in = uploadedFile.getInputStream()) {
+                    File f = new File(absolutePath + "/public/images/" + filename);
+                    if (f.exists() && !f.isDirectory()) {
+                        file.delete();
+                    } else {
+                        Files.copy(in, Paths.get(absolutePath + "/public/images/" + fileName));
+                        uploadedFile.delete();
+                    }
+                }
+            }
+
+            return inputsMap;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
