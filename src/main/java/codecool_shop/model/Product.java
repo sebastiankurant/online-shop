@@ -9,17 +9,27 @@ public class Product {
     private String description;
     private Date date;
     private List<ProductCategory> categories = null;
+    private String url;
 
     public Product() {
 
     }
 
-    public Product(Integer id, String name, String description, Date date, List<ProductCategory> categories) {
+    public Product(Integer id, String name, String description, Date date, List<ProductCategory> categories,String url) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.date = date;
         this.categories = categories;
+        this.url = url;
+    }
+
+    public Product(String name, String description, Date date, List<ProductCategory> categories,String url) {
+        this.name = name;
+        this.description = description;
+        this.date = date;
+        this.categories = categories;
+        this.url = url;
     }
 
     public Integer getId() {
@@ -68,5 +78,13 @@ public class Product {
             classContainer += category.getSlug() + " ";
         }
         return classContainer;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

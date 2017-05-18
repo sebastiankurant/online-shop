@@ -2,8 +2,6 @@ package codecool_shop;
 
 import codecool_shop.controller.*;
 import codecool_shop.dao.SgliteJDSCConnector;
-import spark.Request;
-import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 import java.sql.Connection;
@@ -67,7 +65,6 @@ public class Application {
                 if (!path.endsWith("/")) {
                     res.redirect(path + "/");
                 }
-                System.out.println("zzz");
                 sessionController.manageBasketSession(req, res);
             });
             get("/", productController::displayProducts, new ThymeleafTemplateEngine());
@@ -91,7 +88,7 @@ public class Application {
             });
             path("/admin/", () -> {
                 before("/*", (req, res) -> {
-                    loginController.ensureUserIsLoggedIn(req, res);
+//                    loginController.ensureUserIsLoggedIn(req, res);
                 });
 
                 get("/", adminController::displayIndex, new ThymeleafTemplateEngine());
@@ -102,9 +99,9 @@ public class Application {
                     get("/edit/:id/", productControllerAdmin::editProduct, new ThymeleafTemplateEngine());
                     get("/past/", productControllerAdmin::pastProducts, new ThymeleafTemplateEngine());
                     get("/category/", productControllerAdmin::filterCategory, new ThymeleafTemplateEngine());
-                    post("/add/", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
+                    post("/add/","multipart/form-data", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
                     post("/remove/:id/", productControllerAdmin::removeProduct);
-                    post("/edit/:id/", productControllerAdmin::editEventProduct);
+                    post("/edit/:id/","multipart/form-data", productControllerAdmin::editProductPost);
                 });
 
                 path("/category", () -> {
@@ -144,8 +141,6 @@ public class Application {
                 "<div th:replace=\"footer :: copy\"></div>\n" +
                 "</body>\n" +
                 "</html>");
-
-
     }
 
 

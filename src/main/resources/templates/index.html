@@ -20,9 +20,9 @@
              th:class="'element-item col-4 '+${product.getClassSlug()}">
             <div class="product-wrapper">
                 <h2 th:text="${product.getName()}"></h2>
+                <img th:src="${product.getUrl()}" class="img-fluid product-image"/>
                 <div th:class="${UtilityClass.calculateClass(product.getDate(),currentDate)}">
                     <p class="product-date" th:text="${#dates.format(product.getDate(), 'yyyy-MM-dd')}"></p>
-
                     <p class="product-description" th:text="${product.getDescription()}"></p>
                     <div th:class="'cat-wrapper product-category'"
                          th:each="category,catIterCounter :${product.getCategories()}">
@@ -31,7 +31,8 @@
                         </span>
                     </div>
                     <form th:action="@{~/basket/add/}" method="post">
-                        <input type="hidden" th:id="'product-id' + ${product.getId()}" name="add_product" th:value="${product.getId()}">
+                        <input type="hidden" th:id="'product-id' + ${product.getId()}" name="add_product"
+                               th:value="${product.getId()}">
                         <button th:type="submit" class="cat-wrapper">Add To Basket</button>
                     </form>
 
