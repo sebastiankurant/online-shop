@@ -10,6 +10,10 @@
 <nav th:fragment="admin-panel" id="admin-panel-nav" class="admin-panel col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2">
     <div class="admin-panel-background">
         <div>
+            <a th:href="@{~/}"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Shop</a>
+        </div>
+
+        <div>
             <a th:href="@{~/admin/products/}"><i class="fa fa-calendar" aria-hidden="true"></i> Product List</a>
         </div>
         <div>
@@ -22,10 +26,9 @@
             <a th:href="@{~/admin/products/past/}"><i class="fa fa-history" aria-hidden="true"></i> Past Events List</a>
         </div>
         <div>
-            <form method="post" th:action="@{~/admin/logout/}">
+            <form method="post" th:action="@{~/logout/}">
                 <button th:type="submit"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</button>
             </form>
-
         </div>
     </div>
 </nav>

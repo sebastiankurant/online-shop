@@ -5,35 +5,81 @@
 </head>
 <body>
 <div class="container">
-    <div class="login"><a th:href="@{~/login/}"><i class="fa fa-sign-in" aria-hidden="true"></i>
-        Login In </a></div>
-    <h1>Shop</h1>
-    <div class="info" th:if="${Msg}" th:text="'Product ' + ${productName} + 'has beend added to cart'"></div>
+    <div class="login" th:replace="header :: login">
+    </div>
+    <h1 th:class="'page-title'">Shop</h1>
+    <div class="carousel-wrapper">
+        <div id="carouselProducts" class="carousel slide" data-ride="carousel">
+
+            <ol class="carousel-indicators">
+
+                <li th:unless="${product.getUrl()=='http://localhost:8888/images/'}" data-target="#carouselProducts"
+                    th:each="product,counter:${productContainer}"
+                    th:data-slide-to="${counter.index}" th:class="(${counter.index}==1) ? 'active' : '' "></li>
+
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <div th:unless="${product.getUrl()=='http://localhost:8888/images/'}"
+                     th:each="product,counter:${productContainer}"
+                     th:class="(${counter.index}==1) ? 'carousel-item active active' : 'carousel-item'">
+                    <img class="d-block img-fluid" th:src="${product.getUrl()}" th:alt-title="${product.getName()}">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h3 th:text="${product.getName()}"></h3>
+                        <p th:text="${product.getDescription()}"></p>
+                        <form id="add-to-basket" th:action="@{~/basket/add/}" method="post">
+                            <input type="hidden" th:id="'product-id' + ${product.getId()}" name="add_product"
+                                   th:value="${product.getId()}">
+                            <button th:type="submit" class="btn btn-outline-primary">Add To Basket</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselProducts" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselProducts" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="alert alert-info" th:if="${Msg}"> Product <strong th:text="${productName}"></strong> has been added to
+        cart'
+    </div>
+
     <div class="filter-button-group">
         <button class="filter-button is-checked" data-filter="*">Show all</button>
-        <button th:each="category:${allCategoires}" th:class="filter-button" th:data-filter="'.'+${category.getSlug()}"
+        <button th:each="category:${allCategoires}" th:class="'filter-button'"
+                th:data-filter="'.'+${category.getSlug()}"
                 th:text="${category.getName()}"></button>
     </div>
     <div class="row products-grid">
 
-        <div class="col-4" th:each="product,counter:${eventContainer}"
+        <div class="col-4" th:each="product,counter:${productContainer}"
              th:class="'element-item col-4 '+${product.getClassSlug()}">
             <div class="product-wrapper">
                 <h2 th:text="${product.getName()}"></h2>
-                <img th:src="${product.getUrl()}" class="img-fluid product-image"/>
+                <img th:unless="${product.getUrl()=='http://localhost:8888/images/'}" th:src="${product.getUrl()}"
+                     class="img-fluid product-image"/>
                 <div th:class="${UtilityClass.calculateClass(product.getDate(),currentDate)}">
-                    <p class="product-date" th:text="${#dates.format(product.getDate(), 'yyyy-MM-dd')}"></p>
                     <p class="product-description" th:text="${product.getDescription()}"></p>
+                    <p class="product-supplier" th:if="${product.getSupplier()}!=null" th:text="'Supplier: ' +${product.getSupplier().getName()}"></p>
                     <div th:class="'cat-wrapper product-category'"
                          th:each="category,catIterCounter :${product.getCategories()}">
                         <span th:class="category-tags">
                             <span th:text="${category.getName()}"> </span>
                         </span>
                     </div>
-                    <form th:action="@{~/basket/add/}" method="post">
+                    <div class="price">
+                        <span th:text="${product.getPrice()}+' zł'"></span>
+                    </div>
+                    <form id="add-to-basket" th:action="@{~/basket/add/}" method="post">
                         <input type="hidden" th:id="'product-id' + ${product.getId()}" name="add_product"
                                th:value="${product.getId()}">
-                        <button th:type="submit" class="cat-wrapper">Add To Basket</button>
+                        <button th:type="submit" class="btn btn-outline-primary">Add To Basket</button>
                     </form>
 
                 </div>
@@ -46,5 +92,9 @@
 </body>
 <script type="text/javascript" th:src="@{~/js/jquery-3.2.1.min.js}"></script>
 <script type="text/javascript" th:src="@{~/js/isotope.pkgd.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{~/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{~/js/main.js}"></script>
 </html>

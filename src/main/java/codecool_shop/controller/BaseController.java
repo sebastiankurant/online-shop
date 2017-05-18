@@ -10,12 +10,12 @@ import java.util.Map;
  */
 public class BaseController {
 
-	protected ModelAndView render(Map<String, Object> parameters, String viewName){
-		return new ModelAndView(parameters, viewName);
-	}
+    protected ModelAndView render(Map<String, Object> parameters, String viewName) {
+        return new ModelAndView(parameters, viewName);
+    }
 
-	protected ModelAndView render(String viewName){
-		Map<String, Object> parameters = new HashMap<>();
-		return new ModelAndView(parameters, viewName);
-	}
+    protected ModelAndView render(String viewName) {
+        Map<String, Object> parameters = new HashMap<>();
+        return new ModelAndView(parameters, viewName);
+    }
 }

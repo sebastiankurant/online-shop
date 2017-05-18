@@ -11,14 +11,15 @@ import java.util.List;
 /**
  * Created by pgurdek on 17.05.17.
  */
-public class SessionController extends BaseController{
+public class SessionController {
 
 
-    public void manageBasketSession(Request request, Response response) {
-        if (request.session().attributes().isEmpty()) {
-            request.session(true);
+    public void manageBasketSession(Request req, Response res) {
+        if (req.session().attributes().isEmpty()) {
+            req.session(true);
             List<Product> basketProductList = new ArrayList<>();
-            request.session().attribute("basketProductList", basketProductList);
+            req.session().attribute("authenticationSucceeded", false);
+            req.session().attribute("basketProductList", basketProductList);
         }
     }
 }

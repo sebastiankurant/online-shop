@@ -31,7 +31,7 @@ public class Application {
         return app;
     }
 
-    public static void restartTables(){
+    public static void restartTables() {
         try {
             SgliteJDSCConnector temp = new SgliteJDSCConnector();
             temp.dropTables();
@@ -39,18 +39,18 @@ public class Application {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Can't drop and add tables.");
-            System.exit(1);
+            stop();
         }
     }
 
-    public static void fillIfNotExistTables(){
+    public static void fillIfNotExistTables() {
         try {
             SgliteJDSCConnector temp = new SgliteJDSCConnector();
             temp.createTablesIfNotExist();
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Can't fill with not exist tables.");
-            System.exit(1);
+            stop();
         }
     }
 
@@ -88,7 +88,7 @@ public class Application {
             get("/", productController::displayProducts, new ThymeleafTemplateEngine());
 
 //            Front End routes - Not secured routes
-
+            post("/logout/", loginController::handleLogoutPost);
             path("/login/", () -> {
                 before((request, response) -> {
                 });
@@ -110,7 +110,6 @@ public class Application {
                 });
 
                 get("/", adminController::displayIndex, new ThymeleafTemplateEngine());
-                post("/logout/", loginController::handleLogoutPost);
                 path("/products", () -> {
                     get("/", productControllerAdmin::renderProducts, new ThymeleafTemplateEngine());
                     get("/add/", productControllerAdmin::addProduct, new ThymeleafTemplateEngine());
@@ -120,7 +119,7 @@ public class Application {
                     get("/supplier/", productControllerAdmin::filterSupplier, new ThymeleafTemplateEngine());
                     post("/add/","multipart/form-data", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
                     post("/remove/:id/", productControllerAdmin::removeProduct);
-                    post("/edit/:id/","multipart/form-data", productControllerAdmin::editProductPost);
+                    post("/edit/:id/", "multipart/form-data", productControllerAdmin::editProductPost);
                 });
 
                 path("/category", () -> {

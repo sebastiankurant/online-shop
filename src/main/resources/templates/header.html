@@ -8,5 +8,19 @@
     <link rel="stylesheet" type="text/css" th:href="@{~/css/style.css}">
 </head>
 <body>
+<div th:fragment="login" class="login">
+
+    <a th:unless="${authenticationSucceeded}" th:href="@{~/login/}"><i
+            class="fa fa-sign-in" aria-hidden="true"></i>
+        Login In </a>
+
+    <div th:if="${authenticationSucceeded}" th:class="'login-button'">
+        <form method="post" th:action="@{~/logout/}">
+            <button th:type="submit"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</button>
+        </form>
+    </div>
+    <a style="padding-left: 15px;" th:href="@{~/basket/}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        Basket </a>
+</div>
 </body>
 </html>

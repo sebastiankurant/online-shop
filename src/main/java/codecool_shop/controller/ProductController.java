@@ -20,27 +20,26 @@ import java.util.Map;
 /**
  * Created by pgurdek on 14.05.17.
  */
-public class ProductController extends BaseController{
+public class ProductController {
     private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();
     private UtilityClass calculateClass = new UtilityClass();
 
-    public ModelAndView displayProducts(Request request, Response response) throws SQLException {
+    public ModelAndView displayProducts(Request req, Response res) throws SQLException {
         Map<String, Object> params = new HashMap<>();
+        params.put("authenticationSucceeded", req.session().attribute("authenticationSucceeded"));
         List<Product> products = productDao.getAll();
         List<ProductCategory> categoires = categoryDao.getAll();
-        params.put("eventContainer", products);
+        params.put("productContainer", products);
         params.put("allCategoires", categoires);
         params.put("UtilityClass", calculateClass);
         params.put("currentDate", new Date());
-// Test
-        Boolean addedToCart = request.session().attribute("addedToCart");
+        Boolean addedToCart = req.session().attribute("addedToCart");
         params.put("Msg", addedToCart);
-        String productName = request.session().attribute("productName");
+        String productName = req.session().attribute("productName");
         params.put("productName", productName);
-        request.session().attribute("addedToCart", false);
+        req.session().attribute("addedToCart", false);
 
-//        End
-        return render(params, "index");
+        return new ModelAndView(params, "index");
     }
 }

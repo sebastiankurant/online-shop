@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by monika on 17.05.17.
  */
-public class SupplierControllerAdmin extends BaseController{
+public class SupplierControllerAdmin extends BaseController {
 
     private SupplierInterface supplierDao = new SupplierDao();
 
@@ -37,7 +37,7 @@ public class SupplierControllerAdmin extends BaseController{
         String name = request.queryParams("name");
         String address = request.queryParams("address");
 
-        if(!name.isEmpty()) {
+        if (!name.isEmpty()) {
             ProductSupplier newSupplier = new ProductSupplier();
             newSupplier.setId(0);
             newSupplier.setName(name);
@@ -51,7 +51,7 @@ public class SupplierControllerAdmin extends BaseController{
         return render(params, "admin/supplier/add");
     }
 
-    public ModelAndView editSupplier(Request request, Response response) throws SQLException  {
+    public ModelAndView editSupplier(Request request, Response response) throws SQLException {
         Integer id = Integer.valueOf(request.params("id"));
         ProductSupplier productSupplier = supplierDao.getById(id);
         Map<String, Object> params = new HashMap<>();

@@ -10,15 +10,15 @@ import java.util.Map;
 /**
  * Created by pgurdek on 16.05.17.
  */
-public class UserDao extends Dao implements UserInterface{
+public class UserDao extends Dao implements UserInterface {
     private final String GET_BY_NAME = "SELECT id FROM users WHERE username=?";
     private final String GET_BY_ID = "SELECT id,username,firstname,lastname,password,type FROM users WHERE id=?";
 
     @Override
     public User getByName(String username) throws SQLException {
         Map<Integer, String> parameters = new HashMap<>();
-        parameters.put(1,username);
-        ResultSet rs = executeStatement(GET_BY_NAME,parameters);
+        parameters.put(1, username);
+        ResultSet rs = executeStatement(GET_BY_NAME, parameters);
         if (rs.isBeforeFirst())
             if (!(rs == null)) {
                 Integer userId = rs.getInt("id");
@@ -36,8 +36,8 @@ public class UserDao extends Dao implements UserInterface{
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, id.toString());
         ResultSet resultSet = this.executeStatement(GET_BY_ID, parameters);
-        while (resultSet.next()){
-            User tmp =  new User(
+        while (resultSet.next()) {
+            User tmp = new User(
                     resultSet.getString("username"),
                     resultSet.getString("firstname"),
                     resultSet.getString("lastname"),

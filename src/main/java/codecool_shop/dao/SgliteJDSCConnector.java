@@ -51,7 +51,7 @@ public class SgliteJDSCConnector {
                 "(\n" +
                 "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    name VARCHAR(255) NOT NULL,\n" +
-                "    address TEXT\n"+
+                "    address TEXT\n" +
                 ")");
 
         statement.execute("CREATE TABLE product_meta\n" +
@@ -111,7 +111,7 @@ public class SgliteJDSCConnector {
                 "(\n" +
                 "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    name VARCHAR(255) NOT NULL,\n" +
-                "    address TEXT\n"+
+                "    address TEXT\n" +
                 ")");
 
         statement.execute("CREATE TABLE IF NOT EXISTS product_meta\n" +

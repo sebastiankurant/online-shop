@@ -21,7 +21,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 public class ProductControllerAdmin extends BaseController {
+
     private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();
     private MetaInterface productMeta = new ProductDao();
@@ -29,8 +31,7 @@ public class ProductControllerAdmin extends BaseController {
     private UtilityClass utilityClass = new UtilityClass();
 
     public ModelAndView renderProducts(Request request, Response response) throws SQLException {
-        //Get products from database by Dao
-        Map<String, Object> params = new HashMap<>();
+        Map params = new HashMap<>();
         try {
             params.put("productContainer", productDao.getAll());
             params.put("categoryAvailable", categoryDao.getAll());
@@ -42,11 +43,11 @@ public class ProductControllerAdmin extends BaseController {
         UtilityClass utilityClass = new UtilityClass();
         params.put("UtilityClass", utilityClass);
         params.put("currentDate", currentDate);
-        return render(params, "/admin/products/index");
+        return new ModelAndView(params, "/admin/products/index");
     }
 
-    public ModelAndView addProduct(Request request, Response response) {
-        Map<String, Object> params = new HashMap<>();
+    public ModelAndView addProduct(Request req, Response res) {
+        Map params = new HashMap<>();
         try {
             List<ProductCategory> availableCategory = categoryDao.getAll();
             List<ProductSupplier> availableSupplier = supplierDao.getAll();
@@ -55,31 +56,38 @@ public class ProductControllerAdmin extends BaseController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return render(params, "/admin/products/add");
+        return new ModelAndView(params, "/admin/products/add");
     }
 
-    public ModelAndView addProductPost(Request request, Response response) throws SQLException {
+    public ModelAndView addProductPost(Request req, Response res) throws SQLException {
         String name;
-        String description = null;
+        String description;
+        ProductSupplier supplier = null;
         String postDate;
+        Integer price = 0;
+        Integer supplierId = 0;
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Map<String, Object> params = new HashMap<>();
+        Map params = new HashMap<>();
         try {
             List<ProductCategory> availableCategory = categoryDao.getAll();
             params.put("availableCategory", availableCategory);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Map<String, String> formInputs = getParamsFromInputStream(request, response);
+        Map<String, String> formInputs = getParamsFromInputStream(req, res);
         name = formInputs.get("name");
         description = formInputs.get("description");
         postDate = formInputs.get("date");
         String filename = formInputs.get("filename");
-        String url = utilityClass.getDomainUrl(request)+filename;
-        String[] categoryList = request.queryParamsValues("category");
-        Integer price = Integer.valueOf(request.queryParams("price"));
-        Integer supplierId = Integer.valueOf(request.queryParams("supplier"));
-        ProductSupplier supplier = supplierDao.getById(supplierId);
+        String url = utilityClass.getDomainUrl(req) + filename;
+        String[] categoryList = req.queryParamsValues("category");
+        try {
+            price = Integer.valueOf(req.queryParams("price"));
+            supplierId = Integer.valueOf(req.queryParams("supplier"));
+            supplier = supplierDao.getById(supplierId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Date date = null;
         try {
             date = format.parse(postDate);
@@ -94,23 +102,23 @@ public class ProductControllerAdmin extends BaseController {
                     catList.add(tempCat);
                 }
             }
-            Product newProduct = new Product(name, description, date, catList,url,supplier, price);
+            Product newProduct = new Product(name, description, date, catList, url, supplier, price);
             productDao.add(newProduct);
             Integer eventId = productDao.getByName(newProduct.getName());
             newProduct.setId(eventId);
             productMeta.addMeta(newProduct);
-            response.redirect("/admin/products/");
+            res.redirect("/admin/products/");
         } else {
             params.put("errorContainer", "Name or Date is not invalid");
-            return render(params, "admin/products/add");
+            return new ModelAndView(params, "admin/products/add");
         }
-        return render(params, "/admin/products/add");
+        return new ModelAndView(params, "/admin/products/add");
     }
 
-    public ModelAndView editProduct(Request request, Response response) throws SQLException {
-        Integer id = Integer.valueOf(request.params("id"));
+    public ModelAndView editProduct(Request req, Response res) throws SQLException {
+        Integer id = Integer.valueOf(req.params("id"));
         Product productToEdit = productDao.getById(id);
-        Map<String, Object> params = new HashMap<>();
+        Map params = new HashMap<>();
         if (!(productToEdit == null)) {
             try { // Set attributes which are already checked
                 List<ProductCategory> availableCategory = categoryDao.getAll();
@@ -126,30 +134,29 @@ public class ProductControllerAdmin extends BaseController {
                 params.put("productContainer", productToEdit);
                 params.put("availableSupplier", availableSupplier);
 
-                return render(params, "/admin/products/edit");
+  
+                return new ModelAndView(params, "/admin/products/edit");
 
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
         }
-        return render(params, "404");
+        return new ModelAndView(params, "404");
     }
 
-    public String editProductPost(Request request, Response response) throws SQLException {
-        Integer id = Integer.valueOf(request.params("id"));
+    public String editProductPost(Request req, Response res) throws SQLException {
+        Integer id = Integer.valueOf(req.params("id"));
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//        String name = req.queryParams("name");
-//        String description = req.queryParams("description");
-//        String postDate = req.queryParams("date");
-        String[] categoryList = request.queryParamsValues("category");
+        String[] categoryList = req.queryParamsValues("category");
         Date date = null;
         Product editProduct = productDao.getById(id);
-        Map<String, String> formInputs = getParamsFromInputStream(request, response);
+        Map<String, String> formInputs = getParamsFromInputStream(req, res);
         String name = formInputs.get("name");
         String description = formInputs.get("description");
         String postDate = formInputs.get("date");
         String filename = formInputs.get("filename");
+
         Integer supplierId = Integer.valueOf(request.queryParams("supplier"));
         String url = utilityClass.getDomainUrl(request)+filename;
 
@@ -178,30 +185,30 @@ public class ProductControllerAdmin extends BaseController {
             productDao.update(editProduct);
             productMeta.removeMeta(editProduct);
             productMeta.addMeta(editProduct);
-            response.redirect("/admin/products/");
+            res.redirect("/admin/products/");
             return "Sucess";
         }
         return "Error";
     }
 
-    public String removeProduct(Request request, Response response) throws SQLException {
+    public String removeProduct(Request req, Response res) throws SQLException {
         System.out.println("Remove Product");
-        Integer id = Integer.valueOf(request.params("id"));
+        Integer id = Integer.valueOf(req.params("id"));
         System.out.println(id);
         Product productToDelete = productDao.getById(id);
 
         if (!(productToDelete == null)) {
             productDao.remove(productToDelete.getId());
             productMeta.removeMeta(productToDelete);
-            response.redirect("/admin/products/");
+            res.redirect("/admin/products/");
             return "works";
         }
-        response.redirect("/admin/products/");
+        res.redirect("/admin/products/");
         return "";
     }
 
-    public ModelAndView pastProducts(Request request, Response response) throws SQLException {
-        Map<String, Object> params = new HashMap<>();
+    public ModelAndView pastProducts(Request req, Response res) throws SQLException {
+        Map params = new HashMap<>();
         try {
             params.put("productContainer", productDao.getAllPast());
         } catch (SQLException e) {
@@ -214,9 +221,9 @@ public class ProductControllerAdmin extends BaseController {
         return new ModelAndView(params, "/admin/products/index");
     }
 
-    public ModelAndView filterCategory(Request request, Response response) throws SQLException {
-        Map<String, Object> params = new HashMap<>();
-        String category = request.queryParams("cat");
+    public ModelAndView filterCategory(Request req, Response res) throws SQLException {
+        Map params = new HashMap<>();
+        String category = req.queryParams("cat");
         ProductCategory catObject = null;
         try {
             catObject = categoryDao.getById(Integer.valueOf(category));
@@ -235,12 +242,13 @@ public class ProductControllerAdmin extends BaseController {
             }
             params.put("UtilityClass", utilityClass);
             params.put("currentDate", new Date());
-            return render(params, "/admin/products/index");
+            return new ModelAndView(params, "/admin/products/index");
         }
-        return render(params, "/admin/products/index");
+        return new ModelAndView(params, "/admin/products/index");
     }
 
 
+  
     public ModelAndView filterSupplier(Request request, Response response) throws SQLException {
         Map<String, Object> params = new HashMap<>();
         String supplierId = request.queryParams("supplier");
@@ -269,19 +277,20 @@ public class ProductControllerAdmin extends BaseController {
 
 
     public Map<String, String> getParamsFromInputStream(Request request, Response response) {
+
         Map<String, String> inputsMap = new HashMap<>();
         try {
             File file = new File("src/main/resources");
             String absolutePath = file.getAbsolutePath();
-            request.raw().setAttribute("org.eclipse.jetty.multipartConfig",
+            req.raw().setAttribute("org.eclipse.jetty.multipartConfig",
                     new MultipartConfigElement(absolutePath + "/public/tmp/", 100000000, 100000000, 1024));
 
-            Part partName = request.raw().getPart("name");
-            Part partDescription = request.raw().getPart("description");
-            Part partDate = request.raw().getPart("date");
-            Part uploadedFile = request.raw().getPart("file");
+            Part partName = req.raw().getPart("name");
+            Part partDescription = req.raw().getPart("description");
+            Part partDate = req.raw().getPart("date");
+            Part uploadedFile = req.raw().getPart("file");
 //            Part partCategory = req.raw().getPart("category");
-            String filename = request.raw().getPart("file").getSubmittedFileName();
+            String filename = req.raw().getPart("file").getSubmittedFileName();
             inputsMap.put("name", utilityClass.getStringFromInputStream(partName));
             inputsMap.put("description", utilityClass.getStringFromInputStream(partDescription));
             inputsMap.put("date", utilityClass.getStringFromInputStream(partDate));
