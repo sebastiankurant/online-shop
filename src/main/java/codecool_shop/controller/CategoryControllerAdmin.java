@@ -18,30 +18,29 @@ public class CategoryControllerAdmin extends BaseController{
     private CategoryInterface categoryDao = new CategoryDao();
 
     public ModelAndView renderCategory(Request req, Response res) {
-        Map<Object, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         try {
             params.put("categoryContainer", categoryDao.getAll());
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new ModelAndView(params, "admin/category/index");
+        return render(params, "admin/category/index");
     }
 
     public ModelAndView addCategory(Request req, Response res) {
-        Map<Object, Object> params = new HashMap<>();
-        return new ModelAndView(params, "admin/category/add");
+        return render("admin/category/add");
     }
 
     public ModelAndView editCategory(Request req, Response res) throws SQLException {
         Integer id = Integer.valueOf(req.params("id"));
         ProductCategory productCategory = categoryDao.getById(id);
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         if (!(productCategory == null)) {
             params.put("categoryContainer", productCategory);
             System.out.println("tutaj");
             return new ModelAndView(params, "admin/category/edit");
         }
-        return new ModelAndView(params, "404");
+        return render(params, "404");
     }
 
     public ModelAndView editCategoryPost(Request req, Response res) throws SQLException {
@@ -49,7 +48,7 @@ public class CategoryControllerAdmin extends BaseController{
         String description = req.queryParams("description");
         Integer id = Integer.valueOf(req.params("id"));
         ProductCategory editCategory = categoryDao.getById(id);
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         if (!name.isEmpty() && !(editCategory == null)) {
             editCategory.setName(name);
             editCategory.setDescription(description);
@@ -61,12 +60,12 @@ public class CategoryControllerAdmin extends BaseController{
             params.put("errorContainer", "Category name cannot be empty");
             return new ModelAndView(params, "admin/category/edit");
         }
-        return new ModelAndView(params, "admin/category/edit");
+        return render(params, "admin/category/edit");
 
     }
 
     public ModelAndView addCategoryPost(Request req, Response res) throws SQLException {
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         String name = req.queryParams("name");
         String description = req.queryParams("description");
         if (!name.isEmpty()) {
@@ -79,9 +78,9 @@ public class CategoryControllerAdmin extends BaseController{
             res.redirect("/admin/category");
         } else {
             params.put("errorContainer", "Category name cannot be empty");
-            return new ModelAndView(params, "admin/category/add");
+            return render(params, "admin/category/add");
         }
-        return new ModelAndView(params, "admin/category/add");
+        return render(params, "admin/category/add");
     }
 
     public String removeCategory(Request req, Response res) throws SQLException {
