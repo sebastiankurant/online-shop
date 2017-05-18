@@ -32,17 +32,13 @@ public class LoginController {
             model.put("authenticationFailed", true);
             return new ModelAndView(model, "login");
         }
-        Session userSession = request.session(true);
-        userSession.attribute("username", currentUser.getUsername());
-        userSession.attribute("id", currentUser.getId());
-        List<Product> basketProductList = new ArrayList<>();
-        userSession.attribute("basketProductList",  basketProductList);
-        System.out.println(currentUser.getType());
-        userSession.attribute("type",currentUser.getType());
 
+        request.session().attribute("username", currentUser.getUsername());
+        request.session().attribute("id", currentUser.getId());
+        request.session().attribute("type",currentUser.getType());
         model.put("authenticationSucceeded", true);
         request.session().attribute("currentUser", currentUser.getUsername());
-        if (userSession.attribute("type").equals("admin")){
+        if (request.session().attribute("type").equals("admin")){
             response.redirect("/admin/");
         }
         else{

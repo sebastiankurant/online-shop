@@ -28,14 +28,30 @@ public class Application {
         return app;
     }
 
-    public void start() {
+    public static void restartTables(){
         try {
             SgliteJDSCConnector temp = new SgliteJDSCConnector();
+            temp.dropTables();
             temp.createTables();
         } catch (SQLException e) {
-
             e.printStackTrace();
+            System.out.println("Can't drop and add tables.");
+            System.exit(1);
         }
+    }
+
+    public static void fillIfNotExistTables(){
+        try {
+            SgliteJDSCConnector temp = new SgliteJDSCConnector();
+            temp.createTablesIfNotExist();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Can't fill with not exist tables.");
+            System.exit(1);
+        }
+    }
+
+    public void start() {
 
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
         Boolean localhost = true;  //Prevent public files from caching
@@ -52,7 +68,9 @@ public class Application {
         ProductController productController = new ProductController();
         ProductControllerAdmin productControllerAdmin = new ProductControllerAdmin();
         CategoryControllerAdmin catController = new CategoryControllerAdmin();
+        SupplierControllerAdmin supplierController = new SupplierControllerAdmin();
         LoginController loginController = new LoginController();
+        SessionController sessionController = new SessionController();
         AdminController adminController = new AdminController();
         BasketController basketController = new BasketController();
 
@@ -62,6 +80,7 @@ public class Application {
                 if (!path.endsWith("/")) {
                     res.redirect(path + "/");
                 }
+                sessionController.manageBasketSession(req, res);
             });
             get("/", productController::displayProducts, new ThymeleafTemplateEngine());
 
@@ -80,10 +99,11 @@ public class Application {
                 get("/", basketController::getBasket, new ThymeleafTemplateEngine());
                 get("/add/", basketController::addToBasket);
                 post("/add/", basketController::addToBasket);
+                post("/remove/product/", basketController::removeProduct);
             });
             path("/admin/", () -> {
                 before("/*", (req, res) -> {
-                    loginController.ensureUserIsLoggedIn(req, res);
+//                    loginController.ensureUserIsLoggedIn(req, res);
                 });
 
                 get("/", adminController::displayIndex, new ThymeleafTemplateEngine());
@@ -94,9 +114,9 @@ public class Application {
                     get("/edit/:id/", productControllerAdmin::editProduct, new ThymeleafTemplateEngine());
                     get("/past/", productControllerAdmin::pastProducts, new ThymeleafTemplateEngine());
                     get("/category/", productControllerAdmin::filterCategory, new ThymeleafTemplateEngine());
-                    post("/add/", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
+                    post("/add/","multipart/form-data", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
                     post("/remove/:id/", productControllerAdmin::removeProduct);
-                    post("/edit/:id/", productControllerAdmin::editEventProduct);
+                    post("/edit/:id/","multipart/form-data", productControllerAdmin::editProductPost);
                 });
 
                 path("/category", () -> {
@@ -106,7 +126,15 @@ public class Application {
                     post("/add/", catController::addCategoryPost, new ThymeleafTemplateEngine());
                     post("/edit/:id/", catController::editCategoryPost, new ThymeleafTemplateEngine());
                     post("/remove/:id/", catController::removeCategory);
+                });
 
+                path("/supplier", () -> {
+                    get("/", supplierController::renderSupplier, new ThymeleafTemplateEngine());
+                    get("/add/", supplierController::add, new ThymeleafTemplateEngine());
+                    get("/edit/:id/", supplierController::editSupplier, new ThymeleafTemplateEngine());
+                    post("/add/", supplierController::addSupplierPost, new ThymeleafTemplateEngine());
+                    post("/edit/:id/", supplierController::editSupplierPost, new ThymeleafTemplateEngine());
+                    post("/remove/:id/", supplierController::removeSupplier);
                 });
             });
         });
@@ -128,8 +156,6 @@ public class Application {
                 "<div th:replace=\"footer :: copy\"></div>\n" +
                 "</body>\n" +
                 "</html>");
-
-
     }
 
 

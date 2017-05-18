@@ -29,11 +29,18 @@ public class ProductController {
         Map<String, Object> params = new HashMap<>();
         List<Product> products = productDao.getAll();
         List<ProductCategory> categoires = categoryDao.getAll();
-        params.put("eventContaienr", products);
+        params.put("eventContainer", products);
         params.put("allCategoires", categoires);
         params.put("UtilityClass", calculateClass);
         params.put("currentDate", new Date());
-        params.put("Msg",req.session().attribute("addedToCart"));
+// Test
+        Boolean addedToCart = req.session().attribute("addedToCart");
+        params.put("Msg", addedToCart);
+        String productName = req.session().attribute("productName");
+        params.put("productName", productName);
+        req.session().attribute("addedToCart", false);
+
+//        End
         return new ModelAndView(params, "index");
     }
 }

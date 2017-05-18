@@ -14,7 +14,7 @@
         <div id="admin-panel-content" class="admin-content col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
             <h1>Add Product</h1>
             <div id="products">
-                <form class="form-default col-6 center" th:method="post" action="">
+                <form class="form-default col-6 center" enctype="multipart/form-data" th:method="post" action="">
                     <div class="form-group row">
                         <label class="col-2 col-form-label">Name:</label>
                         <input class="form-control col-8" id="name" type="text" th:name="name">
@@ -26,10 +26,24 @@
                     </textarea>
                     </div>
                     <div class="form-group row">
-                        <label class="col-2 col-form-label">Date</label>
+                        <label class="col-2 col-form-label">Expire Date</label>
                         <input class="form-control col-8" id="date" type="date" th:name="date"
                                th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
-                               th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                        th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">Price:</label>
+                        <input class="form-control col-8" id="price" type="number" th:name="price">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">Supplier:</label>
+                        <select name="supplier">
+                            <option th:each="supplier:${availableSupplier}" th:text="${supplier.getName()}" th:value="${supplier.getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">Img to Upload:</label>
+                        <input class="form-control col-8" id="file" type="file" th:name="file">
                     </div>
                     <div class="form-group row cat-group">
                         <div class="col-3" th:each="category,iterCount:${availableCategory}">

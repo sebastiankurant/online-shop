@@ -2,6 +2,7 @@ package codecool_shop.dao;
 
 import codecool_shop.model.Product;
 import codecool_shop.model.ProductCategory;
+import codecool_shop.model.ProductSupplier;
 import org.sqlite.date.DateFormatUtils;
 
 import java.sql.ResultSet;
@@ -13,23 +14,24 @@ import java.util.*;
 
 public class ProductDao extends Dao implements ProductInterface, MetaInterface {
 
-    private final String ADD = "INSERT INTO product (name,description,product_date)" +
-            " VALUES(?,?,?)";
+    private final String ADD = "INSERT INTO product (name,description,product_date,url,supplier_id,price)" +
+            " VALUES(?,?,?,?,?,?)";
     private final String REMOVE = "DELETE FROM product" +
             " WHERE id=? ";
-    private final String UPDATE = "UPDATE product SET name=?, description=?,product_date=?" +
+    private final String UPDATE = "UPDATE product SET name=?, description=?,product_date=?,url=?,supplier_id=?,price=?" +
             " WHERE id=? ";
     private final String ADD_META = "INSERT INTO product_meta (post_id,category_id)" +
             " VALUES(?,?)";
     private final String REMOVE_META = "DELETE FROM product_meta" +
             " WHERE post_id=? ";
-    private final String GET_BY_ID = "SELECT id,name,description, product_date FROM product WHERE id=?";
-    private final String GET_BY_ID_FUTURE = "SELECT id,name,description, product_date FROM product WHERE id=? AND product_date>=current_date ORDER BY product_date ASC";
+    private final String GET_BY_ID = "SELECT id,name,description, product_date,url,supplier_id,price FROM product WHERE id=?";
+    private final String GET_BY_ID_FUTURE = "SELECT id,name,description, product_date,url,supplier_id,price FROM product WHERE id=? AND product_date>=current_date ORDER BY product_date ASC";
     private final String GET_CATEGORIES_META = "SELECT category_id FROM product_meta WHERE post_id=?";
-    private final String GET_BY_ALL_CATEGORY  = "SELECT post_id FROM product_meta LEFT JOIN product_category ON product_meta.category_id = product_category.id WHERE category_id = ?";
-    private final String GET_ALL_PAST = "SELECT id,name,description, product_date FROM product WHERE product_date < current_date ORDER BY product_date  DESC ;";
-    private final String GET_ALL = "SELECT id,name,description, product_date FROM product WHERE product_date>=current_date ORDER BY product_date  ASC ;";
+    private final String GET_BY_ALL_CATEGORY = "SELECT post_id FROM product_meta LEFT JOIN product_category ON product_meta.category_id = product_category.id WHERE category_id = ?";
+    private final String GET_ALL_PAST = "SELECT id,name,description, product_date, url, supplier_id,price FROM product WHERE product_date < date(current_date,'-1 day') ORDER BY product_date  DESC ;";
+    private final String GET_ALL = "SELECT id,name,description, product_date ,url, supplier_id,price FROM product WHERE product_date >= date(current_date,'-1 day') ORDER BY product_date  ASC ;";
     private final String GET_BY_NAME = "SELECT id  FROM product WHERE name=?";
+    private SupplierInterface supplierDao = new SupplierDao();
 
     @Override
     public void add(Product product) throws SQLException {
@@ -38,6 +40,9 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
         parameters.put(1, product.getName());
         parameters.put(2, product.getDescription());
         parameters.put(3, stringDate);
+        parameters.put(4, product.getUrl());
+        parameters.put(5, String.valueOf(product.getSupplier().getId()));
+        parameters.put(6, String.valueOf(product.getPrice()));
         this.executeStatementUpdate(ADD, parameters);
     }
 
@@ -50,19 +55,22 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
 
     @Override
     public void update(Product editProduct) throws SQLException {
-        Map<Integer, String > parameters = new HashMap<>();
+        Map<Integer, String> parameters = new HashMap<>();
         String stringDate = DateFormatUtils.format(editProduct.getDate(), "yyyy-MM-dd");
         parameters.put(1, editProduct.getName());
         parameters.put(2, editProduct.getDescription());
         parameters.put(3, stringDate);
-        parameters.put(4, editProduct.getId().toString());
+        parameters.put(4, editProduct.getUrl());
+        parameters.put(5, String.valueOf(editProduct.getSupplier().getId()));
+        parameters.put(6, String.valueOf(editProduct.getPrice()));
+        parameters.put(7, editProduct.getId().toString());
         this.executeStatementUpdate(UPDATE, parameters);
     }
 
     @Override
     public void addMeta(Product product) throws SQLException {
         for (ProductCategory meta : product.getCategories()) {
-            Map<Integer,String> parameters = new HashMap<>();
+            Map<Integer, String> parameters = new HashMap<>();
             parameters.put(1, product.getId().toString());
             parameters.put(2, meta.getId().toString());
             this.executeStatementUpdate(ADD_META, parameters);
@@ -94,8 +102,8 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
     @Override
     public Integer getByName(String name) throws SQLException {
         Map<Integer, String> parameters = new HashMap<>();
-        parameters.put(1,name);
-        ResultSet rs = executeStatement(GET_BY_NAME,parameters);
+        parameters.put(1, name);
+        ResultSet rs = executeStatement(GET_BY_NAME, parameters);
         if (!(rs == null)) {
             Integer productId = rs.getInt("id");
             rs.close();
@@ -126,7 +134,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
         List<Product> productByCategory = new ArrayList<>();
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, String.valueOf(category.getId()));
-        ResultSet rs = this.executeStatement(GET_BY_ALL_CATEGORY,parameters);
+        ResultSet rs = this.executeStatement(GET_BY_ALL_CATEGORY, parameters);
         while (rs.next()) {
             Integer productId = rs.getInt("post_id");
             Product product = getByIdFuture(productId);
@@ -145,6 +153,11 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
             String stringDate = rs.getString("product_date");
             Date product_date = null;
             List<ProductCategory> productCatList = getCategoriesFromMeta(rs);
+            ProductSupplier supplier = null;
+            String supplierId = rs.getString("supplier_id");
+            if (supplierId != null && supplierId !=""){
+                supplier = supplierDao.getById(Integer.valueOf(rs.getString("supplier_id")));
+            }
             try {
                 product_date = formatNew.parse(stringDate);
             } catch (ParseException e) {
@@ -155,8 +168,10 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
                     rs.getString("name"),
                     rs.getString("description"),
                     product_date,
-                    productCatList
-            );
+                    productCatList,
+                    rs.getString("url"),
+                    supplier,
+                    rs.getInt("price"));
             products.add(product);
         }
         return products;
@@ -167,7 +182,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
         List<ProductCategory> productCatList = new ArrayList<>();
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, String.valueOf(rs.getInt("id")));
-        ResultSet rs_cat = executeStatement(GET_CATEGORIES_META,parameters);
+        ResultSet rs_cat = executeStatement(GET_CATEGORIES_META, parameters);
         while (rs_cat.next()) {
             productCatList.add(categoryDao.getById(rs_cat.getInt("category_id")));
         }
@@ -181,6 +196,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
         Date product_date = null;
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         while (resultSet.next()) {
+            ProductSupplier supplier = null;
             String stringDate = resultSet.getString("product_date");
             try {
                 product_date = format.parse(stringDate);
@@ -188,14 +204,19 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
                 e.printStackTrace();
             }
             List<ProductCategory> productCatList = getCategoriesFromMeta(resultSet);
-
+            String supplierId = resultSet.getString("supplier_id");
+            if (supplierId != null && supplierId !=""){
+                supplier = supplierDao.getById(Integer.valueOf(resultSet.getString("supplier_id")));
+            }
             Product product = new Product(
                     resultSet.getInt("id"),
                     resultSet.getString("name"),
                     resultSet.getString("description"),
                     product_date,
-                    productCatList
-            );
+                    productCatList,
+                    resultSet.getString("url"),
+                    supplier,
+                    resultSet.getInt("price"));
             resultSet.close();
             return product;
         }
