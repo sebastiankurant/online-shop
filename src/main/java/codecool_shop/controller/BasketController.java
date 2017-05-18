@@ -2,6 +2,7 @@ package codecool_shop.controller;
 
 import codecool_shop.dao.ProductDao;
 import codecool_shop.dao.ProductInterface;
+import codecool_shop.model.Basket;
 import codecool_shop.model.Product;
 import spark.ModelAndView;
 import spark.Request;
@@ -25,7 +26,8 @@ public class BasketController {
         List<Product> basketProductList;
         basketProductList = req.session().attribute("basketProductList");
         if (!(basketProductList == null)) {
-            params.put("basket", basketProductList);
+            Basket basket = new Basket(basketProductList);
+            params.put("basket",basket);
             params.put("removeFromBasket", req.session().attribute("removeFromBasket"));
             req.session().attribute("removeFromBasket",false);
         }
