@@ -25,7 +25,7 @@ public class ProductController extends BaseController{
     private CategoryInterface categoryDao = new CategoryDao();
     private UtilityClass calculateClass = new UtilityClass();
 
-    public ModelAndView displayProducts(Request req, Response res) throws SQLException {
+    public ModelAndView displayProducts(Request req) throws SQLException {
         Map<String, Object> params = new HashMap<>();
         List<Product> products = productDao.getAll();
         List<ProductCategory> categoires = categoryDao.getAll();
