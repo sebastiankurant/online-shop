@@ -19,22 +19,21 @@ public class SupplierControllerAdmin extends BaseController{
     private SupplierInterface supplierDao = new SupplierDao();
 
     public ModelAndView renderSupplier() {
-        Map<Object, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         try {
             params.put("supplierContainer", supplierDao.getAll());
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new ModelAndView(params, "admin/supplier/index");
+        return render(params, "admin/supplier/index");
     }
 
     public ModelAndView add() {
-        Map<Object, Object> params = new HashMap<>();
-        return new ModelAndView(params, "admin/supplier/add");
+        return render("admin/supplier/add");
     }
 
     public ModelAndView addSupplierPost(Request request, Response response) throws SQLException {
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         String name = request.queryParams("name");
         String address = request.queryParams("address");
 
@@ -47,20 +46,20 @@ public class SupplierControllerAdmin extends BaseController{
             response.redirect("/admin/supplier");
         } else {
             params.put("errorContainer", "Supplier name cannot be empty");
-            return new ModelAndView(params, "admin/supplier/add");
+            return render(params, "admin/supplier/add");
         }
-        return new ModelAndView(params, "admin/supplier/add");
+        return render(params, "admin/supplier/add");
     }
 
     public ModelAndView editSupplier(Request request) throws SQLException  {
         Integer id = Integer.valueOf(request.params("id"));
         ProductSupplier productSupplier = supplierDao.getById(id);
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         if (!(productSupplier == null)) {
             params.put("supplierContainer", productSupplier);
-            return new ModelAndView(params, "admin/supplier/edit");
+            return render(params, "admin/supplier/edit");
         }
-        return new ModelAndView(params, "404");
+        return render(params, "404");
     }
 
     public ModelAndView editSupplierPost(Request request, Response response) throws SQLException {
@@ -69,7 +68,7 @@ public class SupplierControllerAdmin extends BaseController{
         Integer id = Integer.valueOf(request.params("id"));
 
         ProductSupplier editSupplier = supplierDao.getById(id);
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         if (!name.isEmpty() && !(editSupplier == null)) {
             editSupplier.setName(name);
             editSupplier.setAddress(address);
@@ -78,9 +77,9 @@ public class SupplierControllerAdmin extends BaseController{
         } else {
             params.put("supplierContainer", editSupplier);
             params.put("errorContainer", "Supplier name cannot be empty");
-            return new ModelAndView(params, "admin/supplier/edit");
+            return render(params, "admin/supplier/edit");
         }
-        return new ModelAndView(params, "admin/supplier/edit");
+        return render(params, "admin/supplier/edit");
 
     }
 
