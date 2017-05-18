@@ -1,5 +1,7 @@
 import codecool_shop.Application;
 
+import java.sql.SQLException;
+
 
 public class Main {
 
@@ -12,6 +14,17 @@ public class Main {
 			Application.fillIfNotExistTables();
 		}
 		Application.runApp().start();
+
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			try {
+				Thread.sleep(200);
+				Application.dropConnection();
+				System.out.println("Shouting down ...");
+
+			} catch (InterruptedException | SQLException e) {
+				e.printStackTrace();
+			}
+		}));
 	}
 
 }

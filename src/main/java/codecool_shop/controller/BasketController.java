@@ -3,6 +3,7 @@ package codecool_shop.controller;
 import codecool_shop.dao.ProductDao;
 import codecool_shop.dao.ProductInterface;
 import codecool_shop.model.Product;
+import com.sun.xml.internal.rngom.parse.host.Base;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -15,12 +16,11 @@ import java.util.Map;
 /**
  * Created by pgurdek on 16.05.17.
  */
-public class BasketController {
+public class BasketController extends BaseController{
 
     private ProductInterface produtDao = new ProductDao();
-    private ProductController productController = new ProductController();
 
-    public ModelAndView getBasket(Request req, Response res) {
+    public ModelAndView getBasket(Request req) {
         Map<String, Object> params = new HashMap<>();
         List<Product> basketProductList;
         basketProductList = req.session().attribute("basketProductList");
@@ -30,7 +30,7 @@ public class BasketController {
             req.session().attribute("removeFromBasket",false);
         }
 
-        return new ModelAndView(params, "basket/basket");
+        return render(params, "basket/basket");
     }
 
     public String addToBasket(Request req, Response res) throws SQLException {

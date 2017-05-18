@@ -22,16 +22,16 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Supplier;
 
-public class ProductControllerAdmin {
+public class ProductControllerAdmin extends BaseController {
     private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();
     private MetaInterface productMeta = new ProductDao();
     private SupplierInterface supplierDao = new SupplierDao();
     private UtilityClass utilityClass = new UtilityClass();
 
-    public ModelAndView renderProducts(Request req, Response res) throws SQLException {
+    public ModelAndView renderProducts() throws SQLException {
         //Get products from database by Dao
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         try {
             params.put("productContainer", productDao.getAll());
             params.put("categoryAvailable", categoryDao.getAll());
@@ -42,11 +42,11 @@ public class ProductControllerAdmin {
         UtilityClass utilityClass = new UtilityClass();
         params.put("UtilityClass", utilityClass);
         params.put("currentDate", currentDate);
-        return new ModelAndView(params, "/admin/products/index");
+        return render(params, "/admin/products/index");
     }
 
-    public ModelAndView addProduct(Request req, Response res) {
-        Map params = new HashMap<>();
+    public ModelAndView addProduct() {
+        Map<String, Object> params = new HashMap<>();
         try {
             List<ProductCategory> availableCategory = categoryDao.getAll();
             List<ProductSupplier> availableSupplier = supplierDao.getAll();
@@ -55,7 +55,7 @@ public class ProductControllerAdmin {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new ModelAndView(params, "/admin/products/add");
+        return render(params, "/admin/products/add");
     }
 
     public ModelAndView addProductPost(Request req, Response res) throws SQLException {
@@ -63,14 +63,14 @@ public class ProductControllerAdmin {
         String description = null;
         String postDate;
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         try {
             List<ProductCategory> availableCategory = categoryDao.getAll();
             params.put("availableCategory", availableCategory);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Map<String, String> formInputs = getParamsFromInputStream(req, res);
+        Map<String, String> formInputs = getParamsFromInputStream(req);
         name = formInputs.get("name");
         description = formInputs.get("description");
         postDate = formInputs.get("date");
@@ -102,15 +102,15 @@ public class ProductControllerAdmin {
             res.redirect("/admin/products/");
         } else {
             params.put("errorContainer", "Name or Date is not invalid");
-            return new ModelAndView(params, "admin/products/add");
+            return render(params, "admin/products/add");
         }
-        return new ModelAndView(params, "/admin/products/add");
+        return render(params, "/admin/products/add");
     }
 
     public ModelAndView editProduct(Request req, Response res) throws SQLException {
         Integer id = Integer.valueOf(req.params("id"));
         Product productToEdit = productDao.getById(id);
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         if (!(productToEdit == null)) {
             try { // Set attributes which are already checked
                 List<ProductCategory> availableCategory = categoryDao.getAll();
@@ -125,13 +125,15 @@ public class ProductControllerAdmin {
                 productToEdit.setCategories(availableCategory);
                 params.put("productContainer", productToEdit);
                 params.put("availableSupplier", availableSupplier);
-                return new ModelAndView(params, "/admin/products/edit");
+
+                return render(params, "/admin/products/edit");
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
         }
-        return new ModelAndView(params, "404");
+        return render(params, "404");
     }
 
     public String editProductPost(Request req, Response res) throws SQLException {
@@ -143,7 +145,7 @@ public class ProductControllerAdmin {
         String[] categoryList = req.queryParamsValues("category");
         Date date = null;
         Product editProduct = productDao.getById(id);
-        Map<String, String> formInputs = getParamsFromInputStream(req, res);
+        Map<String, String> formInputs = getParamsFromInputStream(req);
         String name = formInputs.get("name");
         String description = formInputs.get("description");
         String postDate = formInputs.get("date");
@@ -197,8 +199,8 @@ public class ProductControllerAdmin {
         return "";
     }
 
-    public ModelAndView pastProducts(Request req, Response res) throws SQLException {
-        Map params = new HashMap<>();
+    public ModelAndView pastProducts() throws SQLException {
+        Map<String, Object> params = new HashMap<>();
         try {
             params.put("productContainer", productDao.getAllPast());
         } catch (SQLException e) {
@@ -211,8 +213,8 @@ public class ProductControllerAdmin {
         return new ModelAndView(params, "/admin/products/index");
     }
 
-    public ModelAndView filterCategory(Request req, Response res) throws SQLException {
-        Map params = new HashMap<>();
+    public ModelAndView filterCategory(Request req) throws SQLException {
+        Map<String, Object> params = new HashMap<>();
         String category = req.queryParams("cat");
         ProductCategory catObject = null;
         try {
@@ -230,13 +232,13 @@ public class ProductControllerAdmin {
             }
             params.put("UtilityClass", utilityClass);
             params.put("currentDate", new Date());
-            return new ModelAndView(params, "/admin/products/index");
+            return render(params, "/admin/products/index");
         }
-        return new ModelAndView(params, "/admin/products/index");
+        return render(params, "/admin/products/index");
     }
 
 
-    public Map<String, String> getParamsFromInputStream(Request req, Response res) {
+    public Map<String, String> getParamsFromInputStream(Request req) {
         Map<String, String> inputsMap = new HashMap<>();
         try {
             File file = new File("src/main/resources");

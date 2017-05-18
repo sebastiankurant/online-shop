@@ -11,14 +11,9 @@ import java.util.Map;
 /**
  * Created by pgurdek on 11.05.17.
  */
-public class AdminController {
-    private CategoryInterface categoryDao = new CategoryDao();
-    private ProductInterface eventDao = new ProductDao();
-    private SupplierInterface supplierDao = new SupplierDao();
+public class AdminController extends BaseController{
 
-
-    public ModelAndView displayIndex(Request req, Response res) {
-        Map params = new HashMap<>();
-        return new ModelAndView(params, "admin/index");
+    public ModelAndView displayIndex() {
+        return render("admin/index");
     }
 }
