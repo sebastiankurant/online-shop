@@ -1,0 +1,81 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: header">
+</head>
+
+<body>
+<div class="container-fluid">
+
+    <div class="row">
+        <nav th:replace="admin/admin-panel :: admin-panel">
+        </nav>
+
+        <div id="admin-panel-content" class="admin-content col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
+            <h1>Products</h1>
+            <a class="btn btn-outline-primary" th:text="'Add Product'" th:href="@{~/admin/products/add/}"></a>
+            <form th:method="get" th:action="@{~/admin/products/category/}">
+                <label>Category Filter: </label>
+                <select class="btn btn-outline-primary select-primary" name="cat">
+                    <option th:each="catOption,index:${categoryAvailable}" th:text="${catOption.getName()}"
+                            th:value="${catOption.getId()}"></option>
+                </select>
+                <button class="btn btn-outline-primary" th:text="Filter" type="submit"></button>
+            </form>
+            <div id="products" class="">
+                <table class="table">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:class="${UtilityClass.calculateClass(product.getDate(),currentDate)}"
+                        th:each="product,iterCount : ${productContainer}">
+                        <td>
+                            <p th:text="${iterCount.count}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${product.getName()}"></p>
+                        </td>
+                        <td th:text="${#dates.format(product.getDate(), 'yyyy-MM-dd')}">Date</td>
+                        <td>
+
+                                <div th:class="cat-wrapper"
+                                     th:each="category,catIterCounter :${product.getCategories()}">
+                                    <a  th:class="category-tags" th:href="@{~/admin/products/category/?cat=}+${category.getId()}">
+                                    <span th:text="${category.getName()}"> </span>
+                                    </a>
+                                </div>
+
+
+                        </td>
+                        <td>
+                            <a th:href="@{~/admin/products/edit/}+${product.getId()}">
+                                <button type="button" class="btn btn-secondary" th:text="Edit"></button>
+                            </a>
+                            <form th:method="POST" th:action="@{~/admin/products/remove/}+${product.getId()}+'/'">
+                                <button class="btn btn-secondary" th:type="submit" th:value="Delete"
+                                        th:text="Delete"></button>
+                            </form>
+                        </td>
+
+
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div th:replace="footer :: copy"></div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

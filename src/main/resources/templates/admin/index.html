@@ -1,0 +1,25 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: header">
+</head>
+
+<body>
+<div  class="container-fluid" >
+
+    <div class="row">
+        <nav th:replace="admin/admin-panel :: admin-panel">
+        </nav>
+
+        <div id="admin-panel-content" class="list-group admin-content col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
+            <h1>Admin Panel</h1>
+            <div th:replace="footer :: copy"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</body>
+</html>

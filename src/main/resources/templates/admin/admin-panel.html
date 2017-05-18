@@ -1,0 +1,35 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: header">
+    <title>Admin Panel </title>
+</head>
+
+<body>
+
+<nav th:fragment="admin-panel" id="admin-panel-nav" class="admin-panel col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2">
+    <div class="admin-panel-background">
+        <div>
+            <a th:href="@{~/admin/products/}"><i class="fa fa-calendar" aria-hidden="true"></i> Product List</a>
+        </div>
+        <div>
+            <a th:href="@{~/admin/category/}"><i class="fa fa-tags" aria-hidden="true"></i> Category List</a>
+        </div>
+        <div>
+            <a th:href="@{~/admin/supplier/}"><i class="fa fa-building" aria-hidden="true"></i> Supplier List</a>
+        </div>
+        <div>
+            <a th:href="@{~/admin/products/past/}"><i class="fa fa-history" aria-hidden="true"></i> Past Events List</a>
+        </div>
+        <div>
+            <form method="post" th:action="@{~/admin/logout/}">
+                <button th:type="submit"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</button>
+            </form>
+
+        </div>
+    </div>
+</nav>
+
+
+</body>
+</html>

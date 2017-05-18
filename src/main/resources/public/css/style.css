@@ -1,0 +1,210 @@
+
+body {
+    color: #23282d;
+}
+
+a {
+    color: #23282d;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.5s all;
+}
+
+button {
+    cursor: pointer;
+}
+
+a:hover {
+    color: #6ab2d3;
+    text-decoration: none;
+}
+
+table {
+    width: 100%;
+}
+
+.table thead th {
+    text-align: center;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.table .past {
+    /*background: rgba(152, 152, 152, 0.68);*/
+    /*color:white;*/
+}
+
+.table .now {
+    background: #6ab2d3;
+    color: white;
+    position: relative;
+}
+
+.table .now td {
+    position: relative;
+}
+
+table p {
+    margin-bottom: 0px;
+}
+
+.table .now td:first-child:before {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    content: "\f12a";
+    display: inline-block;
+    color: #db302a;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+
+.table .future {
+
+}
+
+.admin-panel {
+    min-height: 100vh;
+    padding-top: 100px;
+    background: #23282d;
+    text-align: left;
+}
+
+.admin-panel-background div {
+    margin: 20px 0;
+    padding-left: 20px;
+}
+
+#admin-panel-nav form button {
+    color: white;
+    background: none;
+    border: none;
+    padding: 15px;
+    font-size: 20px;
+    transition: 0.5s all;
+}
+
+#admin-panel-nav form button:hover {
+    color: #6ab2d3;
+}
+
+.admin-panel a {
+    color: white;
+    padding: 15px;
+    font-size: 20px;
+}
+
+.admin-panel a:hover {
+    color: #6ab2d3;
+}
+
+.admin-content {
+    padding: 15px;
+}
+
+.admin-content h1 {
+    text-align: center;
+}
+
+/*Buttons*/
+.btn-outline-primary {
+    margin: 5px 0;
+    color: #6ab2d3;
+    border-color: #6ab2d3;
+}
+
+.btn-outline-primary:hover {
+    color: white;
+    background: #6ab2d3;
+    border-color: #6ab2d3;
+}
+
+.select-primary:hover {
+    background: transparent;
+    color: #6ab2d3;
+}
+
+.btn-secondary {
+    background: #db4c52;
+    color: white;
+    border-color: #db4c52;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin: 5px 0;
+}
+
+.btn-secondary:hover {
+    background: #db302a;
+    color: white;
+    border-color: #db302a;
+}
+
+.cat-wrapper {
+    display: inline-block;
+
+}
+
+.category-tags {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #db302a;
+    color: white;
+    border-radius: 10px;
+}
+
+.category-tags:hover {
+    color: white;
+    background: #bb0407;
+}
+
+.category-tags a:hover div {
+    background: #db302a;
+    color: white;
+    border-color: #db302a;
+}
+
+/*Forms*/
+.form-default {
+
+}
+
+.form-default input {
+    display: inline-block;
+}
+
+.center {
+    margin: 0 auto;
+}
+
+.form-group label {
+
+}
+
+textarea.form-control {
+    padding-left: 15px;
+}
+
+.admin-content {
+    text-align: center;
+}
+
+.errors {
+    text-align: center;
+    width: auto;
+    display: inline-block;
+}
+
+.panel-default {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 25px;
+}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: header">
+</head>
+<body>
+<div class="container">
+    <h1>Basket</h1>
+
+    <div class="row products-grid">
+        <span th:if="${removeFromBasket}" th:text="'Product Deletd'"></span>
+        <div class="col-12" th:each="product,counter:${basket}"
+             th:class="'col-12 '+${product.getClassSlug()}">
+            <div class="product-wrapper">
+                <h2 th:text="${product.getName()}"></h2>
+             </div>
+            <form th:action="@{~/basket/remove/product/}" method="POST">
+                <input type="hidden" th:id="'product-id' + ${product.getId()}" name="remove_product" th:value="${product.getId()}">
+                <button th:type="submit" class="cat-wrapper">Remove From Basket</button>
+            </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+<script type="text/javascript" th:src="@{~/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{~/js/isotope.pkgd.min.js}"></script>
+<script type="text/javascript" th:src="@{~/js/main.js}"></script>
+</html>

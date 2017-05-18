@@ -1,0 +1,53 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: header">
+</head>
+
+<body>
+<div class="container-fluid">
+
+    <div class="row">
+        <nav th:replace="admin/admin-panel :: admin-panel">
+        </nav>
+
+        <div id="admin-panel-content" class="admin-content col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
+            <h1>Category</h1>
+            <a class="btn btn-outline-primary" th:text="'Add Category'" th:href="@{~/admin/category/add/}"></a>
+            <div id="category" class="">
+                <table class="table">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="category,iterCount : ${categoryContainer}">
+                        <td th:text="${iterCount.count}"></td>
+                        <td th:text="${category.getName()}"></td>
+                        <td th:text="${category.getDescription()}"></td>
+                        <td>
+                            <a th:href="@{~/admin/category/edit/}+${category.getId()}">
+                                <button type="button" class="btn btn-secondary" th:text="Edit"></button>
+                            </a>
+                            <form th:method="POST" th:action="@{~/admin/category/remove/}+${category.getId()}+'/'">
+                                <button class="btn btn-secondary" th:type="submit" th:value="Delete"
+                                        th:text="Delete"></button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div th:replace="footer :: copy"></div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
