@@ -31,7 +31,7 @@ public class ProductControllerAdmin extends BaseController{
 
     public ModelAndView renderProducts() throws SQLException {
         //Get products from database by Dao
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         try {
             params.put("productContainer", productDao.getAll());
             params.put("categoryAvailable", categoryDao.getAll());
@@ -42,11 +42,11 @@ public class ProductControllerAdmin extends BaseController{
         UtilityClass utilityClass = new UtilityClass();
         params.put("UtilityClass", utilityClass);
         params.put("currentDate", currentDate);
-        return new ModelAndView(params, "/admin/products/index");
+        return render(params, "/admin/products/index");
     }
 
     public ModelAndView addProduct() {
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         try {
             List<ProductCategory> availableCategory = categoryDao.getAll();
             List<ProductSupplier> availableSupplier = supplierDao.getAll();
@@ -55,7 +55,7 @@ public class ProductControllerAdmin extends BaseController{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new ModelAndView(params, "/admin/products/add");
+        return render(params, "/admin/products/add");
     }
 
     public ModelAndView addProductPost(Request req, Response res) throws SQLException {
@@ -63,7 +63,7 @@ public class ProductControllerAdmin extends BaseController{
         String description = null;
         String postDate;
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         try {
             List<ProductCategory> availableCategory = categoryDao.getAll();
             params.put("availableCategory", availableCategory);
@@ -102,15 +102,15 @@ public class ProductControllerAdmin extends BaseController{
             res.redirect("/admin/products/");
         } else {
             params.put("errorContainer", "Name or Date is not invalid");
-            return new ModelAndView(params, "admin/products/add");
+            return render(params, "admin/products/add");
         }
-        return new ModelAndView(params, "/admin/products/add");
+        return render(params, "/admin/products/add");
     }
 
     public ModelAndView editProduct(Request req, Response res) throws SQLException {
         Integer id = Integer.valueOf(req.params("id"));
         Product productToEdit = productDao.getById(id);
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         if (!(productToEdit == null)) {
             try { // Set attributes which are already checked
                 List<ProductCategory> availableCategory = categoryDao.getAll();
@@ -123,13 +123,13 @@ public class ProductControllerAdmin extends BaseController{
                 }
                 productToEdit.setCategories(availableCategory);
                 params.put("productContainer", productToEdit);
-                return new ModelAndView(params, "/admin/products/edit");
+                return render(params, "/admin/products/edit");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
         }
-        return new ModelAndView(params, "404");
+        return render(params, "404");
     }
 
     public String editProductPost(Request req, Response res) throws SQLException {
@@ -193,7 +193,7 @@ public class ProductControllerAdmin extends BaseController{
     }
 
     public ModelAndView pastProducts() throws SQLException {
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         try {
             params.put("productContainer", productDao.getAllPast());
         } catch (SQLException e) {
@@ -207,7 +207,7 @@ public class ProductControllerAdmin extends BaseController{
     }
 
     public ModelAndView filterCategory(Request req) throws SQLException {
-        Map params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         String category = req.queryParams("cat");
         ProductCategory catObject = null;
         try {
@@ -225,9 +225,9 @@ public class ProductControllerAdmin extends BaseController{
             }
             params.put("UtilityClass", utilityClass);
             params.put("currentDate", new Date());
-            return new ModelAndView(params, "/admin/products/index");
+            return render(params, "/admin/products/index");
         }
-        return new ModelAndView(params, "/admin/products/index");
+        return render(params, "/admin/products/index");
     }
 
 
