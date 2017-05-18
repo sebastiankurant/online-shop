@@ -21,8 +21,7 @@ public class LoginController extends BaseController{
     UserController userController = new UserController();
 
     public ModelAndView serveLoginPage() {
-        Map<String, Object> params = new HashMap<>();
-        return new ModelAndView(params, "login");
+        return render("login");
     }
 
     public ModelAndView handleLoginPost(Request request, Response response) throws SQLException {
@@ -44,7 +43,7 @@ public class LoginController extends BaseController{
         else{
             response.redirect("/");
         }
-        return new ModelAndView(model, "login");
+        return render(model, "login");
     }
 
     public Route handleLogoutPost(Request request, Response response) {
