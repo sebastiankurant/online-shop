@@ -1,8 +1,16 @@
 package codecool_shop.utilities;
 
 import org.joda.time.DateTimeComparator;
+import spark.Request;
 
+import javax.servlet.http.Part;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 /**
  * Created by pgurdek on 13.05.17.
@@ -17,5 +25,23 @@ public class UtilityClass {
             return "now";
         }
         return "past";
+    }
+
+    public String getStringFromInputStream(Part part) {
+        try {
+            return new BufferedReader(new InputStreamReader(part.getInputStream()))
+                    .lines().collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getDomainUrl(Request request){
+        if (request.protocol().equals("HTTP/1.1")){
+             return "http://"+request.host()+"/images/";
+        }
+        return "https://" + request.host() + "/images/";
+
     }
 }
