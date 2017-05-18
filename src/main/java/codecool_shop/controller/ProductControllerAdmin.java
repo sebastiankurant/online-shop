@@ -20,7 +20,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Supplier;
 
 public class ProductControllerAdmin {
     private ProductInterface productDao = new ProductDao();
@@ -60,8 +59,11 @@ public class ProductControllerAdmin {
 
     public ModelAndView addProductPost(Request req, Response res) throws SQLException {
         String name;
-        String description = null;
+        String description;
+        ProductSupplier supplier = null;
         String postDate;
+        Integer price = 0;
+        Integer supplierId = 0;
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Map params = new HashMap<>();
         try {
@@ -75,11 +77,15 @@ public class ProductControllerAdmin {
         description = formInputs.get("description");
         postDate = formInputs.get("date");
         String filename = formInputs.get("filename");
-        String url = utilityClass.getDomainUrl(req)+filename;
+        String url = utilityClass.getDomainUrl(req) + filename;
         String[] categoryList = req.queryParamsValues("category");
-        Integer price = Integer.valueOf(req.queryParams("price"));
-        Integer supplierId = Integer.valueOf(req.queryParams("supplier"));
-        ProductSupplier supplier = supplierDao.getById(supplierId);
+        try{
+            price = Integer.valueOf(req.queryParams("price"));
+            supplierId = Integer.valueOf(req.queryParams("supplier"));
+            supplier = supplierDao.getById(supplierId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         Date date = null;
         try {
             date = format.parse(postDate);
@@ -94,7 +100,7 @@ public class ProductControllerAdmin {
                     catList.add(tempCat);
                 }
             }
-            Product newProduct = new Product(name, description, date, catList,url,supplier, price);
+            Product newProduct = new Product(name, description, date, catList, url, supplier, price);
             productDao.add(newProduct);
             Integer eventId = productDao.getByName(newProduct.getName());
             newProduct.setId(eventId);
@@ -146,7 +152,7 @@ public class ProductControllerAdmin {
         String description = formInputs.get("description");
         String postDate = formInputs.get("date");
         String filename = formInputs.get("filename");
-        String url = utilityClass.getDomainUrl(req)+filename;
+        String url = utilityClass.getDomainUrl(req) + filename;
         try {
             date = format.parse(postDate);
             System.out.println(postDate);

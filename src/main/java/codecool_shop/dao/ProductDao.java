@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Supplier;
 
 public class ProductDao extends Dao implements ProductInterface, MetaInterface {
 
@@ -36,12 +37,19 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
     @Override
     public void add(Product product) throws SQLException {
         Map<Integer, String> parameters = new HashMap<>();
+        String supplier = "";
         String stringDate = DateFormatUtils.format(product.getDate(), "yyyy-MM-dd");
         parameters.put(1, product.getName());
         parameters.put(2, product.getDescription());
         parameters.put(3, stringDate);
         parameters.put(4, product.getUrl());
-        parameters.put(5, String.valueOf(product.getSupplier().getId()));
+        try{
+            supplier = String.valueOf(product.getSupplier().getId());
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        parameters.put(5, supplier);
         parameters.put(6, String.valueOf(product.getPrice()));
         this.executeStatementUpdate(ADD, parameters);
     }
@@ -155,7 +163,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
             List<ProductCategory> productCatList = getCategoriesFromMeta(rs);
             ProductSupplier supplier = null;
             String supplierId = rs.getString("supplier_id");
-            if (supplierId != null && supplierId !=""){
+            if (supplierId != null && !supplierId.equals("")){
                 supplier = supplierDao.getById(Integer.valueOf(rs.getString("supplier_id")));
             }
             try {
