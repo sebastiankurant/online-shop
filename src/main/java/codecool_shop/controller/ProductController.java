@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Created by pgurdek on 14.05.17.
  */
-public class ProductController {
+public class ProductController extends BaseController{
     private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();
     private UtilityClass calculateClass = new UtilityClass();

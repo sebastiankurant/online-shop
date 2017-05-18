@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by monika on 17.05.17.
  */
-public class SupplierControllerAdmin {
+public class SupplierControllerAdmin extends BaseController{
 
     private SupplierInterface supplierDao = new SupplierDao();
 

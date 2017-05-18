@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Supplier;
 
-public class ProductControllerAdmin {
+public class ProductControllerAdmin extends BaseController{
     private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();
     private MetaInterface productMeta = new ProductDao();

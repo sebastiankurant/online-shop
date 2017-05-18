@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by pgurdek on 10.05.17.
  */
-public class CategoryControllerAdmin {
+public class CategoryControllerAdmin extends BaseController{
     private CategoryInterface categoryDao = new CategoryDao();
 
     public ModelAndView renderCategory(Request req, Response res) {
