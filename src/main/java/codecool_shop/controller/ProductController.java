@@ -41,6 +41,6 @@ public class ProductController extends BaseController{
         req.session().attribute("addedToCart", false);
 
 //        End
-        return new ModelAndView(params, "index");
+        return render(params, "index");
     }
 }
