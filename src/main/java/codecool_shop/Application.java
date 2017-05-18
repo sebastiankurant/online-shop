@@ -70,7 +70,7 @@ public class Application {
             get("/", productController::displayProducts, new ThymeleafTemplateEngine());
 
 //            Front End routes - Not secured routes
-
+            post("/logout/", loginController::handleLogoutPost);
             path("/login/", () -> {
                 before((request, response) -> {
                 });
@@ -92,7 +92,6 @@ public class Application {
                 });
 
                 get("/", adminController::displayIndex, new ThymeleafTemplateEngine());
-                post("/logout/", loginController::handleLogoutPost);
                 path("/products", () -> {
                     get("/", productControllerAdmin::renderProducts, new ThymeleafTemplateEngine());
                     get("/add/", productControllerAdmin::addProduct, new ThymeleafTemplateEngine());
