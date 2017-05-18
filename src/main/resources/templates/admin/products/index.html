@@ -22,6 +22,15 @@
                 </select>
                 <button class="btn btn-outline-primary" th:text="Filter" type="submit"></button>
             </form>
+            <form th:method="get" th:action="@{~/admin/products/supplier/}">
+                <label>Supplier Filter: </label>
+                <select class="btn btn-outline-primary select-primary" name="supplier">
+                    <option th:each="supplierOption,index:${supplierAvailable}" th:text="${supplierOption.getName()}"
+                            th:value="${supplierOption.getId()}"></option>
+                </select>
+                <button class="btn btn-outline-primary" th:text="Filter" type="submit"></button>
+            </form>
+
             <div id="products" class="">
                 <table class="table">
                     <thead class="thead-inverse">
