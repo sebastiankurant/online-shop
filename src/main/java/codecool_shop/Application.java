@@ -39,7 +39,7 @@ public class Application {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Can't drop and add tables.");
-            System.exit(1);
+            stop();
         }
     }
 
@@ -50,7 +50,7 @@ public class Application {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Can't fill with not exist tables.");
-            System.exit(1);
+            stop();
         }
     }
 
