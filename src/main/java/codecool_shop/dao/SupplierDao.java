@@ -24,7 +24,6 @@ public class SupplierDao extends Dao implements SupplierInterface {
     private final String GET_ALL = "SELECT id,name,address FROM product_supplier";
 
 
-
     @Override
     public void add(ProductSupplier productSupplier) throws SQLException {
         Map<Integer, String> parameters = new HashMap<>();

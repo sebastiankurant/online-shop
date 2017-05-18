@@ -31,7 +31,7 @@ public class Application {
         return app;
     }
 
-    public static void restartTables(){
+    public static void restartTables() {
         try {
             SgliteJDSCConnector temp = new SgliteJDSCConnector();
             temp.dropTables();
@@ -43,7 +43,7 @@ public class Application {
         }
     }
 
-    public static void fillIfNotExistTables(){
+    public static void fillIfNotExistTables() {
         try {
             SgliteJDSCConnector temp = new SgliteJDSCConnector();
             temp.createTablesIfNotExist();
@@ -116,9 +116,9 @@ public class Application {
                     get("/edit/:id/", productControllerAdmin::editProduct, new ThymeleafTemplateEngine());
                     get("/past/", productControllerAdmin::pastProducts, new ThymeleafTemplateEngine());
                     get("/category/", productControllerAdmin::filterCategory, new ThymeleafTemplateEngine());
-                    post("/add/","multipart/form-data", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
+                    post("/add/", "multipart/form-data", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
                     post("/remove/:id/", productControllerAdmin::removeProduct);
-                    post("/edit/:id/","multipart/form-data", productControllerAdmin::editProductPost);
+                    post("/edit/:id/", "multipart/form-data", productControllerAdmin::editProductPost);
                 });
 
                 path("/category", () -> {

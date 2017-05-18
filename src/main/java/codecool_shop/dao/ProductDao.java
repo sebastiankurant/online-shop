@@ -11,7 +11,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Supplier;
 
 public class ProductDao extends Dao implements ProductInterface, MetaInterface {
 
@@ -43,10 +42,10 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
         parameters.put(2, product.getDescription());
         parameters.put(3, stringDate);
         parameters.put(4, product.getUrl());
-        try{
+        try {
             supplier = String.valueOf(product.getSupplier().getId());
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         parameters.put(5, supplier);
@@ -163,7 +162,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
             List<ProductCategory> productCatList = getCategoriesFromMeta(rs);
             ProductSupplier supplier = null;
             String supplierId = rs.getString("supplier_id");
-            if (supplierId != null && !supplierId.equals("")){
+            if (supplierId != null && !supplierId.equals("")) {
                 supplier = supplierDao.getById(Integer.valueOf(rs.getString("supplier_id")));
             }
             try {
@@ -213,7 +212,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
             }
             List<ProductCategory> productCatList = getCategoriesFromMeta(resultSet);
             String supplierId = resultSet.getString("supplier_id");
-            if (supplierId != null && supplierId !=""){
+            if (supplierId != null && supplierId != "") {
                 supplier = supplierDao.getById(Integer.valueOf(resultSet.getString("supplier_id")));
             }
             Product product = new Product(

@@ -1,13 +1,13 @@
 package codecool_shop.controller;
 
-import codecool_shop.model.Product;
 import codecool_shop.model.User;
-import spark.*;
+import spark.ModelAndView;
+import spark.Request;
+import spark.Response;
+import spark.Route;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static codecool_shop.utilities.RequestUtil.getQueryPassword;
@@ -17,7 +17,7 @@ import static codecool_shop.utilities.RequestUtil.getQueryUsername;
 /**
  * Created by pgurdek on 13.05.17.
  */
-public class LoginController extends BaseController{
+public class LoginController extends BaseController {
     UserController userController = new UserController();
 
     public ModelAndView serveLoginPage(Request request, Response response) {
@@ -36,13 +36,12 @@ public class LoginController extends BaseController{
         request.session().attribute("authenticationSucceeded", true);
         request.session().attribute("username", currentUser.getUsername());
         request.session().attribute("id", currentUser.getId());
-        request.session().attribute("type",currentUser.getType());
+        request.session().attribute("type", currentUser.getType());
         model.put("authenticationSucceeded", true);
         request.session().attribute("currentUser", currentUser.getUsername());
-        if (request.session().attribute("type").equals("admin")){
+        if (request.session().attribute("type").equals("admin")) {
             response.redirect("/admin/");
-        }
-        else{
+        } else {
             response.redirect("/");
         }
         return render(model, "login");
@@ -62,7 +61,7 @@ public class LoginController extends BaseController{
         if (request.session().attribute("currentUser") == null) {
             response.redirect("/login/");
         }
-        if (request.session().attribute("type").equals("customer") ) {
+        if (request.session().attribute("type").equals("customer")) {
             response.redirect("/");
         }
     }

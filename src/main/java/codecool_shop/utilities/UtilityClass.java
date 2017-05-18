@@ -7,8 +7,6 @@ import javax.servlet.http.Part;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -37,9 +35,9 @@ public class UtilityClass {
         return null;
     }
 
-    public String getDomainUrl(Request request){
-        if (request.protocol().equals("HTTP/1.1")){
-             return "http://"+request.host()+"/images/";
+    public String getDomainUrl(Request request) {
+        if (request.protocol().equals("HTTP/1.1")) {
+            return "http://" + request.host() + "/images/";
         }
         return "https://" + request.host() + "/images/";
 

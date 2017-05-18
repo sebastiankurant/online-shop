@@ -31,11 +31,11 @@ public class Basket {
         this.productsInBasket = productsInBasket;
     }
 
-    public Integer getPrice(){
+    public Integer getPrice() {
 
         Integer basketPrice = 0;
-        for (Product product:this.productsInBasket){
-            basketPrice+=product.getPrice();
+        for (Product product : this.productsInBasket) {
+            basketPrice += product.getPrice();
 
         }
         return basketPrice;
