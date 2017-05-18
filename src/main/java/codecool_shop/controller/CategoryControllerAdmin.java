@@ -17,7 +17,7 @@ import java.util.Map;
 public class CategoryControllerAdmin extends BaseController{
     private CategoryInterface categoryDao = new CategoryDao();
 
-    public ModelAndView renderCategory(Request req, Response res) {
+    public ModelAndView renderCategory() {
         Map<String, Object> params = new HashMap<>();
         try {
             params.put("categoryContainer", categoryDao.getAll());
@@ -27,11 +27,11 @@ public class CategoryControllerAdmin extends BaseController{
         return render(params, "admin/category/index");
     }
 
-    public ModelAndView addCategory(Request req, Response res) {
+    public ModelAndView addCategory() {
         return render("admin/category/add");
     }
 
-    public ModelAndView editCategory(Request req, Response res) throws SQLException {
+    public ModelAndView editCategory(Request req) throws SQLException {
         Integer id = Integer.valueOf(req.params("id"));
         ProductCategory productCategory = categoryDao.getById(id);
         Map<String, Object> params = new HashMap<>();
