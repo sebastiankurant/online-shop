@@ -20,7 +20,7 @@ public class BasketController extends BaseController{
 
     private ProductInterface produtDao = new ProductDao();
 
-    public ModelAndView getBasket(Request req, Response res) {
+    public ModelAndView getBasket(Request req) {
         Map<String, Object> params = new HashMap<>();
         List<Product> basketProductList;
         basketProductList = req.session().attribute("basketProductList");
