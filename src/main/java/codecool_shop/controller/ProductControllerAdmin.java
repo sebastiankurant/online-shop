@@ -29,7 +29,7 @@ public class ProductControllerAdmin extends BaseController {
     private SupplierInterface supplierDao = new SupplierDao();
     private UtilityClass utilityClass = new UtilityClass();
 
-    public ModelAndView renderProducts() throws SQLException {
+    public ModelAndView renderProducts(Request request, Response response) throws SQLException {
         //Get products from database by Dao
         Map<String, Object> params = new HashMap<>();
         try {
@@ -45,7 +45,7 @@ public class ProductControllerAdmin extends BaseController {
         return render(params, "/admin/products/index");
     }
 
-    public ModelAndView addProduct() {
+    public ModelAndView addProduct(Request request, Response response) {
         Map<String, Object> params = new HashMap<>();
         try {
             List<ProductCategory> availableCategory = categoryDao.getAll();
@@ -58,7 +58,7 @@ public class ProductControllerAdmin extends BaseController {
         return render(params, "/admin/products/add");
     }
 
-    public ModelAndView addProductPost(Request req, Response res) throws SQLException {
+    public ModelAndView addProductPost(Request request, Response response) throws SQLException {
         String name;
         String description = null;
         String postDate;
@@ -70,15 +70,15 @@ public class ProductControllerAdmin extends BaseController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Map<String, String> formInputs = getParamsFromInputStream(req);
+        Map<String, String> formInputs = getParamsFromInputStream(request, response);
         name = formInputs.get("name");
         description = formInputs.get("description");
         postDate = formInputs.get("date");
         String filename = formInputs.get("filename");
-        String url = utilityClass.getDomainUrl(req)+filename;
-        String[] categoryList = req.queryParamsValues("category");
-        Integer price = Integer.valueOf(req.queryParams("price"));
-        Integer supplierId = Integer.valueOf(req.queryParams("supplier"));
+        String url = utilityClass.getDomainUrl(request)+filename;
+        String[] categoryList = request.queryParamsValues("category");
+        Integer price = Integer.valueOf(request.queryParams("price"));
+        Integer supplierId = Integer.valueOf(request.queryParams("supplier"));
         ProductSupplier supplier = supplierDao.getById(supplierId);
         Date date = null;
         try {
@@ -99,7 +99,7 @@ public class ProductControllerAdmin extends BaseController {
             Integer eventId = productDao.getByName(newProduct.getName());
             newProduct.setId(eventId);
             productMeta.addMeta(newProduct);
-            res.redirect("/admin/products/");
+            response.redirect("/admin/products/");
         } else {
             params.put("errorContainer", "Name or Date is not invalid");
             return render(params, "admin/products/add");
@@ -107,8 +107,8 @@ public class ProductControllerAdmin extends BaseController {
         return render(params, "/admin/products/add");
     }
 
-    public ModelAndView editProduct(Request req, Response res) throws SQLException {
-        Integer id = Integer.valueOf(req.params("id"));
+    public ModelAndView editProduct(Request request, Response response) throws SQLException {
+        Integer id = Integer.valueOf(request.params("id"));
         Product productToEdit = productDao.getById(id);
         Map<String, Object> params = new HashMap<>();
         if (!(productToEdit == null)) {
@@ -136,22 +136,23 @@ public class ProductControllerAdmin extends BaseController {
         return render(params, "404");
     }
 
-    public String editProductPost(Request req, Response res) throws SQLException {
-        Integer id = Integer.valueOf(req.params("id"));
+    public String editProductPost(Request request, Response response) throws SQLException {
+        Integer id = Integer.valueOf(request.params("id"));
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 //        String name = req.queryParams("name");
 //        String description = req.queryParams("description");
 //        String postDate = req.queryParams("date");
-        String[] categoryList = req.queryParamsValues("category");
+        String[] categoryList = request.queryParamsValues("category");
         Date date = null;
         Product editProduct = productDao.getById(id);
-        Map<String, String> formInputs = getParamsFromInputStream(req);
+        Map<String, String> formInputs = getParamsFromInputStream(request, response);
         String name = formInputs.get("name");
         String description = formInputs.get("description");
         String postDate = formInputs.get("date");
         String filename = formInputs.get("filename");
-        Integer supplierId = Integer.valueOf(req.queryParams("supplier"));
-        String url = utilityClass.getDomainUrl(req)+filename;
+        Integer supplierId = Integer.valueOf(request.queryParams("supplier"));
+        String url = utilityClass.getDomainUrl(request)+filename;
+
         try {
             date = format.parse(postDate);
             System.out.println(postDate);
@@ -177,29 +178,29 @@ public class ProductControllerAdmin extends BaseController {
             productDao.update(editProduct);
             productMeta.removeMeta(editProduct);
             productMeta.addMeta(editProduct);
-            res.redirect("/admin/products/");
+            response.redirect("/admin/products/");
             return "Sucess";
         }
         return "Error";
     }
 
-    public String removeProduct(Request req, Response res) throws SQLException {
+    public String removeProduct(Request request, Response response) throws SQLException {
         System.out.println("Remove Product");
-        Integer id = Integer.valueOf(req.params("id"));
+        Integer id = Integer.valueOf(request.params("id"));
         System.out.println(id);
         Product productToDelete = productDao.getById(id);
 
         if (!(productToDelete == null)) {
             productDao.remove(productToDelete.getId());
             productMeta.removeMeta(productToDelete);
-            res.redirect("/admin/products/");
+            response.redirect("/admin/products/");
             return "works";
         }
-        res.redirect("/admin/products/");
+        response.redirect("/admin/products/");
         return "";
     }
 
-    public ModelAndView pastProducts() throws SQLException {
+    public ModelAndView pastProducts(Request request, Response response) throws SQLException {
         Map<String, Object> params = new HashMap<>();
         try {
             params.put("productContainer", productDao.getAllPast());
@@ -213,9 +214,9 @@ public class ProductControllerAdmin extends BaseController {
         return new ModelAndView(params, "/admin/products/index");
     }
 
-    public ModelAndView filterCategory(Request req) throws SQLException {
+    public ModelAndView filterCategory(Request request, Response response) throws SQLException {
         Map<String, Object> params = new HashMap<>();
-        String category = req.queryParams("cat");
+        String category = request.queryParams("cat");
         ProductCategory catObject = null;
         try {
             catObject = categoryDao.getById(Integer.valueOf(category));
@@ -238,20 +239,20 @@ public class ProductControllerAdmin extends BaseController {
     }
 
 
-    public Map<String, String> getParamsFromInputStream(Request req) {
+    public Map<String, String> getParamsFromInputStream(Request request, Response response) {
         Map<String, String> inputsMap = new HashMap<>();
         try {
             File file = new File("src/main/resources");
             String absolutePath = file.getAbsolutePath();
-            req.raw().setAttribute("org.eclipse.jetty.multipartConfig",
+            request.raw().setAttribute("org.eclipse.jetty.multipartConfig",
                     new MultipartConfigElement(absolutePath + "/public/tmp/", 100000000, 100000000, 1024));
 
-            Part partName = req.raw().getPart("name");
-            Part partDescription = req.raw().getPart("description");
-            Part partDate = req.raw().getPart("date");
-            Part uploadedFile = req.raw().getPart("file");
+            Part partName = request.raw().getPart("name");
+            Part partDescription = request.raw().getPart("description");
+            Part partDate = request.raw().getPart("date");
+            Part uploadedFile = request.raw().getPart("file");
 //            Part partCategory = req.raw().getPart("category");
-            String filename = req.raw().getPart("file").getSubmittedFileName();
+            String filename = request.raw().getPart("file").getSubmittedFileName();
             inputsMap.put("name", utilityClass.getStringFromInputStream(partName));
             inputsMap.put("description", utilityClass.getStringFromInputStream(partDescription));
             inputsMap.put("date", utilityClass.getStringFromInputStream(partDate));

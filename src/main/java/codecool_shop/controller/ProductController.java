@@ -25,7 +25,7 @@ public class ProductController extends BaseController{
     private CategoryInterface categoryDao = new CategoryDao();
     private UtilityClass calculateClass = new UtilityClass();
 
-    public ModelAndView displayProducts(Request req) throws SQLException {
+    public ModelAndView displayProducts(Request request, Response response) throws SQLException {
         Map<String, Object> params = new HashMap<>();
         List<Product> products = productDao.getAll();
         List<ProductCategory> categoires = categoryDao.getAll();
@@ -34,11 +34,11 @@ public class ProductController extends BaseController{
         params.put("UtilityClass", calculateClass);
         params.put("currentDate", new Date());
 // Test
-        Boolean addedToCart = req.session().attribute("addedToCart");
+        Boolean addedToCart = request.session().attribute("addedToCart");
         params.put("Msg", addedToCart);
-        String productName = req.session().attribute("productName");
+        String productName = request.session().attribute("productName");
         params.put("productName", productName);
-        req.session().attribute("addedToCart", false);
+        request.session().attribute("addedToCart", false);
 
 //        End
         return render(params, "index");

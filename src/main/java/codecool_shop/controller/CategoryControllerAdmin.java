@@ -17,7 +17,7 @@ import java.util.Map;
 public class CategoryControllerAdmin extends BaseController{
     private CategoryInterface categoryDao = new CategoryDao();
 
-    public ModelAndView renderCategory() {
+    public ModelAndView renderCategory(Request request, Response response) {
         Map<String, Object> params = new HashMap<>();
         try {
             params.put("categoryContainer", categoryDao.getAll());
@@ -27,12 +27,12 @@ public class CategoryControllerAdmin extends BaseController{
         return render(params, "admin/category/index");
     }
 
-    public ModelAndView addCategory() {
+    public ModelAndView addCategory(Request request, Response response) {
         return render("admin/category/add");
     }
 
-    public ModelAndView editCategory(Request req) throws SQLException {
-        Integer id = Integer.valueOf(req.params("id"));
+    public ModelAndView editCategory(Request request, Response response) throws SQLException {
+        Integer id = Integer.valueOf(request.params("id"));
         ProductCategory productCategory = categoryDao.getById(id);
         Map<String, Object> params = new HashMap<>();
         if (!(productCategory == null)) {
@@ -43,10 +43,10 @@ public class CategoryControllerAdmin extends BaseController{
         return render(params, "404");
     }
 
-    public ModelAndView editCategoryPost(Request req, Response res) throws SQLException {
-        String name = req.queryParams("name");
-        String description = req.queryParams("description");
-        Integer id = Integer.valueOf(req.params("id"));
+    public ModelAndView editCategoryPost(Request request, Response response) throws SQLException {
+        String name = request.queryParams("name");
+        String description = request.queryParams("description");
+        Integer id = Integer.valueOf(request.params("id"));
         ProductCategory editCategory = categoryDao.getById(id);
         Map<String, Object> params = new HashMap<>();
         if (!name.isEmpty() && !(editCategory == null)) {
@@ -54,7 +54,7 @@ public class CategoryControllerAdmin extends BaseController{
             editCategory.setDescription(description);
             editCategory.setSlug(name);
             categoryDao.update(editCategory);
-            res.redirect("/admin/category");
+            response.redirect("/admin/category");
         } else {
             params.put("categoryContainer", editCategory);
             params.put("errorContainer", "Category name cannot be empty");
@@ -64,10 +64,10 @@ public class CategoryControllerAdmin extends BaseController{
 
     }
 
-    public ModelAndView addCategoryPost(Request req, Response res) throws SQLException {
+    public ModelAndView addCategoryPost(Request request, Response response) throws SQLException {
         Map<String, Object> params = new HashMap<>();
-        String name = req.queryParams("name");
-        String description = req.queryParams("description");
+        String name = request.queryParams("name");
+        String description = request.queryParams("description");
         if (!name.isEmpty()) {
             ProductCategory newCategory = new ProductCategory();
             newCategory.setId(0);
@@ -75,7 +75,7 @@ public class CategoryControllerAdmin extends BaseController{
             newCategory.setDescription(description);
             newCategory.setSlug(name);
             categoryDao.add(newCategory);
-            res.redirect("/admin/category");
+            response.redirect("/admin/category");
         } else {
             params.put("errorContainer", "Category name cannot be empty");
             return render(params, "admin/category/add");
@@ -83,16 +83,16 @@ public class CategoryControllerAdmin extends BaseController{
         return render(params, "admin/category/add");
     }
 
-    public String removeCategory(Request req, Response res) throws SQLException {
-        Integer id = Integer.valueOf(req.params("id"));
+    public String removeCategory(Request request, Response response) throws SQLException {
+        Integer id = Integer.valueOf(request.params("id"));
         ProductCategory catToDelete = categoryDao.getById(id);
         if (null != catToDelete) {
             categoryDao.remove(catToDelete.getId());
             categoryDao.removeMeta(catToDelete.getId());
-            res.redirect("/admin/category/");
+            response.redirect("/admin/category/");
             return "Success";
         } else {
-            res.redirect("/admin/category/");
+            response.redirect("/admin/category/");
             return "Failed";
         }
     }
