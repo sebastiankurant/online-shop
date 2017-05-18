@@ -30,7 +30,7 @@ public class BasketController extends BaseController{
             req.session().attribute("removeFromBasket",false);
         }
 
-        return new ModelAndView(params, "basket/basket");
+        return render(params, "basket/basket");
     }
 
     public String addToBasket(Request req, Response res) throws SQLException {
