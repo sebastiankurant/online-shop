@@ -13,6 +13,7 @@ public class Main {
         } else if (args.length > 0 && args[0].equals("--migrate-db")) {
             Application.fillIfNotExistTables();
         }
+        Application.isDbCreated();
         Application.runApp().start();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
