@@ -20,12 +20,12 @@ import java.util.Map;
 /**
  * Created by pgurdek on 14.05.17.
  */
-public class ProductController {
+public class ProductController extends BaseController{
     private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();
     private UtilityClass calculateClass = new UtilityClass();
 
-    public ModelAndView displayProducts(Request req, Response res) throws SQLException {
+    public ModelAndView displayProducts(Request req) throws SQLException {
         Map<String, Object> params = new HashMap<>();
         List<Product> products = productDao.getAll();
         List<ProductCategory> categoires = categoryDao.getAll();
@@ -41,6 +41,6 @@ public class ProductController {
         req.session().attribute("addedToCart", false);
 
 //        End
-        return new ModelAndView(params, "index");
+        return render(params, "index");
     }
 }
