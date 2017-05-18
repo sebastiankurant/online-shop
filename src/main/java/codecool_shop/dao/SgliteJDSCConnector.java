@@ -22,9 +22,9 @@ public class SgliteJDSCConnector {
                 "    name VARCHAR(255) NOT NULL,\n" +
                 "    description TEXT,\n" +
                 "    product_date TEXT, \n" +
-                "    price REAL, \n" +
+                "    url VARCHAR(255), \n" +
                 "    supplier_id INTEGER, \n" +
-                "    url VARCHAR(255) \n" +
+                "    price REAL \n" +
                 ")");
 
         statement.execute("CREATE TABLE IF NOT EXISTS product_category\n" +

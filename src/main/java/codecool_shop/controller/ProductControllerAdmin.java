@@ -3,6 +3,7 @@ package codecool_shop.controller;
 import codecool_shop.dao.*;
 import codecool_shop.model.Product;
 import codecool_shop.model.ProductCategory;
+import codecool_shop.model.ProductSupplier;
 import codecool_shop.utilities.UtilityClass;
 import spark.ModelAndView;
 import spark.Request;
@@ -19,11 +20,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Supplier;
 
 public class ProductControllerAdmin {
     private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();
-    private MetaInterface eventMeta = new ProductDao();
+    private MetaInterface productMeta = new ProductDao();
+    private SupplierInterface supplierDao = new SupplierDao();
     private UtilityClass utilityClass = new UtilityClass();
 
     public ModelAndView renderProducts(Request req, Response res) throws SQLException {
@@ -46,7 +49,9 @@ public class ProductControllerAdmin {
         Map params = new HashMap<>();
         try {
             List<ProductCategory> availableCategory = categoryDao.getAll();
+            List<ProductSupplier> availableSupplier = supplierDao.getAll();
             params.put("availableCategory", availableCategory);
+            params.put("availableSupplier", availableSupplier);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -72,6 +77,9 @@ public class ProductControllerAdmin {
         String filename = formInputs.get("filename");
         String url = utilityClass.getDomainUrl(req)+filename;
         String[] categoryList = req.queryParamsValues("category");
+        Integer price = Integer.valueOf(req.queryParams("price"));
+        Integer supplierId = Integer.valueOf(req.queryParams("supplier"));
+        ProductSupplier supplier = supplierDao.getById(supplierId);
         Date date = null;
         try {
             date = format.parse(postDate);
@@ -86,11 +94,11 @@ public class ProductControllerAdmin {
                     catList.add(tempCat);
                 }
             }
-            Product newProduct = new Product(name, description, date, catList,url);
+            Product newProduct = new Product(name, description, date, catList,url,supplier, price);
             productDao.add(newProduct);
             Integer eventId = productDao.getByName(newProduct.getName());
             newProduct.setId(eventId);
-            eventMeta.addMeta(newProduct);
+            productMeta.addMeta(newProduct);
             res.redirect("/admin/products/");
         } else {
             params.put("errorContainer", "Name or Date is not invalid");
@@ -160,8 +168,8 @@ public class ProductControllerAdmin {
             editProduct.setCategories(catList);
             editProduct.setUrl(url);
             productDao.update(editProduct);
-            eventMeta.removeMeta(editProduct);
-            eventMeta.addMeta(editProduct);
+            productMeta.removeMeta(editProduct);
+            productMeta.addMeta(editProduct);
             res.redirect("/admin/products/");
             return "Sucess";
         }
@@ -176,7 +184,7 @@ public class ProductControllerAdmin {
 
         if (!(productToDelete == null)) {
             productDao.remove(productToDelete.getId());
-            eventMeta.removeMeta(productToDelete);
+            productMeta.removeMeta(productToDelete);
             res.redirect("/admin/products/");
             return "works";
         }
@@ -195,7 +203,7 @@ public class ProductControllerAdmin {
         UtilityClass utilityClass = new UtilityClass();
         params.put("UtilityClass", utilityClass);
         params.put("currentDate", currentDate);
-        return new ModelAndView(params, "/admin/products/pasts");
+        return new ModelAndView(params, "/admin/products/index");
     }
 
     public ModelAndView filterCategory(Request req, Response res) throws SQLException {
