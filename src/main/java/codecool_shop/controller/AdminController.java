@@ -14,7 +14,7 @@ import java.util.Map;
 public class AdminController {
     private CategoryInterface categoryDao = new CategoryDao();
     private ProductInterface eventDao = new ProductDao();
-    private SupplierInterface supplierDao = new SupplierDao()
+    private SupplierInterface supplierDao = new SupplierDao();
 
 
     public ModelAndView displayIndex(Request req, Response res) {
