@@ -20,7 +20,7 @@ import static codecool_shop.utilities.RequestUtil.getQueryUsername;
 public class LoginController extends BaseController{
     UserController userController = new UserController();
 
-    public ModelAndView serveLoginPage(Request request, Response response) {
+    public ModelAndView serveLoginPage() {
         Map<String, Object> params = new HashMap<>();
         return new ModelAndView(params, "login");
     }
