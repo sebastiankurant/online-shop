@@ -17,7 +17,7 @@ import static codecool_shop.utilities.RequestUtil.getQueryUsername;
 /**
  * Created by pgurdek on 13.05.17.
  */
-public class LoginController {
+public class LoginController extends BaseController{
     UserController userController = new UserController();
 
     public ModelAndView serveLoginPage(Request request, Response response) {
@@ -45,7 +45,7 @@ public class LoginController {
         else{
             response.redirect("/");
         }
-        return new ModelAndView(model, "login");
+        return render(model, "login");
     }
 
     public Route handleLogoutPost(Request request, Response response) {
