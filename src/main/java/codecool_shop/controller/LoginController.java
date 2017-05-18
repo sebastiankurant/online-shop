@@ -26,13 +26,14 @@ public class LoginController {
     }
 
     public ModelAndView handleLoginPost(Request request, Response response) throws SQLException {
+
         Map<String, Object> model = new HashMap<>();
         User currentUser = userController.authenticate(getQueryUsername(request), getQueryPassword(request));
         if (currentUser == null) {
             model.put("authenticationFailed", true);
             return new ModelAndView(model, "login");
         }
-
+        request.session().attribute("authenticationSucceeded", true);
         request.session().attribute("username", currentUser.getUsername());
         request.session().attribute("id", currentUser.getId());
         request.session().attribute("type",currentUser.getType());
@@ -48,10 +49,11 @@ public class LoginController {
     }
 
     public Route handleLogoutPost(Request request, Response response) {
-        System.out.println("jestem");
         request.session().removeAttribute("currentUser");
         request.session().removeAttribute("username");
         request.session().attribute("loggedOut", true);
+        request.session().attribute("authenticationSucceeded", false);
+
         response.redirect("/");
         return null;
     }
