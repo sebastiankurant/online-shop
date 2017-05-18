@@ -114,6 +114,7 @@ public class ProductControllerAdmin {
         if (!(productToEdit == null)) {
             try { // Set attributes which are already checked
                 List<ProductCategory> availableCategory = categoryDao.getAll();
+                List<ProductSupplier> availableSupplier = supplierDao.getAll();
                 for (ProductCategory availableCat : availableCategory) {
                     for (ProductCategory cat : productToEdit.getCategories()) {
                         if (availableCat.getId() == cat.getId()) {
@@ -123,6 +124,7 @@ public class ProductControllerAdmin {
                 }
                 productToEdit.setCategories(availableCategory);
                 params.put("productContainer", productToEdit);
+                params.put("availableSupplier", availableSupplier);
                 return new ModelAndView(params, "/admin/products/edit");
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -146,6 +148,7 @@ public class ProductControllerAdmin {
         String description = formInputs.get("description");
         String postDate = formInputs.get("date");
         String filename = formInputs.get("filename");
+        Integer supplierId = Integer.valueOf(req.queryParams("supplier"));
         String url = utilityClass.getDomainUrl(req)+filename;
         try {
             date = format.parse(postDate);
@@ -155,6 +158,7 @@ public class ProductControllerAdmin {
         }
         if (!name.isEmpty() && date != null && editProduct != null) {
             List<ProductCategory> catList = new ArrayList<>();
+            ProductSupplier supplier = new SupplierDao().getById(supplierId);
             if (categoryList != null) {
                 for (String category_slug : categoryList) {
                     ProductCategory tempCat = categoryDao.getBySlug(category_slug);
@@ -167,6 +171,7 @@ public class ProductControllerAdmin {
             editProduct.setDate(date);
             editProduct.setCategories(catList);
             editProduct.setUrl(url);
+            editProduct.setSupplier(supplier);
             productDao.update(editProduct);
             productMeta.removeMeta(editProduct);
             productMeta.addMeta(editProduct);
