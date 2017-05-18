@@ -5,28 +5,47 @@
 </head>
 <body>
 <div class="container">
-    <h1>Basket</h1>
+    <h1 class="page-title">Basket</h1>
 
-    <div class="row products-grid">
-        <span th:if="${removeFromBasket}" th:text="'Product Deletd'"></span>
-        <div class="col-12" th:each="product,counter:${basket}"
-             th:class="'col-12 '+${product.getClassSlug()}">
-            <div class="product-wrapper">
-                <h2 th:text="${product.getName()}"></h2>
-             </div>
-            <form th:action="@{~/basket/remove/product/}" method="POST">
-                <input type="hidden" th:id="'product-id' + ${product.getId()}" name="remove_product" th:value="${product.getId()}">
-                <button th:type="submit" class="cat-wrapper">Remove From Basket</button>
-            </form>
+    <div class="row">
+        <div class="row col-7 products-grid basket-wrapper">
+            <div class="alert alert-info" th:if="${removeFromBasket}"> Product <strong
+                    th:text="${productName}"></strong> has been deleted from cart'
+            </div>
+
+            <div th:each="product,counter:${basket.getProductsInBasket()}"
+                 th:class="'col-12 basket-product '+${product.getClassSlug()}">
+                <div class="basket-img"><img th:unless="${product.getUrl()=='http://localhost:8888/images/'}"
+                                             th:src="${product.getUrl()}" class="img-fluid product-image"/>
+                </div>
+                <div class="product-info-basket">
+                    <h2 th:text="${product.getName()}"></h2>
+                    <p th:text="${product.getDescription()}"></p>
+                    <div class="price">
+                        <span th:text="${product.getPrice()}+' zł'"></span>
+                    </div>
+                </div>
+                <div class="delete-product-basket">
+                <form th:action="@{~/basket/remove/product/}" method="POST">
+                    <input type="hidden" th:id="'product-id' + ${product.getId()}" name="remove_product"
+                           th:value="${product.getId()}">
+                    <button th:type="submit" class="btn btn-outline-primary">Remove From Basket</button>
+                </form>
+                </div>
             </div>
 
         </div>
-
+        <div th:class="'col-5 cart cart-total'">
+            <div>
+                <a class="btn btn-outline-primary" th:text="'Back to shop'" th:href="@{~/}"></a>
+            </div>
+            <div class="total-wrapper">
+            <h4>Total price: <span class="red" th:text="${basket.getPrice()}+' zł'"></span></h4>
+            </div>
+        </div>
     </div>
+</div>
 
 
 </body>
-<script type="text/javascript" th:src="@{~/js/jquery-3.2.1.min.js}"></script>
-<script type="text/javascript" th:src="@{~/js/isotope.pkgd.min.js}"></script>
-<script type="text/javascript" th:src="@{~/js/main.js}"></script>
 </html>

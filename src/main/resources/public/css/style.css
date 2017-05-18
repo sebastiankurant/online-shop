@@ -208,3 +208,139 @@ textarea.form-control {
     text-align: center;
     margin-top: 25px;
 }
+
+/*Main Index*/
+.page-title {
+    font-size: 62px;
+    line-height: 140%;
+    text-align: center;
+}
+
+.filter-button-group {
+    text-align: center;
+}
+
+.filter-button {
+    background: #db4c52;
+    color: white;
+    border-color: #db4c52;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin: 15px 15px;
+
+}
+
+.filter-button:hover {
+    background: #db302a;
+    color: white;
+    border-color: #db302a;
+}
+.login-button {
+    display: inline-block;
+
+}
+.login-button button {
+    background: transparent;
+    border: none;
+    font-size:25px;
+}
+.login {
+    text-align: right;
+    padding-top: 15px;
+}
+.login a {
+    font-size:25px;
+}
+/*Product*/
+.product-wrapper h2 {
+    text-align: center;
+}
+
+.product-category {
+    width: 100%;
+    text-align: center;
+}
+.product-supplier{
+ text-align: center;
+    font-size: 17px;
+    font-weight:500;
+}
+
+.product-description {
+    padding: 15px;
+    text-align: center;
+}
+
+#add-to-basket {
+    margin-top: 15px;
+    text-align: center;
+}
+
+/*basket-wrapper*/
+.basket-product {
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.basket-wrapper h2 {
+    text-align: left;
+}
+
+.basket-wrapper .basket-img {
+    float: left;
+    max-width: 200px;
+    height: auto;
+}
+
+.product-info-basket {
+    float: left;
+    padding: 5px 15px 15px;
+    display: block;
+}
+
+.price {
+    text-align: center;
+}
+
+.price span {
+    color: #db302a;
+    font-weight: bold;
+    border: 1px solid #db302a;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    display: inline-block;
+}
+.product-info-basket .price  {
+    text-align: left;
+}
+.delete-product-basket{
+    width:100%;
+}
+.product-info-basket .price span{
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.total-wrapper{
+    border: 1px solid #db302a;
+    font-weight:bold;
+    padding:30px;
+}
+.total-wrapper .red{
+    color: #db302a;
+    font-size:22px;
+}
+.carousel-wrapper{
+    max-width: 700px;
+    margin:0 auto;
+}
+.carousel-item{
+    max-height: 500px;
+}
+#carouselProducts{
+
+}
