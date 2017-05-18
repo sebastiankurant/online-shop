@@ -29,7 +29,7 @@ public class ProductControllerAdmin extends BaseController{
     private SupplierInterface supplierDao = new SupplierDao();
     private UtilityClass utilityClass = new UtilityClass();
 
-    public ModelAndView renderProducts(Request req, Response res) throws SQLException {
+    public ModelAndView renderProducts() throws SQLException {
         //Get products from database by Dao
         Map params = new HashMap<>();
         try {
@@ -45,7 +45,7 @@ public class ProductControllerAdmin extends BaseController{
         return new ModelAndView(params, "/admin/products/index");
     }
 
-    public ModelAndView addProduct(Request req, Response res) {
+    public ModelAndView addProduct() {
         Map params = new HashMap<>();
         try {
             List<ProductCategory> availableCategory = categoryDao.getAll();
@@ -70,7 +70,7 @@ public class ProductControllerAdmin extends BaseController{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Map<String, String> formInputs = getParamsFromInputStream(req, res);
+        Map<String, String> formInputs = getParamsFromInputStream(req);
         name = formInputs.get("name");
         description = formInputs.get("description");
         postDate = formInputs.get("date");
@@ -141,7 +141,7 @@ public class ProductControllerAdmin extends BaseController{
         String[] categoryList = req.queryParamsValues("category");
         Date date = null;
         Product editProduct = productDao.getById(id);
-        Map<String, String> formInputs = getParamsFromInputStream(req, res);
+        Map<String, String> formInputs = getParamsFromInputStream(req);
         String name = formInputs.get("name");
         String description = formInputs.get("description");
         String postDate = formInputs.get("date");
@@ -192,7 +192,7 @@ public class ProductControllerAdmin extends BaseController{
         return "";
     }
 
-    public ModelAndView pastProducts(Request req, Response res) throws SQLException {
+    public ModelAndView pastProducts() throws SQLException {
         Map params = new HashMap<>();
         try {
             params.put("productContainer", productDao.getAllPast());
@@ -206,7 +206,7 @@ public class ProductControllerAdmin extends BaseController{
         return new ModelAndView(params, "/admin/products/index");
     }
 
-    public ModelAndView filterCategory(Request req, Response res) throws SQLException {
+    public ModelAndView filterCategory(Request req) throws SQLException {
         Map params = new HashMap<>();
         String category = req.queryParams("cat");
         ProductCategory catObject = null;
@@ -231,7 +231,7 @@ public class ProductControllerAdmin extends BaseController{
     }
 
 
-    public Map<String, String> getParamsFromInputStream(Request req, Response res) {
+    public Map<String, String> getParamsFromInputStream(Request req) {
         Map<String, String> inputsMap = new HashMap<>();
         try {
             File file = new File("src/main/resources");
