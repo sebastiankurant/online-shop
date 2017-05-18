@@ -88,7 +88,10 @@ public class SgliteJDSCConnector {
                 "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    name VARCHAR(255) NOT NULL,\n" +
                 "    description TEXT,\n" +
-                "    product_date TEXT \n" +
+                "    product_date TEXT, \n" +
+                "    price REAL, \n" +
+                "    supplier_id INTEGER, \n" +
+                "    url VARCHAR(255) \n" +
                 ")");
 
         statement.execute("CREATE TABLE IF NOT EXISTS product_category\n" +
