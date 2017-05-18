@@ -18,6 +18,7 @@ public class SessionController {
         if (req.session().attributes().isEmpty()) {
             req.session(true);
             List<Product> basketProductList = new ArrayList<>();
+            req.session().attribute("authenticationSucceeded", false);
             req.session().attribute("basketProductList", basketProductList);
         }
     }
