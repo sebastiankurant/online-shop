@@ -20,7 +20,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Supplier;
 
 public class ProductControllerAdmin extends BaseController {
     private ProductInterface productDao = new ProductDao();
@@ -35,6 +34,7 @@ public class ProductControllerAdmin extends BaseController {
         try {
             params.put("productContainer", productDao.getAll());
             params.put("categoryAvailable", categoryDao.getAll());
+            params.put("supplierAvailable", supplierDao.getAll());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -225,9 +225,38 @@ public class ProductControllerAdmin extends BaseController {
         }
         if (catObject != null) {
             try {
+                List<ProductSupplier> availableSupplier = supplierDao.getAll();
                 List<ProductCategory> availableCategory = categoryDao.getAll();
+                params.put("supplierAvailable", availableSupplier);
                 params.put("categoryAvailable", availableCategory);
                 params.put("productContainer", productDao.getByAllCategory(catObject));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            params.put("UtilityClass", utilityClass);
+            params.put("currentDate", new Date());
+            return render(params, "/admin/products/index");
+        }
+        return render(params, "/admin/products/index");
+    }
+
+
+    public ModelAndView filterSupplier(Request request, Response response) throws SQLException {
+        Map<String, Object> params = new HashMap<>();
+        String supplierId = request.queryParams("supplier");
+        ProductSupplier supplierObject = null;
+        try {
+            supplierObject = supplierDao.getById(Integer.valueOf(supplierId));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (supplierObject != null) {
+            try {
+                List<ProductCategory> availableCategory = categoryDao.getAll();
+                List<ProductSupplier> availableSupplier = supplierDao.getAll();
+                params.put("supplierAvailable", availableSupplier);
+                params.put("categoryAvailable", availableCategory);
+                params.put("productContainer", productDao.getBySupplier(Integer.valueOf(supplierId)));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
