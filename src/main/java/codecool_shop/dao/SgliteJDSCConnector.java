@@ -17,6 +17,7 @@ public class SgliteJDSCConnector {
         statement.execute("DROP TABLE IF EXISTS product;");
         statement.execute("DROP TABLE IF EXISTS product_category;");
         statement.execute("DROP TABLE IF EXISTS product_meta;");
+        statement.execute("DROP TABLE IF EXISTS product_supplier;");
         statement.execute("DROP TABLE IF EXISTS users;");
         statement.close();
         connection.close();
@@ -32,7 +33,10 @@ public class SgliteJDSCConnector {
                 "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    name VARCHAR(255) NOT NULL,\n" +
                 "    description TEXT,\n" +
-                "    product_date TEXT \n" +
+                "    product_date TEXT, \n" +
+                "    url VARCHAR(255), \n" +
+                "    supplier_id INTEGER, \n" +
+                "    price REAL \n" +
                 ")");
 
         statement.execute("CREATE TABLE product_category\n" +
