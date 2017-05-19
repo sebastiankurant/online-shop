@@ -134,7 +134,7 @@ public class Application {
                     get("/past/", productControllerAdmin::pastProducts, new ThymeleafTemplateEngine());
                     get("/category/", productControllerAdmin::filterCategory, new ThymeleafTemplateEngine());
                     get("/supplier/", productControllerAdmin::filterSupplier, new ThymeleafTemplateEngine());
-                    post("/add/","multipart/form-data", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
+                    post("/add/", "multipart/form-data", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
                     post("/remove/:id/", productControllerAdmin::removeProduct);
                     post("/edit/:id/", "multipart/form-data", productControllerAdmin::editProductPost);
                 });

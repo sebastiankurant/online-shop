@@ -27,9 +27,9 @@ public class BasketController {
         basketProductList = req.session().attribute("basketProductList");
         if (!(basketProductList == null)) {
             Basket basket = new Basket(basketProductList);
-            params.put("basket",basket);
+            params.put("basket", basket);
             params.put("removeFromBasket", req.session().attribute("removeFromBasket"));
-            req.session().attribute("removeFromBasket",false);
+            req.session().attribute("removeFromBasket", false);
         }
 
         return new ModelAndView(params, "basket/basket");
