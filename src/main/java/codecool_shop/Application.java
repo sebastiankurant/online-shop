@@ -112,7 +112,7 @@ public class Application {
             });
             path("/admin/", () -> {
                 before("/*", (req, res) -> {
-//                    loginController.ensureUserIsLoggedIn(req, res);
+                    loginController.ensureUserIsLoggedIn(req, res);
                 });
 
                 get("/", adminController::displayIndex, new ThymeleafTemplateEngine());

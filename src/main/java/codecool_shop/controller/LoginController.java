@@ -58,7 +58,7 @@ public class LoginController extends BaseController {
         if (request.session().attribute("currentUser") == null) {
             response.redirect("/login/");
         }
-        if (request.session().attribute("type").equals("customer")) {
+        else if (request.session().attribute("type").equals("customer")) {
             response.redirect("/");
         }
     }
