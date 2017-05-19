@@ -26,4 +26,6 @@ public interface ProductInterface {
     List<Product> getAllPast() throws SQLException;
 
     List<Product> getByAllCategory(ProductCategory category) throws SQLException;
+
+    List<Product> getBySupplier(Integer supplierId) throws SQLException;
 }

@@ -31,6 +31,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
     private final String GET_ALL_PAST = "SELECT id,name,description, product_date, url, supplier_id,price FROM product WHERE product_date < date(current_date,'-1 day') ORDER BY product_date  DESC ;";
     private final String GET_ALL = "SELECT id,name,description, product_date ,url, supplier_id,price FROM product WHERE product_date >= date(current_date,'-1 day') ORDER BY product_date  ASC ;";
     private final String GET_BY_NAME = "SELECT id  FROM product WHERE name=?";
+    private final String GET_ALL_BY_SUPPLIER = "SELECT id,name,description, product_date ,url, supplier_id,price FROM product WHERE supplier_id=?";
     private SupplierInterface supplierDao = new SupplierDao();
 
     @Override
@@ -152,6 +153,24 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
         return productByCategory == null ? null : productByCategory;
 
     }
+
+
+    public List<Product> getBySupplier(Integer supplierId) throws SQLException {
+        List<Product> productBySupplier = new ArrayList<>();
+        Map<Integer, String> parameters = new HashMap<>();
+        parameters.put(1, String.valueOf(supplierId));
+        ResultSet rs = this.executeStatement(GET_ALL_BY_SUPPLIER, parameters);
+        while (rs.next()) {
+            Integer productId = rs.getInt("id");
+            Product product = getById(productId);
+            if (product != null) {
+                productBySupplier.add(product);
+            }
+
+        }
+        return productBySupplier == null ? null : productBySupplier;
+    }
+
 
     private List<Product> createProductList(ResultSet rs) throws SQLException {
         List<Product> products = new ArrayList<>();

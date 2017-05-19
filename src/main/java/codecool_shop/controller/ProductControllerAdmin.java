@@ -21,7 +21,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class ProductControllerAdmin {
+
+public class ProductControllerAdmin extends BaseController {
+
     private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();
     private MetaInterface productMeta = new ProductDao();
@@ -33,6 +35,7 @@ public class ProductControllerAdmin {
         try {
             params.put("productContainer", productDao.getAll());
             params.put("categoryAvailable", categoryDao.getAll());
+            params.put("supplierAvailable", supplierDao.getAll());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -119,6 +122,7 @@ public class ProductControllerAdmin {
         if (!(productToEdit == null)) {
             try { // Set attributes which are already checked
                 List<ProductCategory> availableCategory = categoryDao.getAll();
+                List<ProductSupplier> availableSupplier = supplierDao.getAll();
                 for (ProductCategory availableCat : availableCategory) {
                     for (ProductCategory cat : productToEdit.getCategories()) {
                         if (availableCat.getId() == cat.getId()) {
@@ -128,7 +132,11 @@ public class ProductControllerAdmin {
                 }
                 productToEdit.setCategories(availableCategory);
                 params.put("productContainer", productToEdit);
+                params.put("availableSupplier", availableSupplier);
+
+  
                 return new ModelAndView(params, "/admin/products/edit");
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -148,7 +156,10 @@ public class ProductControllerAdmin {
         String description = formInputs.get("description");
         String postDate = formInputs.get("date");
         String filename = formInputs.get("filename");
-        String url = utilityClass.getDomainUrl(req) + filename;
+
+        Integer supplierId = Integer.valueOf(request.queryParams("supplier"));
+        String url = utilityClass.getDomainUrl(request)+filename;
+
         try {
             date = format.parse(postDate);
             System.out.println(postDate);
@@ -157,6 +168,7 @@ public class ProductControllerAdmin {
         }
         if (!name.isEmpty() && date != null && editProduct != null) {
             List<ProductCategory> catList = new ArrayList<>();
+            ProductSupplier supplier = new SupplierDao().getById(supplierId);
             if (categoryList != null) {
                 for (String category_slug : categoryList) {
                     ProductCategory tempCat = categoryDao.getBySlug(category_slug);
@@ -169,6 +181,7 @@ public class ProductControllerAdmin {
             editProduct.setDate(date);
             editProduct.setCategories(catList);
             editProduct.setUrl(url);
+            editProduct.setSupplier(supplier);
             productDao.update(editProduct);
             productMeta.removeMeta(editProduct);
             productMeta.addMeta(editProduct);
@@ -219,7 +232,9 @@ public class ProductControllerAdmin {
         }
         if (catObject != null) {
             try {
+                List<ProductSupplier> availableSupplier = supplierDao.getAll();
                 List<ProductCategory> availableCategory = categoryDao.getAll();
+                params.put("supplierAvailable", availableSupplier);
                 params.put("categoryAvailable", availableCategory);
                 params.put("productContainer", productDao.getByAllCategory(catObject));
             } catch (SQLException e) {
@@ -233,7 +248,36 @@ public class ProductControllerAdmin {
     }
 
 
-    public Map<String, String> getParamsFromInputStream(Request req, Response res) {
+  
+    public ModelAndView filterSupplier(Request request, Response response) throws SQLException {
+        Map<String, Object> params = new HashMap<>();
+        String supplierId = request.queryParams("supplier");
+        ProductSupplier supplierObject = null;
+        try {
+            supplierObject = supplierDao.getById(Integer.valueOf(supplierId));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (supplierObject != null) {
+            try {
+                List<ProductCategory> availableCategory = categoryDao.getAll();
+                List<ProductSupplier> availableSupplier = supplierDao.getAll();
+                params.put("supplierAvailable", availableSupplier);
+                params.put("categoryAvailable", availableCategory);
+                params.put("productContainer", productDao.getBySupplier(Integer.valueOf(supplierId)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            params.put("UtilityClass", utilityClass);
+            params.put("currentDate", new Date());
+            return render(params, "/admin/products/index");
+        }
+        return render(params, "/admin/products/index");
+    }
+
+
+    public Map<String, String> getParamsFromInputStream(Request request, Response response) {
+
         Map<String, String> inputsMap = new HashMap<>();
         try {
             File file = new File("src/main/resources");
