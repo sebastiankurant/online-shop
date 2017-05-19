@@ -4,6 +4,7 @@ import codecool_shop.controller.*;
 import codecool_shop.dao.SgliteJDSCConnector;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -15,7 +16,7 @@ import static spark.debug.DebugScreen.enableDebugScreen;
  */
 public class Application {
 
-    private static Application app = new Application();
+    private static Application app;
     private Connection connection = new SgliteJDSCConnector().connection();
 
 
@@ -28,7 +29,7 @@ public class Application {
     }
 
     public static Application runApp() {
-        return app;
+        return app = new Application();
     }
 
     public static void restartTables() {
@@ -51,6 +52,22 @@ public class Application {
             e.printStackTrace();
             System.out.println("Can't fill with not exist tables.");
             stop();
+        }
+    }
+
+    public static void isDbCreated() {
+        try {
+            File file = new File("src/main/resources/database.db");
+            Boolean bool = file.exists();
+
+            if (!bool) {
+                System.out.println("There is no db, app shutdown's ...");
+                System.exit(0);
+            }
+        } catch (Exception e) {
+
+            // if any error occurs
+            e.printStackTrace();
         }
     }
 

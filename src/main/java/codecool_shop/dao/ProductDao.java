@@ -37,7 +37,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
     @Override
     public void add(Product product) throws SQLException {
         Map<Integer, String> parameters = new HashMap<>();
-        String supplier = "";
+        String supplier = null;
         String stringDate = DateFormatUtils.format(product.getDate(), "yyyy-MM-dd");
         parameters.put(1, product.getName());
         parameters.put(2, product.getDescription());
@@ -231,7 +231,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
             }
             List<ProductCategory> productCatList = getCategoriesFromMeta(resultSet);
             String supplierId = resultSet.getString("supplier_id");
-            if (supplierId != null && supplierId != "") {
+            if (supplierId != null && !supplierId.equals("")) {
                 supplier = supplierDao.getById(Integer.valueOf(resultSet.getString("supplier_id")));
             }
             Product product = new Product(
