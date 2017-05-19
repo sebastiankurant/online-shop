@@ -6,14 +6,12 @@ import codecool_shop.model.User;
 
 import java.sql.SQLException;
 
-/**
- * Created by pgurdek on 13.05.17.
- */
-public class UserController extends BaseController {
+
+class UserController extends BaseController {
 
     private UserInterface userDao = new UserDao();
 
-    public User authenticate(String username, String password) throws SQLException {
+    User authenticate(String username, String password) throws SQLException {
         if (username.isEmpty() || password.isEmpty()) {
             return null;
         }

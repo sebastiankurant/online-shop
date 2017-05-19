@@ -9,9 +9,9 @@ import java.sql.SQLException;
 import java.util.Map;
 
 
-public class Dao {
+class Dao {
 
-    Connection connection = Application.getConnection();
+    private Connection connection = Application.getConnection();
 
     ResultSet executeStatement(String query, Map<Integer, String> parameters) throws SQLException {
         ResultSet resultSet;
@@ -38,13 +38,6 @@ public class Dao {
         for (Integer index : parameters.keySet()) {
             statement.setString(index, parameters.get(index));
         }
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    void executeStatementUpdate(String query) throws SQLException {
-        PreparedStatement statement;
-        statement = connection.prepareStatement(query);
         statement.executeUpdate();
         statement.close();
     }

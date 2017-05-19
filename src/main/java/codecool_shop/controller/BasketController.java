@@ -13,54 +13,50 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by pgurdek on 16.05.17.
- */
 public class BasketController {
 
     private ProductInterface produtDao = new ProductDao();
-    private ProductController productController = new ProductController();
 
-    public ModelAndView getBasket(Request req, Response res) {
-        Map<String, Object> params = new HashMap<>();
+    public ModelAndView getBasket(Request request, Response response) {
+        Map<String, Object> parameters = new HashMap<>();
         List<Product> basketProductList;
-        basketProductList = req.session().attribute("basketProductList");
+        basketProductList = request.session().attribute("basketProductList");
         if (!(basketProductList == null)) {
             Basket basket = new Basket(basketProductList);
-            params.put("basket", basket);
-            params.put("removeFromBasket", req.session().attribute("removeFromBasket"));
-            req.session().attribute("removeFromBasket", false);
+            parameters.put("basket", basket);
+            parameters.put("removeFromBasket", request.session().attribute("removeFromBasket"));
+            request.session().attribute("removeFromBasket", false);
         }
 
-        return new ModelAndView(params, "basket/basket");
+        return new ModelAndView(parameters, "basket/basket");
     }
 
-    public String addToBasket(Request req, Response res) throws SQLException {
-        Integer id = Integer.valueOf(req.queryParams("add_product"));
+    public String addToBasket(Request request, Response response) throws SQLException {
+        Integer id = Integer.valueOf(request.queryParams("add_product"));
         List<Product> basketProductList;
-        basketProductList = req.session().attribute("basketProductList");
+        basketProductList = request.session().attribute("basketProductList");
         Product tmpProduct = produtDao.getById(id);
         basketProductList.add(tmpProduct);
-        req.session().attribute("basketProductList", basketProductList);
-        req.session().attribute("addedToCart", true);
-        req.session().attribute("productName", tmpProduct.getName());
-        res.redirect("/");
+        request.session().attribute("basketProductList", basketProductList);
+        request.session().attribute("addedToCart", true);
+        request.session().attribute("productName", tmpProduct.getName());
+        response.redirect("/");
         return "";
     }
 
-    public String removeProduct(Request req, Response res) throws SQLException {
-        Integer id = Integer.valueOf(req.queryParams("remove_product"));
+    public String removeProduct(Request request, Response response) throws SQLException {
+        Integer id = Integer.valueOf(request.queryParams("remove_product"));
         List<Product> basketProductList;
-        basketProductList = req.session().attribute("basketProductList");
+        basketProductList = request.session().attribute("basketProductList");
         for (Product product : basketProductList) {
             if (product.getId() == id) {
                 basketProductList.remove(product);
-                req.session().attribute("removeFromBasket", true);
+                request.session().attribute("removeFromBasket", true);
                 break;
             }
         }
-        req.session().attribute("basketProductList", basketProductList);
-        res.redirect("/basket/");
+        request.session().attribute("basketProductList", basketProductList);
+        response.redirect("/basket/");
         return "";
     }
 }

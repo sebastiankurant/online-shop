@@ -2,18 +2,12 @@ package codecool_shop.model;
 
 import codecool_shop.utilities.SlugGenerator;
 
-/**
- * Created by pgurdek on 10.05.17.
- */
 public class ProductCategory {
     private Integer id;
     private String name;
     private String description;
     private String slug;
-
-
     private Boolean equal;
-
 
     public ProductCategory() {
 

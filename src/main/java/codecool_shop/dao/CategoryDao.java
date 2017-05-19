@@ -9,9 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by pgurdek on 10.05.17.
- */
 public class CategoryDao extends Dao implements CategoryInterface {
 
     private final String ADD = "INSERT INTO product_category (name,description,slug)" +
@@ -22,8 +19,10 @@ public class CategoryDao extends Dao implements CategoryInterface {
 
     private final String DELETE = "DELETE FROM product_category" +
             " WHERE id=? ";
+
     private final String DELETE_META = "DELETE FROM product_meta" +
             " WHERE category_id=? ";
+
     private final String GET_BY_ID = "SELECT id,name,description,slug FROM product_category WHERE id=?";
 
     private final String GET_BY_SLUG = "SELECT id,name,description,slug FROM product_category WHERE slug=?";
@@ -67,16 +66,16 @@ public class CategoryDao extends Dao implements CategoryInterface {
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, String.valueOf(id));
 
-        ResultSet rs = this.executeStatement(GET_BY_ID, parameters);
+        ResultSet resultSet = this.executeStatement(GET_BY_ID, parameters);
 
-        if (!(rs == null) && rs.isBeforeFirst()) {
-            String name = rs.getString("name");
-            String description = rs.getString("description");
-            String slug = rs.getString("slug");
-            rs.close();
+        if (!(resultSet == null) && resultSet.isBeforeFirst()) {
+            String name = resultSet.getString("name");
+            String description = resultSet.getString("description");
+            String slug = resultSet.getString("slug");
+            resultSet.close();
             return new ProductCategory(id, name, description, slug);
         }
-        rs.close();
+        resultSet.close();
         return null;
     }
 
@@ -84,38 +83,39 @@ public class CategoryDao extends Dao implements CategoryInterface {
     public ProductCategory getBySlug(String slug) throws SQLException {
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, slug);
-        ResultSet rs = this.executeStatement(GET_BY_SLUG, parameters);
-        if (!(rs == null) && rs.isBeforeFirst()) {
-            Integer id = rs.getInt("id");
-            String name = rs.getString("name");
-            String description = rs.getString("description");
-            rs.close();
+        ResultSet resultSet = this.executeStatement(GET_BY_SLUG, parameters);
+        if (!(resultSet == null) && resultSet.isBeforeFirst()) {
+            Integer id = resultSet.getInt("id");
+            String name = resultSet.getString("name");
+            String description = resultSet.getString("description");
+            resultSet.close();
             return new ProductCategory(id, name, description, slug);
         }
-        rs.close();
+        resultSet.close();
         return null;
     }
 
     @Override
     public List<ProductCategory> getAll() throws SQLException {
-        ResultSet rs = this.executeStatement(GET_ALL);
-        List<ProductCategory> categoryEvents = createCategoryList(rs);
-        rs.close();
+        ResultSet resultSet = this.executeStatement(GET_ALL);
+        List<ProductCategory> categoryEvents = createCategoryList(resultSet);
+        resultSet.close();
         return categoryEvents;
     }
 
-    private List<ProductCategory> createCategoryList(ResultSet rs) throws SQLException {
+    private List<ProductCategory> createCategoryList(ResultSet resultSet) throws SQLException {
         List<ProductCategory> productCategories = new ArrayList<>();
 
-        while (rs.next()) {
+        while (resultSet.next()) {
             ProductCategory productCategory = new ProductCategory(
-                    rs.getInt("id"),
-                    rs.getString("name"),
-                    rs.getString("description"),
-                    rs.getString("slug")
+                    resultSet.getInt("id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("description"),
+                    resultSet.getString("slug")
             );
             productCategories.add(productCategory);
         }
+        resultSet.close();
         return productCategories;
     }
 }

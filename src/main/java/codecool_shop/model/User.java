@@ -1,8 +1,5 @@
 package codecool_shop.model;
 
-/**
- * Created by pgurdek on 13.05.17.
- */
 public class User {
     private Integer id;
     private String username;
@@ -19,11 +16,6 @@ public class User {
         this.password = password;
         this.type = type;
     }
-
-    public User() {
-
-    }
-
 
     public String getUsername() {
         return username;

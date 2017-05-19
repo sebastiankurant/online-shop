@@ -6,9 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-/**
- * Created by pgurdek on 09.05.17.
- */
 public class SgliteJDSCConnector {
 
     public void dropTables() throws SQLException {

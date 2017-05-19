@@ -9,10 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by monika on 16.05.17.
- */
 public class SupplierDao extends Dao implements SupplierInterface {
+
     private final String ADD = "INSERT INTO product_supplier (name,address)" +
             " VALUES(?,?)";
     private final String UPDATE = "UPDATE product_supplier SET name=?, address=?" +
@@ -34,24 +32,26 @@ public class SupplierDao extends Dao implements SupplierInterface {
 
     @Override
     public List<ProductSupplier> getAll() throws SQLException {
-        ResultSet rs = this.executeStatement(GET_ALL);
-        List<ProductSupplier> productSupplierList = createSupplierList(rs);
-        rs.close();
+        ResultSet resultSet = this.executeStatement(GET_ALL);
+        List<ProductSupplier> productSupplierList = createSupplierList(resultSet);
+        resultSet.close();
         return productSupplierList;
     }
 
 
-    private List<ProductSupplier> createSupplierList(ResultSet rs) throws SQLException {
+    private List<ProductSupplier> createSupplierList(ResultSet resultSet) throws SQLException {
         List<ProductSupplier> productSuppliers = new ArrayList<>();
 
-        while (rs.next()) {
+        while (resultSet.next()) {
             ProductSupplier productSupplier = new ProductSupplier(
-                    rs.getInt("id"),
-                    rs.getString("name"),
-                    rs.getString("address")
+                    resultSet.getInt("id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("address")
             );
             productSuppliers.add(productSupplier);
         }
+
+        resultSet.close();
         return productSuppliers;
     }
 
@@ -76,15 +76,16 @@ public class SupplierDao extends Dao implements SupplierInterface {
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, String.valueOf(id));
 
-        ResultSet rs = this.executeStatement(GET_BY_ID, parameters);
+        ResultSet resultSet = this.executeStatement(GET_BY_ID, parameters);
 
-        if (!(rs == null) && rs.isBeforeFirst()) {
-            String name = rs.getString("name");
-            String address = rs.getString("address");
-            rs.close();
+        if (!(resultSet == null) && resultSet.isBeforeFirst()) {
+            String name = resultSet.getString("name");
+            String address = resultSet.getString("address");
+            resultSet.close();
             return new ProductSupplier(id, name, address);
         }
-        rs.close();
+
+        resultSet.close();
         return null;
     }
 }

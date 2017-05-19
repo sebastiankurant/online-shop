@@ -25,21 +25,21 @@ public class ProductController {
     private CategoryInterface categoryDao = new CategoryDao();
     private UtilityClass calculateClass = new UtilityClass();
 
-    public ModelAndView displayProducts(Request req, Response res) throws SQLException {
-        Map<String, Object> params = new HashMap<>();
-        params.put("authenticationSucceeded", req.session().attribute("authenticationSucceeded"));
+    public ModelAndView displayProducts(Request request, Response response) throws SQLException {
+        Map<String, Object> paramteres = new HashMap<>();
+        paramteres.put("authenticationSucceeded", request.session().attribute("authenticationSucceeded"));
         List<Product> products = productDao.getAll();
         List<ProductCategory> categoires = categoryDao.getAll();
-        params.put("productContainer", products);
-        params.put("allCategoires", categoires);
-        params.put("UtilityClass", calculateClass);
-        params.put("currentDate", new Date());
-        Boolean addedToCart = req.session().attribute("addedToCart");
-        params.put("Msg", addedToCart);
-        String productName = req.session().attribute("productName");
-        params.put("productName", productName);
-        req.session().attribute("addedToCart", false);
+        paramteres.put("productContainer", products);
+        paramteres.put("allCategoires", categoires);
+        paramteres.put("UtilityClass", calculateClass);
+        paramteres.put("currentDate", new Date());
+        Boolean addedToCart = request.session().attribute("addedToCart");
+        paramteres.put("Msg", addedToCart);
+        String productName = request.session().attribute("productName");
+        paramteres.put("productName", productName);
+        request.session().attribute("addedToCart", false);
 
-        return new ModelAndView(params, "index");
+        return new ModelAndView(paramteres, "index");
     }
 }

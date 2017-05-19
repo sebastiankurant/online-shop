@@ -7,10 +7,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by pgurdek on 16.05.17.
- */
 public class UserDao extends Dao implements UserInterface {
+
     private final String GET_BY_NAME = "SELECT id FROM users WHERE username=?";
     private final String GET_BY_ID = "SELECT id,username,firstname,lastname,password,type FROM users WHERE id=?";
 
@@ -18,16 +16,16 @@ public class UserDao extends Dao implements UserInterface {
     public User getByName(String username) throws SQLException {
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, username);
-        ResultSet rs = executeStatement(GET_BY_NAME, parameters);
-        if (rs.isBeforeFirst())
-            if (!(rs == null)) {
-                Integer userId = rs.getInt("id");
+        ResultSet resultSet = executeStatement(GET_BY_NAME, parameters);
+        if (resultSet.isBeforeFirst())
+            if (!(resultSet == null)) {
+                Integer userId = resultSet.getInt("id");
                 User user = getById(userId);
                 user.setId(userId);
-                rs.close();
+                resultSet.close();
                 return user;
             }
-        rs.close();
+        resultSet.close();
         return null;
     }
 

@@ -6,9 +6,6 @@ import codecool_shop.model.ProductCategory;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Created by pgurdek on 09.05.17.
- */
 public interface ProductInterface {
 
     void add(Product product) throws SQLException;

@@ -11,9 +11,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by monika on 17.05.17.
- */
 public class SupplierControllerAdmin extends BaseController {
 
     private SupplierInterface supplierDao = new SupplierDao();
@@ -33,7 +30,7 @@ public class SupplierControllerAdmin extends BaseController {
     }
 
     public ModelAndView addSupplierPost(Request request, Response response) throws SQLException {
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         String name = request.queryParams("name");
         String address = request.queryParams("address");
 
@@ -45,10 +42,10 @@ public class SupplierControllerAdmin extends BaseController {
             supplierDao.add(newSupplier);
             response.redirect("/admin/supplier");
         } else {
-            params.put("errorContainer", "Supplier name cannot be empty");
-            return render(params, "admin/supplier/add");
+            parameters.put("errorContainer", "Supplier name cannot be empty");
+            return render(parameters, "admin/supplier/add");
         }
-        return render(params, "admin/supplier/add");
+        return render(parameters, "admin/supplier/add");
     }
 
     public ModelAndView editSupplier(Request request, Response response) throws SQLException {
@@ -68,18 +65,18 @@ public class SupplierControllerAdmin extends BaseController {
         Integer id = Integer.valueOf(request.params("id"));
 
         ProductSupplier editSupplier = supplierDao.getById(id);
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         if (!name.isEmpty() && !(editSupplier == null)) {
             editSupplier.setName(name);
             editSupplier.setAddress(address);
             supplierDao.update(editSupplier);
             response.redirect("/admin/supplier");
         } else {
-            params.put("supplierContainer", editSupplier);
-            params.put("errorContainer", "Supplier name cannot be empty");
-            return render(params, "admin/supplier/edit");
+            parameters.put("supplierContainer", editSupplier);
+            parameters.put("errorContainer", "Supplier name cannot be empty");
+            return render(parameters, "admin/supplier/edit");
         }
-        return render(params, "admin/supplier/edit");
+        return render(parameters, "admin/supplier/edit");
 
     }
 

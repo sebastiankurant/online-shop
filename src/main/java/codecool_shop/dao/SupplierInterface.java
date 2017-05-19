@@ -5,9 +5,6 @@ import codecool_shop.model.ProductSupplier;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Created by monika on 16.05.17.
- */
 public interface SupplierInterface {
     void add(ProductSupplier productSupplier) throws SQLException;
 

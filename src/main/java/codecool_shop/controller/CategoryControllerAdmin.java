@@ -11,20 +11,18 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by pgurdek on 10.05.17.
- */
+
 public class CategoryControllerAdmin extends BaseController {
     private CategoryInterface categoryDao = new CategoryDao();
 
     public ModelAndView renderCategory(Request request, Response response) {
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         try {
-            params.put("categoryContainer", categoryDao.getAll());
+            parameters.put("categoryContainer", categoryDao.getAll());
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return render(params, "admin/category/index");
+        return render(parameters, "admin/category/index");
     }
 
     public ModelAndView addCategory(Request request, Response response) {
@@ -34,13 +32,12 @@ public class CategoryControllerAdmin extends BaseController {
     public ModelAndView editCategory(Request request, Response response) throws SQLException {
         Integer id = Integer.valueOf(request.params("id"));
         ProductCategory productCategory = categoryDao.getById(id);
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         if (!(productCategory == null)) {
-            params.put("categoryContainer", productCategory);
-            System.out.println("tutaj");
-            return new ModelAndView(params, "admin/category/edit");
+            parameters.put("categoryContainer", productCategory);
+            return new ModelAndView(parameters, "admin/category/edit");
         }
-        return render(params, "404");
+        return render(parameters, "404");
     }
 
     public ModelAndView editCategoryPost(Request request, Response response) throws SQLException {
@@ -48,7 +45,7 @@ public class CategoryControllerAdmin extends BaseController {
         String description = request.queryParams("description");
         Integer id = Integer.valueOf(request.params("id"));
         ProductCategory editCategory = categoryDao.getById(id);
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         if (!name.isEmpty() && !(editCategory == null)) {
             editCategory.setName(name);
             editCategory.setDescription(description);
@@ -56,16 +53,16 @@ public class CategoryControllerAdmin extends BaseController {
             categoryDao.update(editCategory);
             response.redirect("/admin/category");
         } else {
-            params.put("categoryContainer", editCategory);
-            params.put("errorContainer", "Category name cannot be empty");
-            return new ModelAndView(params, "admin/category/edit");
+            parameters.put("categoryContainer", editCategory);
+            parameters.put("errorContainer", "Category name cannot be empty");
+            return new ModelAndView(parameters, "admin/category/edit");
         }
-        return render(params, "admin/category/edit");
+        return render(parameters, "admin/category/edit");
 
     }
 
     public ModelAndView addCategoryPost(Request request, Response response) throws SQLException {
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         String name = request.queryParams("name");
         String description = request.queryParams("description");
         if (!name.isEmpty()) {
@@ -77,10 +74,10 @@ public class CategoryControllerAdmin extends BaseController {
             categoryDao.add(newCategory);
             response.redirect("/admin/category");
         } else {
-            params.put("errorContainer", "Category name cannot be empty");
-            return render(params, "admin/category/add");
+            parameters.put("errorContainer", "Category name cannot be empty");
+            return render(parameters, "admin/category/add");
         }
-        return render(params, "admin/category/add");
+        return render(parameters, "admin/category/add");
     }
 
     public String removeCategory(Request request, Response response) throws SQLException {

@@ -21,30 +21,30 @@ public class LoginController extends BaseController {
     UserController userController = new UserController();
 
     public ModelAndView serveLoginPage(Request request, Response response) {
-        Map<String, Object> params = new HashMap<>();
-        return new ModelAndView(params, "login");
+        Map<String, Object> parameters = new HashMap<>();
+        return new ModelAndView(parameters, "login");
     }
 
     public ModelAndView handleLoginPost(Request request, Response response) throws SQLException {
 
-        Map<String, Object> model = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         User currentUser = userController.authenticate(getQueryUsername(request), getQueryPassword(request));
         if (currentUser == null) {
-            model.put("authenticationFailed", true);
-            return new ModelAndView(model, "login");
+            parameters.put("authenticationFailed", true);
+            return new ModelAndView(parameters, "login");
         }
         request.session().attribute("authenticationSucceeded", true);
         request.session().attribute("username", currentUser.getUsername());
         request.session().attribute("id", currentUser.getId());
         request.session().attribute("type", currentUser.getType());
-        model.put("authenticationSucceeded", true);
+        parameters.put("authenticationSucceeded", true);
         request.session().attribute("currentUser", currentUser.getUsername());
         if (request.session().attribute("type").equals("admin")) {
             response.redirect("/admin/");
         } else {
             response.redirect("/");
         }
-        return render(model, "login");
+        return render(parameters, "login");
     }
 
     public Route handleLogoutPost(Request request, Response response) {

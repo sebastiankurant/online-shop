@@ -1,8 +1,6 @@
 package codecool_shop.model;
 
-/**
- * Created by monika on 16.05.17.
- */
+
 public class ProductSupplier {
     private Integer id;
     private String name;

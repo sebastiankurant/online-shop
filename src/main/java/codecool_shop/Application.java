@@ -87,8 +87,8 @@ public class Application {
         enableDebugScreen();
         ProductController productController = new ProductController();
         ProductControllerAdmin productControllerAdmin = new ProductControllerAdmin();
-        CategoryControllerAdmin catController = new CategoryControllerAdmin();
-        SupplierControllerAdmin supplierController = new SupplierControllerAdmin();
+        CategoryControllerAdmin categoryControllerAdmin = new CategoryControllerAdmin();
+        SupplierControllerAdmin supplierControllerAdmin = new SupplierControllerAdmin();
         LoginController loginController = new LoginController();
         SessionController sessionController = new SessionController();
         AdminController adminController = new AdminController();
@@ -134,31 +134,30 @@ public class Application {
                     get("/past/", productControllerAdmin::pastProducts, new ThymeleafTemplateEngine());
                     get("/category/", productControllerAdmin::filterCategory, new ThymeleafTemplateEngine());
                     get("/supplier/", productControllerAdmin::filterSupplier, new ThymeleafTemplateEngine());
-                    post("/add/", "multipart/form-data", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
+                    post("/add/","multipart/form-data", productControllerAdmin::addProductPost, new ThymeleafTemplateEngine());
                     post("/remove/:id/", productControllerAdmin::removeProduct);
                     post("/edit/:id/", "multipart/form-data", productControllerAdmin::editProductPost);
                 });
 
                 path("/category", () -> {
-                    get("/", catController::renderCategory, new ThymeleafTemplateEngine());
-                    get("/add/", catController::addCategory, new ThymeleafTemplateEngine());
-                    get("/edit/:id/", catController::editCategory, new ThymeleafTemplateEngine());
-                    post("/add/", catController::addCategoryPost, new ThymeleafTemplateEngine());
-                    post("/edit/:id/", catController::editCategoryPost, new ThymeleafTemplateEngine());
-                    post("/remove/:id/", catController::removeCategory);
+                    get("/", categoryControllerAdmin::renderCategory, new ThymeleafTemplateEngine());
+                    get("/add/", categoryControllerAdmin::addCategory, new ThymeleafTemplateEngine());
+                    get("/edit/:id/", categoryControllerAdmin::editCategory, new ThymeleafTemplateEngine());
+                    post("/add/", categoryControllerAdmin::addCategoryPost, new ThymeleafTemplateEngine());
+                    post("/edit/:id/", categoryControllerAdmin::editCategoryPost, new ThymeleafTemplateEngine());
+                    post("/remove/:id/", categoryControllerAdmin::removeCategory);
                 });
 
                 path("/supplier", () -> {
-                    get("/", supplierController::renderSupplier, new ThymeleafTemplateEngine());
-                    get("/add/", supplierController::add, new ThymeleafTemplateEngine());
-                    get("/edit/:id/", supplierController::editSupplier, new ThymeleafTemplateEngine());
-                    post("/add/", supplierController::addSupplierPost, new ThymeleafTemplateEngine());
-                    post("/edit/:id/", supplierController::editSupplierPost, new ThymeleafTemplateEngine());
-                    post("/remove/:id/", supplierController::removeSupplier);
+                    get("/", supplierControllerAdmin::renderSupplier, new ThymeleafTemplateEngine());
+                    get("/add/", supplierControllerAdmin::add, new ThymeleafTemplateEngine());
+                    get("/edit/:id/", supplierControllerAdmin::editSupplier, new ThymeleafTemplateEngine());
+                    post("/add/", supplierControllerAdmin::addSupplierPost, new ThymeleafTemplateEngine());
+                    post("/edit/:id/", supplierControllerAdmin::editSupplierPost, new ThymeleafTemplateEngine());
+                    post("/remove/:id/", supplierControllerAdmin::removeSupplier);
                 });
             });
         });
-
 
         // Using string/html to display not correct routes
         notFound("<!doctype html>\n" +

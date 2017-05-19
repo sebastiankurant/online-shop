@@ -8,18 +8,14 @@ import spark.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by pgurdek on 17.05.17.
- */
 public class SessionController {
 
-
-    public void manageBasketSession(Request req, Response res) {
-        if (req.session().attributes().isEmpty()) {
-            req.session(true);
+    public void manageBasketSession(Request request, Response response) {
+        if (request.session().attributes().isEmpty()) {
+            request.session(true);
             List<Product> basketProductList = new ArrayList<>();
-            req.session().attribute("authenticationSucceeded", false);
-            req.session().attribute("basketProductList", basketProductList);
+            request.session().attribute("authenticationSucceeded", false);
+            request.session().attribute("basketProductList", basketProductList);
         }
     }
 }
