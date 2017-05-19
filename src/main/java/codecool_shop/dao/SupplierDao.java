@@ -84,7 +84,6 @@ public class SupplierDao extends Dao implements SupplierInterface {
             resultSet.close();
             return new ProductSupplier(id, name, address);
         }
-
         resultSet.close();
         return null;
     }

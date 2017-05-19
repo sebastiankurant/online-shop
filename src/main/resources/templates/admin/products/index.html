@@ -66,7 +66,7 @@
 
                         </td>
                         <td>
-                            <p th:text="${product.getSupplier().getName()}"></p>
+                            <p th:if="${product.getSupplier()}!=null" th:text="${product.getSupplier().getName()}"></p>
                         </td>
                         <td>
                             <a th:href="@{~/admin/products/edit/}+${product.getId()}">
