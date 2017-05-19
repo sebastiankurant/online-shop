@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 public class UtilityClass {
     public String calculateClass(Date firstDate, Date secondDate) {
         Integer isEven = DateTimeComparator.getDateOnlyInstance().compare(firstDate, secondDate);
-        System.out.println(isEven);
         if (isEven == 1) {
             return "incoming";
         } else if (isEven == 0) {
