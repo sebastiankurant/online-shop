@@ -14,7 +14,6 @@ public class Main {
             Application.fillIfNotExistTables();
         }
         Application.runApp().start();
-
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 Thread.sleep(200);

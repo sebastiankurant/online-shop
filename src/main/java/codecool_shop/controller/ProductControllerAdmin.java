@@ -134,7 +134,7 @@ public class ProductControllerAdmin extends BaseController {
                 params.put("productContainer", productToEdit);
                 params.put("availableSupplier", availableSupplier);
 
-  
+
                 return new ModelAndView(params, "/admin/products/edit");
 
             } catch (SQLException e) {
@@ -145,20 +145,20 @@ public class ProductControllerAdmin extends BaseController {
         return new ModelAndView(params, "404");
     }
 
-    public String editProductPost(Request req, Response res) throws SQLException {
-        Integer id = Integer.valueOf(req.params("id"));
+    public String editProductPost(Request request, Response res) throws SQLException {
+        Integer id = Integer.valueOf(request.params("id"));
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String[] categoryList = req.queryParamsValues("category");
+        String[] categoryList = request.queryParamsValues("category");
         Date date = null;
         Product editProduct = productDao.getById(id);
-        Map<String, String> formInputs = getParamsFromInputStream(req, res);
+        Map<String, String> formInputs = getParamsFromInputStream(request, res);
         String name = formInputs.get("name");
         String description = formInputs.get("description");
         String postDate = formInputs.get("date");
         String filename = formInputs.get("filename");
 
         Integer supplierId = Integer.valueOf(request.queryParams("supplier"));
-        String url = utilityClass.getDomainUrl(request)+filename;
+        String url = utilityClass.getDomainUrl(request) + filename;
 
         try {
             date = format.parse(postDate);
@@ -248,7 +248,6 @@ public class ProductControllerAdmin extends BaseController {
     }
 
 
-  
     public ModelAndView filterSupplier(Request request, Response response) throws SQLException {
         Map<String, Object> params = new HashMap<>();
         String supplierId = request.queryParams("supplier");
@@ -282,15 +281,15 @@ public class ProductControllerAdmin extends BaseController {
         try {
             File file = new File("src/main/resources");
             String absolutePath = file.getAbsolutePath();
-            req.raw().setAttribute("org.eclipse.jetty.multipartConfig",
+            request.raw().setAttribute("org.eclipse.jetty.multipartConfig",
                     new MultipartConfigElement(absolutePath + "/public/tmp/", 100000000, 100000000, 1024));
 
-            Part partName = req.raw().getPart("name");
-            Part partDescription = req.raw().getPart("description");
-            Part partDate = req.raw().getPart("date");
-            Part uploadedFile = req.raw().getPart("file");
-//            Part partCategory = req.raw().getPart("category");
-            String filename = req.raw().getPart("file").getSubmittedFileName();
+            Part partName = request.raw().getPart("name");
+            Part partDescription = request.raw().getPart("description");
+            Part partDate = request.raw().getPart("date");
+            Part uploadedFile = request.raw().getPart("file");
+//            Part partCategory = request.raw().getPart("category");
+            String filename = request.raw().getPart("file").getSubmittedFileName();
             inputsMap.put("name", utilityClass.getStringFromInputStream(partName));
             inputsMap.put("description", utilityClass.getStringFromInputStream(partDescription));
             inputsMap.put("date", utilityClass.getStringFromInputStream(partDate));
