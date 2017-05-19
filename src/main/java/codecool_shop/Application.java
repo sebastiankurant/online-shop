@@ -11,9 +11,6 @@ import java.sql.SQLException;
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
-/**
- * Created by pgurdek on 16.05.17.
- */
 public class Application {
 
     private static Application app;
@@ -74,17 +71,8 @@ public class Application {
     public void start() {
 
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
-        Boolean localhost = true;  //Prevent public files from caching
-        if (localhost) {
-            String projectDir = System.getProperty("user.dir");
-            String staticDir = "/src/main/resources/public";
-            staticFiles.externalLocation(projectDir + staticDir);
-        } else {
-            staticFileLocation("/public");
-        }
-
+        staticFileLocation("/public");
         port(8888);
-        enableDebugScreen();
         ProductController productController = new ProductController();
         ProductControllerAdmin productControllerAdmin = new ProductControllerAdmin();
         CategoryControllerAdmin categoryControllerAdmin = new CategoryControllerAdmin();
@@ -105,6 +93,7 @@ public class Application {
             get("/", productController::displayProducts, new ThymeleafTemplateEngine());
 
 //            Front End routes - Not secured routes
+
             post("/logout/", loginController::handleLogoutPost);
             path("/login/", () -> {
                 before((request, response) -> {
@@ -123,7 +112,7 @@ public class Application {
             });
             path("/admin/", () -> {
                 before("/*", (req, res) -> {
-//                    loginController.ensureUserIsLoggedIn(req, res);
+                    loginController.ensureUserIsLoggedIn(req, res);
                 });
 
                 get("/", adminController::displayIndex, new ThymeleafTemplateEngine());

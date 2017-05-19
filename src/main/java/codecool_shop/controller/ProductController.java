@@ -17,9 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by pgurdek on 14.05.17.
- */
 public class ProductController {
     private ProductInterface productDao = new ProductDao();
     private CategoryInterface categoryDao = new CategoryDao();

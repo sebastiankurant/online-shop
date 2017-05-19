@@ -10,10 +10,8 @@ import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-/**
- * Created by pgurdek on 13.05.17.
- */
 public class UtilityClass {
+
     public String calculateClass(Date firstDate, Date secondDate) {
         Integer isEven = DateTimeComparator.getDateOnlyInstance().compare(firstDate, secondDate);
         if (isEven == 1) {

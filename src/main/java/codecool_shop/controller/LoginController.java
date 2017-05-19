@@ -14,9 +14,6 @@ import static codecool_shop.utilities.RequestUtil.getQueryPassword;
 import static codecool_shop.utilities.RequestUtil.getQueryUsername;
 
 
-/**
- * Created by pgurdek on 13.05.17.
- */
 public class LoginController extends BaseController {
     UserController userController = new UserController();
 
