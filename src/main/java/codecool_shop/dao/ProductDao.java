@@ -118,7 +118,6 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
             resultSet.close();
             return productId;
         }
-
         resultSet.close();
         return null;
     }

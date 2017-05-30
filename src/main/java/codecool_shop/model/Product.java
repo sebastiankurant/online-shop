@@ -14,7 +14,6 @@ public class Product {
     private Integer price;
 
     public Product() {
-
     }
 
     public Product(Integer id, String name, String description, Date date, List<ProductCategory> categories, String url, ProductSupplier supplier, Integer price) {
