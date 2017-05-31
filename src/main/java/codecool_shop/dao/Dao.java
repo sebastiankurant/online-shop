@@ -1,6 +1,5 @@
 package codecool_shop.dao;
 
-import codecool_shop.Application;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +10,7 @@ import java.util.Map;
 
 class Dao {
 
-    private Connection connection = Application.getConnection();
+    protected Connection connection;
 
     ResultSet executeStatement(String query, Map<Integer, String> parameters) throws SQLException {
         ResultSet resultSet;

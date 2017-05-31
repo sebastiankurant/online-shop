@@ -1,5 +1,6 @@
 package codecool_shop.dao;
 
+import codecool_shop.Application;
 import codecool_shop.model.User;
 
 import java.sql.ResultSet;
@@ -11,6 +12,10 @@ public class UserDao extends Dao implements UserInterface {
 
     private final String GET_BY_NAME = "SELECT id FROM users WHERE username=?";
     private final String GET_BY_ID = "SELECT id,username,firstname,lastname,password,type FROM users WHERE id=?";
+
+    public UserDao(){
+        this.connection = Application.getConnection();
+    }
 
     @Override
     public User getByName(String username) throws SQLException {
