@@ -56,8 +56,6 @@
             <version>2.7.22</version>
         </dependency>
     </dependencies>
-
-
     <build>
         <plugins>
             <plugin>
@@ -70,5 +68,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
