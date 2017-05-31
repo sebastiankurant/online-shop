@@ -35,14 +35,14 @@ public class ProductSupplier {
     }
 
     public void setName(String name) {
-        if (getName() == null){
+        if (name == null){
             throw new IllegalArgumentException("Name can not be null");
         }
         this.name = name;
     }
 
     public void setAddress(String address) {
-        if (address.equals(null)){
+        if (address == null){
             throw new IllegalArgumentException("Address can not be null");
         }
         this.address = address;
