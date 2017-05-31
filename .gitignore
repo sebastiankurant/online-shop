@@ -21,3 +21,4 @@ target/generated-sources/
 target/
 /node_modules/
 /src/main/resources/database.db
+*.iml
