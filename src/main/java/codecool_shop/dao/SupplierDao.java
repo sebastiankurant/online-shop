@@ -1,5 +1,6 @@
 package codecool_shop.dao;
 
+import codecool_shop.Application;
 import codecool_shop.model.ProductSupplier;
 
 import java.sql.ResultSet;
@@ -21,6 +22,9 @@ public class SupplierDao extends Dao implements SupplierInterface {
 
     private final String GET_ALL = "SELECT id,name,address FROM product_supplier";
 
+    public SupplierDao(){
+        this.connection = Application.getConnection();
+    }
 
     @Override
     public void add(ProductSupplier productSupplier) throws SQLException {

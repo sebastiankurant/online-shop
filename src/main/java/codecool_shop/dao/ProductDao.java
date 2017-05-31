@@ -1,10 +1,12 @@
 package codecool_shop.dao;
 
+import codecool_shop.Application;
 import codecool_shop.model.Product;
 import codecool_shop.model.ProductCategory;
 import codecool_shop.model.ProductSupplier;
 import org.sqlite.date.DateFormatUtils;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -34,6 +36,14 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
     private final String GET_ALL_BY_SUPPLIER = "SELECT id,name,description, product_date ,url, supplier_id,price FROM product WHERE supplier_id=?";
 
     private SupplierInterface supplierDao = new SupplierDao();
+
+    public ProductDao() {
+        this.connection = Application.getConnection();
+    }
+
+    public ProductDao(Connection connection){
+        this.connection = connection;
+    }
 
     @Override
     public void add(Product product) throws SQLException {
