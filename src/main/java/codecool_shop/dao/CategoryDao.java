@@ -1,5 +1,6 @@
 package codecool_shop.dao;
 
+import codecool_shop.Application;
 import codecool_shop.model.ProductCategory;
 
 import java.sql.ResultSet;
@@ -28,6 +29,10 @@ public class CategoryDao extends Dao implements CategoryInterface {
     private final String GET_BY_SLUG = "SELECT id,name,description,slug FROM product_category WHERE slug=?";
 
     private final String GET_ALL = "SELECT id,name,description,slug FROM product_category";
+
+    public CategoryDao(){
+        this.connection = Application.getConnection();
+    }
 
     @Override
     public void add(ProductCategory productCategory) throws SQLException {
