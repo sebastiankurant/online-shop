@@ -17,6 +17,9 @@ public class Basket {
     }
 
     public void setId(Integer id) {
+        if (id < 1) {
+            throw new IllegalArgumentException("no no no...");
+        }
         this.id = id;
     }
 
