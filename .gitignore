@@ -1,4 +1,5 @@
 *.class
+*.iml
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -19,3 +20,4 @@ target/generated-sources/
 target/
 /node_modules/
 /src/main/resources/database.db
+*.iml
