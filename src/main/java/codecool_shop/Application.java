@@ -1,7 +1,7 @@
 package codecool_shop;
 
 import codecool_shop.controller.*;
-import codecool_shop.dao.SgliteJDSCConnector;
+import codecool_shop.dao.SqliteJDBCConnector;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 import java.io.File;
@@ -9,12 +9,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import static spark.Spark.*;
-import static spark.debug.DebugScreen.enableDebugScreen;
 
 public class Application {
 
     private static Application app;
-    private Connection connection = new SgliteJDSCConnector().connection();
+    private Connection connection = new SqliteJDBCConnector().connection();
 
 
     public static Connection getConnection() {
@@ -31,7 +30,7 @@ public class Application {
 
     public static void restartTables() {
         try {
-            SgliteJDSCConnector temp = new SgliteJDSCConnector();
+            SqliteJDBCConnector temp = new SqliteJDBCConnector();
             temp.dropTables();
             temp.createTables();
         } catch (SQLException e) {
@@ -43,7 +42,7 @@ public class Application {
 
     public static void fillIfNotExistTables() {
         try {
-            SgliteJDSCConnector temp = new SgliteJDSCConnector();
+            SqliteJDBCConnector temp = new SqliteJDBCConnector();
             temp.createTablesIfNotExist();
         } catch (SQLException e) {
             e.printStackTrace();
