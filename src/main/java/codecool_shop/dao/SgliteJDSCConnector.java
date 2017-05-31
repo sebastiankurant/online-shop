@@ -150,6 +150,5 @@ public class SgliteJDSCConnector {
         }
         return connection;
     }
-
 }
 
