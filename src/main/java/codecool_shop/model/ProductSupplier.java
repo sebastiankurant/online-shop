@@ -7,7 +7,6 @@ public class ProductSupplier {
     private String address;
 
     public ProductSupplier() {
-
     }
 
     public ProductSupplier(Integer id, String name, String address) {
@@ -29,14 +28,23 @@ public class ProductSupplier {
     }
 
     public void setId(Integer id) {
+        if (id == null || id<0){
+            throw new IllegalArgumentException("Id is not valid");
+        }
         this.id = id;
     }
 
     public void setName(String name) {
+        if (getName() == null){
+            throw new IllegalArgumentException("Name can not be null");
+        }
         this.name = name;
     }
 
     public void setAddress(String address) {
+        if (address.equals(null)){
+            throw new IllegalArgumentException("Address can not be null");
+        }
         this.address = address;
     }
 }
