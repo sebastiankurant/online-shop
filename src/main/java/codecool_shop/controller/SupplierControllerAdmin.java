@@ -13,7 +13,11 @@ import java.util.Map;
 
 public class SupplierControllerAdmin extends BaseController {
 
-    private SupplierInterface supplierDao = new SupplierDao();
+    private SupplierInterface supplierDao;
+
+    public SupplierControllerAdmin(SupplierInterface supplierDao){
+        this.supplierDao = supplierDao;
+    }
 
     public ModelAndView renderSupplier(Request request, Response response) {
         Map<String, Object> params = new HashMap<>();

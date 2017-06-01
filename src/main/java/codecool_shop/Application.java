@@ -1,7 +1,7 @@
 package codecool_shop;
 
 import codecool_shop.controller.*;
-import codecool_shop.dao.SqliteJDBCConnector;
+import codecool_shop.dao.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 import java.io.File;
@@ -72,14 +72,28 @@ public class Application {
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
         staticFileLocation("/public");
         port(8888);
-        ProductController productController = new ProductController();
-        ProductControllerAdmin productControllerAdmin = new ProductControllerAdmin();
-        CategoryControllerAdmin categoryControllerAdmin = new CategoryControllerAdmin();
-        SupplierControllerAdmin supplierControllerAdmin = new SupplierControllerAdmin();
+        ProductController productController = new ProductController(
+                new ProductDao(Application.getConnection()),
+                new CategoryDao(Application.getConnection())
+        );
+        ProductControllerAdmin productControllerAdmin = new ProductControllerAdmin(
+                new ProductDao(Application.getConnection()),
+                new CategoryDao(Application.getConnection()),
+                new ProductDao(Application.getConnection()),
+                new SupplierDao(Application.getConnection())
+        );
+        CategoryControllerAdmin categoryControllerAdmin = new CategoryControllerAdmin(
+                new CategoryDao(Application.getConnection())
+        );
+        SupplierControllerAdmin supplierControllerAdmin = new SupplierControllerAdmin(
+                new SupplierDao(Application.getConnection())
+        );
         LoginController loginController = new LoginController();
         SessionController sessionController = new SessionController();
         AdminController adminController = new AdminController();
-        BasketController basketController = new BasketController();
+        BasketController basketController = new BasketController(
+                new ProductDao(Application.getConnection())
+        );
 
         path("/", () -> {
             before("/*", (req, res) -> { // Ensure that url have "/" on ened
