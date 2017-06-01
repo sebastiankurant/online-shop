@@ -16,7 +16,7 @@ public class CategoryDao extends Dao implements CategoryInterface {
     private final String ADD = "INSERT INTO product_category (name,description,slug)" +
             " VALUES(?,?,?)";
 
-    private final String UPDATE = "UPDATE product_category SET name=?, description=? " +
+    private final String UPDATE = "UPDATE product_category SET name=?, description=?, slug=? " +
             " WHERE id=? ";
 
     private final String DELETE = "DELETE FROM product_category" +
@@ -53,7 +53,8 @@ public class CategoryDao extends Dao implements CategoryInterface {
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, productCategory.getName());
         parameters.put(2, productCategory.getDescription());
-        parameters.put(3, String.valueOf(productCategory.getId()));
+        parameters.put(3, productCategory.getSlug());
+        parameters.put(4, String.valueOf(productCategory.getId()));
         this.executeStatementUpdate(UPDATE, parameters);
     }
 
