@@ -3,6 +3,7 @@ package codecool_shop.dao;
 import codecool_shop.Application;
 import codecool_shop.model.ProductSupplier;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,6 +25,10 @@ public class SupplierDao extends Dao implements SupplierInterface {
 
     public SupplierDao(){
         this.connection = Application.getConnection();
+    }
+
+    public SupplierDao(Connection connection) {
+        this.connection = connection;
     }
 
     @Override
