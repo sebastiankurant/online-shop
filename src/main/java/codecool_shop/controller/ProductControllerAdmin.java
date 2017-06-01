@@ -104,7 +104,7 @@ public class ProductControllerAdmin extends BaseController {
             }
             Product newProduct = new Product(name, description, date, catList, url, supplier, price);
             productDao.add(newProduct);
-            Integer eventId = productDao.getByName(newProduct.getName());
+            Integer eventId = productDao.getIdByProductName(newProduct.getName());
             newProduct.setId(eventId);
             productMeta.addMeta(newProduct);
             res.redirect("/admin/products/");

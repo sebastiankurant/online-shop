@@ -3,6 +3,7 @@ package codecool_shop.dao;
 import codecool_shop.Application;
 import codecool_shop.model.User;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -15,6 +16,10 @@ public class UserDao extends Dao implements UserInterface {
 
     public UserDao(){
         this.connection = Application.getConnection();
+    }
+
+    public UserDao(Connection connection){
+        this.connection = connection;
     }
 
     @Override
