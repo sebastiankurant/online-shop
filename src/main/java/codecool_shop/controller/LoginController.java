@@ -1,5 +1,7 @@
 package codecool_shop.controller;
 
+import codecool_shop.Application;
+import codecool_shop.dao.UserDao;
 import codecool_shop.model.User;
 import spark.ModelAndView;
 import spark.Request;
@@ -15,7 +17,7 @@ import static codecool_shop.utilities.RequestUtil.getQueryUsername;
 
 
 public class LoginController extends BaseController {
-    UserController userController = new UserController();
+    UserController userController = new UserController(new UserDao(Application.getConnection()));
 
     public ModelAndView serveLoginPage(Request request, Response response) {
         Map<String, Object> parameters = new HashMap<>();

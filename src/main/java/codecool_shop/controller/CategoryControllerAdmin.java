@@ -13,7 +13,11 @@ import java.util.Map;
 
 
 public class CategoryControllerAdmin extends BaseController {
-    private CategoryInterface categoryDao = new CategoryDao();
+    private CategoryInterface categoryDao;
+
+    public CategoryControllerAdmin(CategoryInterface categoryDao){
+        this.categoryDao = categoryDao;
+    }
 
     public ModelAndView renderCategory(Request request, Response response) {
         Map<String, Object> parameters = new HashMap<>();

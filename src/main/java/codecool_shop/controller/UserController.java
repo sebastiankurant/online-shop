@@ -9,7 +9,11 @@ import java.sql.SQLException;
 
 class UserController extends BaseController {
 
-    private UserInterface userDao = new UserDao();
+    private UserInterface userDao;
+
+    public UserController(UserInterface userDao){
+        this.userDao = userDao;
+    }
 
     User authenticate(String username, String password) throws SQLException {
         if (username.isEmpty() || password.isEmpty()) {

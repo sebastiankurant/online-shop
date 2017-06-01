@@ -15,7 +15,11 @@ import java.util.Map;
 
 public class BasketController {
 
-    private ProductInterface produtDao = new ProductDao();
+    private ProductInterface produtDao;
+
+    public BasketController(ProductInterface produtDao){
+        this.produtDao = produtDao;
+    }
 
     public ModelAndView getBasket(Request request, Response response) {
         Map<String, Object> parameters = new HashMap<>();
