@@ -6,7 +6,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-public class SgliteJDSCConnector {
+public class SqliteJDBCConnector {
+
+    private String pathToDatabase;
+
+    public SqliteJDBCConnector() {
+        this.pathToDatabase = "jdbc:sqlite:src/main/resources/database.db";
+    }
+
+    public SqliteJDBCConnector(String pathToDatabase) {
+        this.pathToDatabase = pathToDatabase;
+    }
 
     public void dropTables() throws SQLException {
         Connection connection = connection();
@@ -144,12 +154,11 @@ public class SgliteJDSCConnector {
             Properties properties = new Properties();
             properties.setProperty("PRAGMA foreign_keys", "ON");
             connection = DriverManager.getConnection(
-                    "jdbc:sqlite:src/main/resources/database.db", properties);
+                    pathToDatabase, properties);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return connection;
     }
-
 }
 

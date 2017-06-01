@@ -119,7 +119,7 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
     }
 
     @Override
-    public Integer getByName(String name) throws SQLException {
+    public Integer getIdByProductName(String name) throws SQLException {
         Map<Integer, String> parameters = new HashMap<>();
         parameters.put(1, name);
         ResultSet resultSet = executeStatement(GET_BY_NAME, parameters);
@@ -128,7 +128,6 @@ public class ProductDao extends Dao implements ProductInterface, MetaInterface {
             resultSet.close();
             return productId;
         }
-
         resultSet.close();
         return null;
     }
