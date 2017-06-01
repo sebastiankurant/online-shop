@@ -14,7 +14,7 @@ public interface ProductInterface {
 
     void update(Product editProduct) throws SQLException;
 
-    Integer getByName(String name) throws SQLException;
+    Integer getIdByProductName(String name) throws SQLException;
 
     Product getById(Integer id) throws SQLException;
 
