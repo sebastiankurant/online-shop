@@ -24,11 +24,22 @@ import java.util.*;
 
 public class ProductControllerAdmin extends BaseController {
 
-    private ProductInterface productDao = new ProductDao();
-    private CategoryInterface categoryDao = new CategoryDao();
-    private MetaInterface productMeta = new ProductDao();
-    private SupplierInterface supplierDao = new SupplierDao();
-    private UtilityClass utilityClass = new UtilityClass();
+    private ProductInterface productDao;
+    private CategoryInterface categoryDao;
+    private MetaInterface productMeta;
+    private SupplierInterface supplierDao;
+    private UtilityClass utilityClass;
+
+    public ProductControllerAdmin(ProductInterface productDao,
+                                  CategoryInterface categoryDao,
+                                  MetaInterface productMeta,
+                                  SupplierInterface supplierDao){
+        this.productDao = productDao;
+        this.categoryDao = categoryDao;
+        this.productMeta = productMeta;
+        this.supplierDao = supplierDao;
+        this.utilityClass = new UtilityClass();
+    }
 
     public ModelAndView renderProducts(Request request, Response response) throws SQLException {
         Map<String, Object> parameters = new HashMap<>();
@@ -104,7 +115,7 @@ public class ProductControllerAdmin extends BaseController {
             }
             Product newProduct = new Product(name, description, date, catList, url, supplier, price);
             productDao.add(newProduct);
-            Integer eventId = productDao.getByName(newProduct.getName());
+            Integer eventId = productDao.getIdByProductName(newProduct.getName());
             newProduct.setId(eventId);
             productMeta.addMeta(newProduct);
             res.redirect("/admin/products/");

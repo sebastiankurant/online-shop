@@ -27,7 +27,7 @@ public class SupplierDao extends Dao implements SupplierInterface {
         this.connection = Application.getConnection();
     }
 
-    public SupplierDao(Connection connection){
+    public SupplierDao(Connection connection) {
         this.connection = connection;
     }
 

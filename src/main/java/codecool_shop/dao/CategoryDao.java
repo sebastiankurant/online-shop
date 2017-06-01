@@ -3,6 +3,7 @@ package codecool_shop.dao;
 import codecool_shop.Application;
 import codecool_shop.model.ProductCategory;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,6 +33,10 @@ public class CategoryDao extends Dao implements CategoryInterface {
 
     public CategoryDao(){
         this.connection = Application.getConnection();
+    }
+
+    public CategoryDao(Connection connection){
+        this.connection = connection;
     }
 
     @Override

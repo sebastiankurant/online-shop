@@ -18,9 +18,15 @@ import java.util.List;
 import java.util.Map;
 
 public class ProductController {
-    private ProductInterface productDao = new ProductDao();
-    private CategoryInterface categoryDao = new CategoryDao();
-    private UtilityClass calculateClass = new UtilityClass();
+    private ProductInterface productDao;
+    private CategoryInterface categoryDao;
+    private UtilityClass calculateClass;
+
+    public ProductController(ProductInterface productDao, CategoryInterface categoryDao){
+        this.productDao = productDao;
+        this.categoryDao = categoryDao;
+        this.calculateClass = new UtilityClass();
+    }
 
     public ModelAndView displayProducts(Request request, Response response) throws SQLException {
         Map<String, Object> paramteres = new HashMap<>();
