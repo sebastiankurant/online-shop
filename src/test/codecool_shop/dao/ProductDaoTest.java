@@ -86,4 +86,18 @@ class ProductDaoTest {
         List<Product> secondTry = productDao.getAll();
         assertEquals(firstTry.size()+1, secondTry.size());
     }
+
+    @Test
+    public void testGetByAllCategoryThrowExceptionWhenNullIsPassed(){
+        assertThrows(NullPointerException.class, () -> {
+            productDao.getByAllCategory(null);
+        });
+    }
+
+    @Test
+    public void testGetBySupplierThrowExceptionWhenNullIsPassed(){
+        assertThrows(NullPointerException.class, () -> {
+            productDao.getBySupplier(null);
+        });
+    }
 }
